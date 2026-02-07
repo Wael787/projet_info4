@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Noter ma commande - Jdk</title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Votre avis nous intéresse</h1>
+    </header>
+
+    <main class="rating-container">
+        <form action="#" method="POST">
+            <h2>Évaluation de la commande #XXXXX</h2>
+
+            <fieldset>
+                <legend>* La Livraison</legend>
+                <p* Comment évaluez-vous la prestation du livreur ?</p>
+                <div class="stars">
+                    <input type="radio" id="livraison-5" name="note_livraison" value="5" required>
+                    <label for="livraison-5">Excellent</label>
+                    
+                    <input type="radio" id="livraison-3" name="note_livraison" value="3">
+                    <label for="livraison-3">Moyen</label>
+                    
+                    <input type="radio" id="livraison-1" name="note_livraison" value="1">
+                    <label for="livraison-1">Décevant</label>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>* Qualité des Produits</legend>
+                <p>Les plats reçus étaient-ils à la hauteur de vos attentes ?</p>
+                <div class="stars">
+                    <input type="radio" id="produit-5" name="note_produit" value="5" required>
+                    <label for="produit-5">Délicieux</label>
+                    
+                    <input type="radio" id="produit-3" name="note_produit" value="3">
+                    <label for="produit-3">Correct</label>
+                    
+                    <input type="radio" id="produit-1" name="note_produit" value="1">
+                    <label for="produit-1">Médiocre</label>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Commentaires (optionnel)</legend>
+                <label for="avis_texte">Dites-nous en plus :</label>
+                <textarea id="avis_texte" name="avis_texte" rows="4" placeholder="Votre expérience..."></textarea>
+            </fieldset>
+
+            <button type="submit">Envoyer mon avis</button>
+        </form>
+    </main>
+
+    <footer>
+        <p><a href="../jdk_projet/profil.html">Retour à mes commandes</a></p>
+        <p>&copy; 2025-2026 Le Jardin de Kyoto</p>
+    </footer>
+</body>
+</html>
