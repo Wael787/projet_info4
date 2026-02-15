@@ -2,56 +2,85 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Inscription</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - Le Jardin de Kyoto</title>
     <link rel="stylesheet" href="../css/style.css"> 
 </head>
 <body>
-    <header>
-        <h1>Créer un compte</h1>
+    <!-- Header avec menu burger -->
+    <header class="entete-principale">
+        <button class="menu-burger">☰</button>
+        <nav class="navigation">
+            <ul class="liste-du-haut">
+                <li><a href="../index.html">Accueil</a></li>
+                <li><a href="connexion.html">Connexion</a></li>
+                <li><a href="inscriptions.html">Inscription</a></li>
+                <li><a href="profil.html">Mon profil</a></li>
+            </ul>
+        </nav>
+        <div class="conteneur-logo">
+            <img src="../img/logo.png" alt="Logo JDK" class="logo-principal">
+            <p class="slogan-header">Authenticité Japonaise</p>
+        </div>
     </header>
 
     <main>
-        <form action="#" method="post">
+        <form class="boite-formulaire" action="#" method="post">
+            <h2>✨ Créer un compte JDK</h2>
+            
             <fieldset>
                 <legend>Informations Personnelles</legend>
                 
-                <label for="nom">* Nom :</label>
-                <input type="text" id="nom" name="nom" required>
-
-                <label for="prenom">* Prénom :</label>
-                <input type="text" id="prenom" name="prenom" required>
+                <div class="form-group">
+                    <label for="nom">* Nom :</label>
+                    <input type="text" id="nom" name="nom" placeholder="Yamamoto" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="prenom">* Prénom :</label>
+                    <input type="text" id="prenom" name="prenom" placeholder="Hiroshi" required>
+                </div>
 
                 <label for="tel">* Numéro de téléphone :</label>
-                <input type="tel" id="tel" name="tel" placeholder="XXXXXXXXXX" required>
+                <input type="tel" id="tel" name="tel" placeholder="06 12 34 56 78" required>
             </fieldset>
 
             <fieldset>
                 <legend>Coordonnées de Livraison</legend>
                 
                 <label for="adresse">* Adresse complète :</label>
-                <input type="text" id="adresse" name="adresse" required>
+                <input type="text" id="adresse" name="adresse" placeholder="12 rue des Cerisiers, 75015 Paris" required>
 
                 <label for="infos_comp">Informations complémentaires (code, étage...) :</label>
-                <textarea id="infos_comp" name="infos_comp" rows="3"></textarea>
+                <textarea id="infos_comp" name="infos_comp" rows="3" placeholder="Code: A1234, 3ème étage, porte droite"></textarea>
             </fieldset>
 
             <fieldset>
                 <legend>Sécurité</legend>
                 
                 <label for="email">* E-mail :</label>
-                <input type="email" id="email" name="email" required>
+                <input type="email" id="email" name="email" placeholder="votre.email@exemple.com" required>
 
                 <label for="password">* Mot de passe :</label>
-                <input type="password" id="password" name="password" required>
+                <input type="password" id="password" name="password" placeholder="Min. 8 caractères" required>
             </fieldset>
-			<input type="checkbox" id="se_souvenir" name="se_souvenir">
-			<label for="se_souvenir">Se souvenir de moi</label>
-			<br>
-			
-            <button type="submit">S'inscrire</button>
-        </form>
-    </main>
-	
-</body>
 
+            <div class="options">
+                <input type="checkbox" id="se_souvenir" name="se_souvenir">
+                <label for="se_souvenir">Se souvenir de moi</label>
+            </div>
+            
+            <button type="submit" class="bouton-validation">S'inscrire</button>
+        </form>
+        
+        <!-- Bulle de dialogue -->
+        <div class="teuchi-bubble">
+            <p>Rejoignez le Jardin de Kyoto et profitez de 10% de réduction ! 🎉</p>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025-2026 Le Jardin de Kyoto</p>
+    </footer>
+</body>
 </html>
