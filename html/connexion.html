@@ -2,36 +2,59 @@
 <html lang="fr">
 <head>
 	<meta charset="UTF-8">
-	<title>Connexion</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Connexion - Le Jardin de Kyoto</title>
 	<link rel="stylesheet" type="text/css" href="../css/style.css">
 </head>
 <body>
-	<header>
-		<h1>Se connecter</h1>
-  </header>
-				<main class="login-container">
-					<form action="#" method="POST">
-						<h2>Accès à votre compte</h2>
-        
-						<label for="email">* E-mail :</label>
-						<input type="email" id="email" name="email" required>
-            <br>
+	<!-- Header avec menu burger -->
+	<header class="entete-principale">
+		<button class="menu-burger">☰</button>
+		<nav class="navigation">
+			<ul class="liste-du-haut">
+				<li><a href="../index.html">Accueil</a></li>
+				<li><a href="connexion.html">Connexion</a></li>
+				<li><a href="inscriptions.html">Inscription</a></li>
+				<li><a href="profil.html">Mon profil</a></li>
+			</ul>
+		</nav>
+		<div class="conteneur-logo">
+			<img src="../img/logo.png" alt="Logo JDK" class="logo-principal">
+			<p class="slogan-header">Authenticité Japonaise</p>
+		</div>
+	</header>
 
-						<label for="password">* Mot de passe :</label>
-						<input type="password" id="password" name="password" required>
+	<main class="login-container">
+		<form action="#" method="POST" class="boite-formulaire">
+			<h2>🔐 Accès à votre compte JDK</h2>
+			
+			<label for="email">📧 E-mail :</label>
+			<input type="email" id="email" name="email" placeholder="votre.email@exemple.com" required>
 
-						<div class="options">
-							<input type="checkbox" id="se_souvenir" name="se_souvenir">
-							<label for="se_souvenir">Se souvenir de moi</label>
-						</div>
+			<label for="password">🔑 Mot de passe :</label>
+			<input type="password" id="password" name="password" placeholder="••••••••" required>
 
-						<button type="submit">Se connecter</button>
+			<div class="options">
+				<input type="checkbox" id="se_souvenir" name="se_souvenir">
+				<label for="se_souvenir">Se souvenir de moi</label>
+			</div>
 
-						<p class="footer-form">
-							<a href="../jdk_projet/password-forgot.html">Mot de passe oublié ?</a><br>
-							Nouveau sur Jdk ? <a href="../jdk_projet/inscriptions.html">Créer un compte</a>
-						</p>
-					</form>
-				</main>
+			<button type="submit" class="bouton-validation">Se connecter</button>
+
+			<p class="footer-form">
+				<a href="../password-forgot.html">Mot de passe oublié ?</a><br>
+				Nouveau sur JDK ? <a href="inscriptions.html">Créer un compte</a>
+			</p>
+		</form>
+		
+		<!-- Bulle de dialogue -->
+		<div class="teuchi-bubble">
+			<p>Connectez-vous pour bénéficier de mes offres alléchantes ! 🍜</p>
+		</div>
+	</main>
+
+	<footer>
+		<p>&copy; 2025-2026 Le Jardin de Kyoto</p>
+	</footer>
 </body>
 </html>
