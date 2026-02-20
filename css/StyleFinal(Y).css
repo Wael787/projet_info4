@@ -1,0 +1,1000 @@
+/* ===============================
+   VARIABLES ( CSS Commun)
+   =============================== */
+:root {
+    --beige-clair: #F4EAE1;
+    --beige-fonce: #D4C4A8;
+    --rouge: #D1464A;
+    --noir: #2C2C2C;
+    --gris: #6B6B6B;
+    --blanc: #FFFFFF;
+}
+
+/* ===============================
+   RESET ( CSS Commun)
+   =============================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Georgia, serif;
+    background-color: var(--beige-clair);
+    color: var(--noir);
+    line-height: 1.6;
+}
+
+
+/* ===============================
+   PAGE D'ACCUEIL
+   =============================== */
+
+/* ===============================
+   HEADER
+   =============================== */
+.page-accueil .entete-principale {
+    background-color: var(--beige-clair);
+    padding: 0.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.page-accueil .conteneur-logo {
+    text-align: center;
+}
+
+/* LOGO PLUS GRAND */
+.page-accueil .logo-principal {
+    height: 225px;
+    width: auto;
+}
+
+.page-accueil .slogan-header {
+    font-size: 0.75rem;
+    letter-spacing: 5px;
+    color: var(--gris);
+    margin-top: 5px;
+    text-transform: uppercase;
+}
+
+/* --- LE CONTENEUR (L'ancrage) --- */
+.page-accueil .section-menu-burger {
+    position: absolute;
+    top: 1.5rem;   /* Aligné sur le padding du header */
+    left: 2rem;
+    z-index: 1000;
+}
+
+/* --- LE BOUTON (Simple et propre) --- */
+.page-accueil .menu-burger {
+    font-size: 3rem;      /* Un peu plus petit pour l'élégance */
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--noir);
+    display: block;       /* Prend sa place naturellement */
+    transition: 0.3s;
+}
+
+.page-accueil .menu-burger:hover {
+    color: var(--rouge);
+}
+
+/* --- LA NAVIGATION (Le menu) --- */
+.page-accueil .navigation {
+    visibility: hidden;    /* Plus "propre" que display:none pour les liseuses */
+    opacity: 0;            /* Préparation pour une transition douce */
+    position: absolute;
+    top: 100%;             /* Se place pile sous le bouton */
+    left: 0;
+    background: var(--blanc);
+    min-width: 180px;
+    border-radius: 8px;
+    border: 1px solid var(--beige-fonce);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s ease; /* Animation fluide */
+}
+
+/* --- LOGIQUE DE SURVOL SIMPLIFIÉE --- */
+/* Quand on survole le bloc entier, on montre le menu */
+.page-accueil .section-menu-burger:hover .navigation {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* --- DESIGN DES LIENS --- */
+.page-accueil .liste-du-haut {
+    list-style: none;
+    padding: 10px 0;
+}
+
+.page-accueil .liste-du-haut a {
+    text-decoration: none;
+    color: var(--noir);
+    padding: 10px 20px;
+    display: block;
+    transition: 0.2s;
+}
+
+.page-accueil .liste-du-haut a:hover {
+    color: var(--rouge);
+}
+
+/* ===============================
+   SECTION BIENVENUE
+   =============================== */
+.page-accueil .section-bienvenue {
+    position: relative;
+    background-image: url('FondThéFleur1.jpeg'); 
+    background-size: cover;
+    background-position: center;
+    
+    width: 90%;
+    max-width: 1200px;
+    margin: 2rem auto;
+    border-radius: 20px;
+    overflow: visible;
+    border: 2px solid var(--beige-fonce);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 4rem 2rem;
+    min-height: 450px;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* PERSONNAGE AU-DESSUS du cadre */
+.page-accueil .perso-accueil {
+    position: absolute;
+    top: -265px;
+    right: 50px;
+    width: 200px;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.page-accueil .perso-accueil img {
+    width: 80%;
+    height: auto;
+    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2));
+}
+
+/* Bulle */
+.page-accueil .bulle-bienvenue {
+    background: var(--blanc);
+    border: 2px solid var(--noir);
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+/* Triangle de la bulle (simple) */
+.page-accueil .bulle-bienvenue::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    right: 30px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid var(--blanc);
+}
+
+/* Titre */
+.page-accueil .section-bienvenue h1 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    line-height: 1.2;
+    text-shadow: 2px 2px 4px rgba(255,255,255,0.8);
+}
+
+/* Recherche */
+.page-accueil .boite-recherche {
+    max-width: 600px;
+    width: 100%;
+}
+
+.page-accueil .boite-recherche form {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.page-accueil .boite-recherche label {
+    display: none;
+}
+
+.page-accueil .champ-recherche {
+    flex: 1;
+    min-width: 250px;
+    padding: 1rem;
+    border: 2px solid var(--beige-fonce);
+    border-radius: 25px;
+    font-size: 1rem;
+    font-family: Georgia, serif;
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.page-accueil .champ-recherche:focus {
+    outline: none;
+    border-color: var(--rouge);
+    background-color: var(--blanc);
+}
+
+.page-accueil .bouton-recherche {
+    padding: 1rem 2rem;
+    background-color: var(--rouge);
+    color: var(--blanc);
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.page-accueil .bouton-recherche:hover {
+    background-color: #B01234;
+    transform: translateY(-2px);
+}
+
+/* ===============================
+   SECTION FAVORIS
+   =============================== */
+.page-accueil .section-favoris {
+    padding: 4rem 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.page-accueil .section-favoris h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 3rem;
+}
+
+.page-accueil .grille-presentation {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+}
+
+.page-accueil .produits-favoris {
+    background-color: var(--blanc);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.page-accueil .produits-favoris:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.page-accueil .produits-favoris img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    display: block;
+}
+
+.page-accueil .produits-favoris h3 {
+    font-size: 1.3rem;
+    padding: 1rem;
+    padding-bottom: 0.5rem;
+}
+
+.page-accueil .prix-produit {
+    font-size: 1.5rem;
+    color: var(--rouge);
+    font-weight: bold;
+    padding: 0 1rem 1.5rem;
+}
+
+/* CARTE MENU (4ème carte) */
+.page-accueil .carte-menu {
+    position: relative;
+}
+
+.page-accueil .carte-menu a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    position: relative;
+}
+
+.page-accueil .texte-survol {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--blanc);
+    padding: 2rem;
+    transition: background 0.3s ease;
+}
+
+.page-accueil .texte-survol h3 {
+    color: var(--blanc);
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.page-accueil .texte-survol p {
+    color: var(--blanc);
+    font-weight: bold;
+}
+
+.page-accueil .carte-menu:hover .texte-survol {
+    background: rgba(212, 70, 74, 0.8);
+}
+
+/* ===============================
+   FOOTER
+   =============================== */
+.page-accueil .bas-de-page {
+    background-color: var(--noir);
+    color: var(--beige-clair);
+    padding: 3rem 2rem 1rem;
+    margin-top: 4rem;
+}
+
+.page-accueil .conteneur-footer {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.page-accueil .colonne-footer h3 {
+    color: var(--rouge);
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.page-accueil .colonne-footer p {
+    margin-bottom: 0.8rem;
+}
+
+.page-accueil .colonne-footer a {
+    color: var(--beige-clair);
+    text-decoration: none;
+}
+
+.page-accueil .colonne-footer a:hover {
+    color: var(--rouge);
+}
+
+.page-accueil .reseaux-sociaux {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.page-accueil .reseaux-sociaux a {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: var(--blanc);
+    color: var(--noir);
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.page-accueil .reseaux-sociaux a:hover {
+    background-color: var(--rouge);
+    color: var(--blanc);
+    transform: scale(1.05);
+}
+
+.page-accueil .copyright {
+    text-align: center;
+    padding-top: 2rem;
+    margin-top: 2rem;
+    border-top: 1px solid var(--gris);
+    font-size: 0.9rem;
+}
+
+/* ===============================
+   RESPONSIVE
+   =============================== */
+@media (max-width: 900px) {
+    .page-accueil .grille-presentation {
+        grid-template-columns: 1fr;
+    }
+    
+    .page-accueil .conteneur-footer {
+        grid-template-columns: 1fr;
+    }
+    
+    .page-accueil .perso-accueil {
+        width: 150px;
+        right: 20px;
+        top: -100px;
+    }
+}
+
+@media (max-width: 600px) {
+    .page-accueil .logo-principal {
+        height: 140px;
+    }
+    
+    .page-accueil .section-bienvenue {
+        margin: 1rem auto;
+    }
+    
+    .page-accueil .section-bienvenue h1 {
+        font-size: 1.8rem;
+    }
+    
+    .page-accueil .boite-recherche form {
+        flex-direction: column;
+    }
+    
+    .page-accueil .champ-recherche,
+    .page-accueil .bouton-recherche {
+        width: 100%;
+    }
+    
+    /* Cache le personnage sur mobile */
+    .page-accueil .perso-accueil {
+        display: none;
+    }
+}
+
+/* ===============================
+    PAGE PRODUIT
+   =============================== */
+
+
+/* ===============================
+    HEADER
+   =============================== */
+.page-produits .entete-principale {
+    background-color: var(--beige-clair);
+    padding: 0.8rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.page-produits .conteneur-logo {
+    text-align: center;
+}
+
+.page-produits .logo-principal {
+    height: 10rem;
+    width: auto;
+}
+
+.page-produits .slogan-header {
+    font-size: 0.75rem;
+    letter-spacing: 0.25rem;
+    color: var(--gris);
+    margin-top: 0.375rem;
+    text-transform: uppercase;
+}
+
+.page-produits .section-menu-burger {
+    position: absolute;
+    top: 1.5rem;
+    left: 2rem;
+    z-index: 1000;
+}
+
+.page-produits .menu-burger {
+    font-size: 3rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--noir);
+    transition: color 0.3s;
+}
+
+.page-produits .menu-burger:hover {
+    color: var(--rouge);
+}
+
+.page-produits .navigation {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: var(--blanc);
+    min-width: 11rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--beige-fonce);
+    box-shadow: 0 0.3rem 1rem rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.page-produits .section-menu-burger:hover .navigation {
+    visibility: visible;
+    opacity: 1;
+}
+
+.page-produits .liste-du-haut {
+    list-style: none;
+    padding: 0.5rem 0;
+}
+
+.page-produits .liste-du-haut a {
+    text-decoration: none;
+    color: var(--noir);
+    padding: 0.625rem 1.125rem;
+    display: block;
+    transition: color 0.2s;
+}
+
+.page-produits .liste-du-haut a:hover {
+    color: var(--rouge);
+}
+
+/* ===============================
+    SECTION BIENVENUE
+   =============================== */
+.page-produits .section-bienvenue {
+    position: relative;
+    width: 100%;
+    margin: 1.5rem auto;
+    border-radius: 1.125rem;
+    overflow: visible;
+    border: 2px solid var(--beige-fonce);
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.08);
+    padding: 4rem 2rem;
+    min-height: 15rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.page-produits .section-bienvenue h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1.8rem;
+    text-align: center;
+}
+
+.page-produits .perso-accueil {
+    position: absolute;
+    top: -10rem;
+    right: 3rem;
+    width: 12.5rem;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.page-produits .perso-accueil img {
+    width: 80%;
+    height: 40vh;
+    filter: drop-shadow(0 0.3rem 1rem rgba(0,0,0,0.2));
+}
+
+.page-produits .bulle-bienvenue {
+    background: var(--blanc);
+    border: 2px solid var(--noir);
+    padding: 0.5rem 0.875rem;
+    border-radius: 1.125rem;
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-bottom: 0.75rem;
+    box-shadow: 0.125rem 0.125rem 0.3rem rgba(0,0,0,0.1);
+    position: relative;
+}
+
+.page-produits .bulle-bienvenue::after {
+    content: "";
+    position: absolute;
+    bottom: -0.625rem;
+    right: 1.875rem;
+    width: 0;
+    height: 0;
+    border-left: 0.625rem solid transparent;
+    border-right: 0.625rem solid transparent;
+    border-top: 0.625rem solid var(--blanc);
+}
+
+.page-produits .boite-recherche {
+    max-width: 37.5rem;
+    width: 100%;
+}
+
+.page-produits .boite-recherche form {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.page-produits .champ-recherche {
+    flex: 1;
+    min-width: 15rem;
+    padding: 0.9rem;
+    border: 2px solid var(--beige-fonce);
+    border-radius: 1.5rem;
+    font-size: 1rem;
+    font-family: Georgia, serif;
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.page-produits .champ-recherche:focus {
+    outline: none;
+    border-color: var(--rouge);
+    background-color: var(--blanc);
+}
+
+.page-produits .bouton-recherche {
+    padding: 0.9rem 1.8rem;
+    background-color: var(--rouge);
+    color: var(--blanc);
+    border: none;
+    border-radius: 1.5rem;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.page-produits .bouton-recherche:hover {
+    background-color: #B01234;
+    transform: translateY(-2px);
+}
+
+/* ===============================
+    CATÉGORIES
+   =============================== */
+.page-produits .conteneur-categories {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13.75rem, 1fr));
+    gap: 1.8rem;
+    padding: 0 2rem;
+    max-width: 75rem;
+    margin: 0 auto 3.5rem;
+}
+
+.page-produits .carte-categorie {
+    position: relative;
+    height: 15rem;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    text-decoration: none;
+    box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,0.12);
+    transition: transform 0.3s ease;
+}
+
+.page-produits .carte-categorie:hover {
+    transform: translateY(-5px);
+}
+
+.page-produits .carte-categorie img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+}
+
+.page-produits .carte-categorie:hover img {
+    transform: scale(1.1);
+}
+
+.page-produits .overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--blanc);
+}
+
+/* ===============================
+    SECTIONS PRODUITS
+   =============================== */
+.page-produits .titre-categorie {
+    text-align: center;
+    font-size: 2rem;
+    margin: 3.5rem 0 2rem;
+    padding-bottom: 0.8rem;
+    position: relative;
+}
+
+.page-produits .titre-categorie::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 5rem;
+    height: 3px;
+    background: var(--rouge);
+}
+
+.page-produits .grille-produits {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(17.5rem, 1fr));
+    gap: 2rem;
+    padding: 0 2rem;
+    max-width: 75rem;
+    margin: 0 auto 3.5rem;
+}
+
+.page-produits .carte-produit {
+    background: var(--blanc);
+    border-radius: 0.75rem;
+    border: 1px solid var(--beige-fonce);
+    overflow: hidden;
+    box-shadow: 0 0.2rem 0.5rem rgba(0,0,0,0.06);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.page-produits .carte-produit:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.4rem 1rem rgba(0,0,0,0.1);
+}
+
+.page-produits .image-conteneur img {
+    width: 100%;
+    height: 12.5rem;
+    object-fit: cover;
+}
+
+.page-produits .infos-produit {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.page-produits .entete-carte {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.8rem;
+}
+
+.page-produits .prix {
+    color: var(--rouge);
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.page-produits .description {
+    font-size: 0.9rem;
+    color: var(--gris);
+    margin-bottom: 1.2rem;
+    flex-grow: 1;
+}
+
+.page-produits .pied-carte {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.page-produits .badge {
+    font-size: 0.75rem;
+    background: var(--beige-clair);
+    padding: 0.25rem 0.625rem;
+    border-radius: 0.3rem;
+}
+
+.page-produits .btn-ajouter {
+    background: var(--rouge);
+    color: var(--blanc);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 1.125rem;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.page-produits .btn-ajouter:hover {
+    background: #B01234;
+    transform: scale(1.05);
+}
+
+/* ===============================
+    MENU ENFANT
+   =============================== */
+.page-produits .bandeau-enfant {
+    position: relative;
+    background: linear-gradient(135deg, #FFE8E8 0%, #FFF5E5 100%);
+    width: 92%;
+    max-width: 60rem;
+    margin: 3.5rem auto;
+    padding: 2.5rem 2rem;
+    border-radius: 1.5rem;
+    border: 3px dashed var(--rouge);
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.08);
+    text-align: center;
+}
+
+.page-produits .samourai-deco {
+    position: absolute;
+    left: -1.5rem;
+    bottom: 0;
+    height: 70vh;
+    width: auto;
+    mix-blend-mode: multiply;
+}
+
+.page-produits .contenu-enfant {
+    padding-left: 20%;
+}
+
+.page-produits .emoji-samourai {
+    font-size: 3.5rem;
+    display: block;
+    margin-bottom: 0.8rem;
+}
+
+.page-produits .bandeau-enfant h2 {
+    color: var(--rouge);
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.page-produits .prix-enfant {
+    font-size: 1.8rem;
+    color: var(--rouge);
+    font-weight: bold;
+    margin-bottom: 0.8rem;
+}
+
+.page-produits .desc-enfant {
+    font-size: 1.1rem;
+    color: var(--noir);
+    margin-bottom: 1.5rem;
+}
+
+.page-produits .btn-enfant {
+    background: var(--rouge);
+    color: var(--blanc);
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 1.75rem;
+    cursor: pointer;
+    font-size: 1.05rem;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.page-produits .btn-enfant:hover {
+    background: #B01234;
+    transform: translateY(-3px);
+    box-shadow: 0 0.3rem 1rem rgba(209, 70, 74, 0.3);
+}
+
+/* ===============================
+    FOOTER
+   =============================== */
+.page-produits .bas-de-page {
+    background-color: var(--noir);
+    color: var(--beige-clair);
+    padding: 3rem 2rem 1rem;
+    margin-top: 4rem;
+}
+
+.page-produits .conteneur-footer {
+    max-width: 75rem;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.page-produits .colonne-footer h3 {
+    color: var(--rouge);
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.page-produits .colonne-footer p {
+    margin-bottom: 0.8rem;
+}
+
+.page-produits .colonne-footer a {
+    color: var(--beige-clair);
+    text-decoration: none;
+}
+
+.page-produits .colonne-footer a:hover {
+    color: var(--rouge);
+}
+
+.page-produits .reseaux-sociaux {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.page-produits .reseaux-sociaux a {
+    display: inline-block;
+    padding: 0.5rem 0.875rem;
+    background-color: var(--blanc);
+    color: var(--noir);
+    border-radius: 1.125rem;
+    transition: all 0.3s ease;
+}
+
+.page-produits .reseaux-sociaux a:hover {
+    background-color: var(--rouge);
+    color: var(--blanc);
+    transform: scale(1.05);
+}
+
+.page-produits .copyright {
+    text-align: center;
+    padding-top: 2rem;
+    margin-top: 2rem;
+    border-top: 1px solid var(--gris);
+    font-size: 0.9rem;
+}
+
+/* ===============================
+    RESPONSIVE
+   =============================== */
+@media (max-width: 56rem) {
+    .page-produits .grille-produits,
+    .page-produits .conteneur-categories {
+        grid-template-columns: 1fr;
+    }
+
+    .page-produits .conteneur-footer {
+        grid-template-columns: 1fr;
+    }
+
+    .page-produits .perso-accueil {
+        width: 9rem;
+        top: -10rem;
+    }
+}
+
+@media (max-width: 37.5rem) {
+    .page-produits .logo-principal {
+        height: 7.5rem;
+    }
+
+    .page-produits .perso-accueil {
+        display: none;
+    }
+
+    .page-produits .section-bienvenue h1 {
+        font-size: 1.8rem;
+    }
+
+    .page-produits .samourai-deco {
+        display: none;
+    }
+
+    .page-produits .contenu-enfant {
+        padding-left: 0;
+    }
+}
