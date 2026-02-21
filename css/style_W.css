@@ -136,6 +136,7 @@ footer{
     cursor: pointer;
     color: var(--noir);
     transition: color 0.3s ease;
+    display: block;       /* Prend sa place naturellement */
     position: absolute;
     left: 2rem;
     top: 1rem;
