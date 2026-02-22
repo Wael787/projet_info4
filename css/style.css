@@ -1,269 +1,485 @@
-/* ===============================
-   VARIABLES ( CSS Commun)
-   =============================== */
+/* 1. VARIABLES (Charte graphique) */
 :root {
-    --beige-clair: #F4EAE1;
-    --beige-fonce: #D4C4A8;
-    --rouge: #D1464A;
-    --noir: #2C2C2C;
-    --gris: #6B6B6B;
-    --blanc: #FFFFFF;
+    --beige-clair:  #F4EAE1;
+    --beige-fonce:  #D4C4A8;
+    --noir:         #2C2C2C;
+    --rouge:        #D1464A;
+    --gris:         #6B6B6B;
+    --blanc:        #FFFFFF;
+    --radius:       0.5rem;
 }
 
-/* ===============================
-   RESET ( CSS Commun)
-   =============================== */
-* {
+
+/* 2. RESET */
+*, *::before, *::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+
+/* 3. BASE */
 body {
     font-family: Georgia, serif;
     background-color: var(--beige-clair);
     color: var(--noir);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
     line-height: 1.6;
 }
 
+main { flex: 1; }
 
-/* ===============================
-   PAGE D'ACCUEIL
-   =============================== */
+a {
+    color: var(--rouge);
+    text-decoration: none;
+    transition: 0.3s;
+}
+a:hover { text-decoration: underline; opacity: 0.8; }
 
-/* ===============================
-   HEADER
-   =============================== */
-.page-accueil .entete-principale {
-    background-color: var(--beige-clair);
-    padding: 1.5rem 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
+h1, h2 { margin-bottom: 1rem; color: var(--noir); text-align: center; }
+
+
+/* 4. MENU BURGER(connexion, inscriptions,
+      notation, profil, index, produit) */
+
+/* Conteneur ancré en haut à gauche du header */
+.section-menu-burger {
+    position: absolute;
+    top: 1.5rem;
+    left: 2rem;
+    z-index: 1000;
 }
 
-.page-accueil .conteneur-logo {
-    text-align: center;
+.section-menu-burger::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 25rem; /* couvre le bouton + tout le menu déroulant */
+    z-index: -1;   /* derrière les éléments, donc non-cliquable par erreur */
 }
 
-/* LOGO PLUS GRAND */
-.page-accueil .logo-principal {
-    height: 225px;
-    width: auto;
-}
-
-.page-accueil .slogan-header {
-    font-size: 0.75rem;
-    letter-spacing: 5px;
-    color: var(--gris);
-    margin-top: 5px;
-    text-transform: uppercase;
-}
-
-/* Menu burger */
-.page-accueil .menu-burger {
-    width: 50px;
-    height: 50px;
-    font-size: 50px;
+/* Bouton ☰ — pas de position:absolute sur lui */
+.menu-burger {
+    font-size: 3rem;
     background: none;
     border: none;
     cursor: pointer;
     color: var(--noir);
     transition: color 0.3s ease;
-    position: absolute;
-    left: 2rem;
-    top: 1rem;
+    display: block;
+    line-height: 1;
 }
+.menu-burger:hover { color: var(--rouge); }
 
-.page-accueil .menu-burger:hover {
-    color: var(--rouge);
-}
 
-/* Navigation */
-.page-accueil .navigation {
-    display: none;
+.navigation {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
     position: absolute;
-    top: 100px;
-    left: 2rem;
+    top: 100%;   /* juste sous le bouton ☰ */
+    left: 0;
     background: var(--blanc);
-    padding: 1rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    min-width: 11rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--beige-fonce);
+    box-shadow: 0 0.3rem 1rem rgba(0,0,0,0.1);
+    z-index: 3000;
+    font-family: Georgia, serif;
+}
+
+/* Hover sur le CONTENEUR entier (pas juste le bouton) */
+.section-menu-burger:hover .navigation {
+    visibility: visible;
+    opacity: 1;
+}
+
+.liste-du-haut {
+    list-style: none;
+    padding: 0.5rem 0;
+}
+.liste-du-haut a {
+    text-decoration: none;
+    color: var(--noir);
+    padding: 0.625rem 1.25rem;
+    display: block;
+    transition: color 0.2s;
+}
+.liste-du-haut a:hover {
+    color: var(--rouge);
+    text-decoration: none;
+}
+
+
+/* 5. MENU BURGER (admin, commandes, livraison) */
+#menu-toggle { display: none; }
+
+.burger-left {
+    position: fixed;
+    top: 25px;
+    left: 25px;
+    width: 28px;
+    cursor: pointer;
     z-index: 1000;
 }
-
-.page-accueil .liste-du-haut {
-    list-style: none;
-}
-
-.page-accueil .liste-du-haut li {
-    margin-bottom: 0.5rem;
-}
-
-.page-accueil .liste-du-haut a {
-    color: var(--noir);
-    text-decoration: none;
-    padding: 0.5rem 1rem;
+.burger-left span {
     display: block;
-    border-radius: 5px;
+    height: 2px;
+    background-color: var(--noir);
+    margin: 6px 0;
+    border-radius: 2px;
+    opacity: 0.85;
 }
 
-.page-accueil .liste-du-haut a:hover {
-    background-color: var(--beige-clair);
-    color: var(--rouge);
-}
-
-.page-accueil .menu-burger:hover + .navigation, 
-.page-accueil .navigation:hover {
-    display: block;
-}
-
-/* ===============================
-   SECTION BIENVENUE
-   =============================== */
-.page-accueil .section-bienvenue {
-    position: relative;
-    background-image: url('FondThéFleur1.jpeg'); 
-    background-size: cover;
-    background-position: center;
-    
-    width: 90%;
-    max-width: 1200px;
-    margin: 2rem auto;
-    border-radius: 20px;
-    overflow: visible;
-    border: 2px solid var(--beige-fonce);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    padding: 4rem 2rem;
-    min-height: 450px;
-    
+.menu-left {
+    position: fixed;
+    top: 0;
+    left: -260px;
+    width: 250px;
+    height: 100vh;
+    background: var(--blanc);
+    padding: 80px 25px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    transition: left 0.3s ease;
+    box-shadow: 5px 0 20px rgba(0,0,0,0.08);
+    z-index: 999;
+    font-family: Georgia, serif;
+}
+.menu-left a {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--beige-fonce);
+    font-size: 15px;
+    color: var(--noir);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+.menu-left a:hover { color: var(--rouge); text-decoration: none; }
+.menu-left hr { margin: 20px 0; border: none; border-top: 1px solid var(--beige-fonce); }
+
+/* Panneau coulisse vers la droite quand cochée */
+#menu-toggle:checked ~ .menu-left { left: 0; }
+
+
+/* 6. HEADER STANDARD (index, produit, connexion, inscriptions,
+      notation, profil) */
+.entete-principale {
+    background-color: var(--beige-clair);
+    padding: 0.8rem 2rem;
+    display: flex;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
+    position: relative;
 }
 
-/* PERSONNAGE AU-DESSUS du cadre */
+.conteneur-logo { text-align: center; }
+
+/* Logo grand pour l'accueil, plus petit pour les autres */
+.page-accueil .logo-principal  { height: 14rem; width: auto; }
+.page-produits .logo-principal { height: 10rem; width: auto; }
+.logo-principal                { height: 9rem;  width: auto; } /* défaut */
+
+.slogan-header {
+    font-size: 0.75rem;
+    letter-spacing: 0.3rem;
+    color: var(--gris);
+    margin-top: 0.3rem;
+    text-transform: uppercase;
+}
+
+/* Header admin/commandes/livraison */
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px 20px;
+    text-align: center;
+    position: relative;
+}
+.admin-header  { padding-top: 60px; }
+.admin-title   { font-size: 42px; font-weight: 600; text-align: center; }
+.admin-subtitle { font-size: 18px; font-weight: 500; color: #666; margin-bottom: 20px; text-align: center; }
+.delivery-header { text-align: center; margin-top: 40px; }
+.delivery-header h1 { font-size: 42px; font-weight: 600; margin: 30px 0 15px; }
+
+
+/* 7. FOND SAKURA  */
+body.admin-page::before,
+body.orders-page::before,
+body.delivery::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: url('../img/sakura.jpg') center / cover no-repeat;
+    opacity: 0.12;
+    filter: blur(2px);
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* body.delivery centré */
+body.delivery { align-items: center; }
+
+
+/* 8. DÉCORATION PAGES FORMULAIRES — body.page-deco
+      Activé sur : connexion.html, inscriptions.html, notation.html */
+
+/* Personnage Teuchi fixé en bas à droite sur les pages formulaires */
+body.page-deco::before {
+    content: '';
+    position: fixed;
+    right: 2%;
+    bottom: 0;
+    width: clamp(12rem, 18vw, 22rem); /* s'adapte à la taille d'écran */
+    aspect-ratio: 2/3;
+    background-image: url('../img/Character_Teuchi.webp');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom right;
+    opacity: 0.9;
+    z-index: 200;
+    pointer-events: none; /* on peut cliquer à travers */
+}
+
+/* Cercle décoratif rouge discret à gauche */
+body.page-deco::after {
+    content: '';
+    position: fixed;
+    left: -5%;
+    top: 20%;
+    width: 20rem;
+    height: 20rem;
+    background: radial-gradient(circle, rgba(209,70,74,0.04) 0%, transparent 70%);
+    border-radius: 50%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Cache Teuchi sous 1200px pour ne pas gêner le contenu */
+@media (max-width: 1200px) {
+    body.page-deco::before { display: none; }
+}
+
+/* 9. PERSONNAGE TEUCHI + BULLE — index, produit */
+
+/* Personnage dépassant en haut à droite de la bannière */
 .page-accueil .perso-accueil {
     position: absolute;
-    top: -265px;
-    right: 50px;
-    width: 200px;
+    top: -16.5rem;
+    right: 3rem;
+    width: 12.5rem;
     z-index: 100;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
 }
-
 .page-accueil .perso-accueil img {
     width: 80%;
     height: auto;
-    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2));
+    filter: drop-shadow(0 0.3rem 1rem rgba(0,0,0,0.2));
 }
 
-/* Bulle */
-.page-accueil .bulle-bienvenue {
+.page-produits .perso-accueil {
+    position: absolute;
+    top: -10rem;
+    right: 3rem;
+    width: 12.5rem;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+.page-produits .perso-accueil img {
+    width: 80%;
+    height: 40vh;
+    filter: drop-shadow(0 0.3rem 1rem rgba(0,0,0,0.2));
+}
+
+/* Bulle de dialogue */
+.bulle-bienvenue {
     background: var(--blanc);
     border: 2px solid var(--noir);
-    padding: 8px 15px;
-    border-radius: 20px;
+    padding: 0.5rem 0.9rem;
+    border-radius: 1.25rem;
     font-size: 0.9rem;
     font-weight: bold;
-    margin-bottom: 10px;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    margin-bottom: 0.625rem;
+    box-shadow: 0.125rem 0.125rem 0.3rem rgba(0,0,0,0.1);
     position: relative;
 }
-
-/* Triangle de la bulle (simple) */
-.page-accueil .bulle-bienvenue::after {
+/* Pointe triangulaire en bas de la bulle */
+.bulle-bienvenue::after {
     content: "";
     position: absolute;
-    bottom: -10px;
-    right: 30px;
-    width: 0;
-    height: 0;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-top: 10px solid var(--blanc);
+    bottom: -0.625rem;
+    right: 1.875rem;
+    width: 0; height: 0;
+    border-left: 0.625rem solid transparent;
+    border-right: 0.625rem solid transparent;
+    border-top: 0.625rem solid var(--blanc);
 }
 
-/* Titre */
+/* BULLE DE DIALOGUE TEUCHI (pages formulaires) */
+.teuchi-bubble {
+    position: fixed;
+    right: calc(clamp(12rem, 18vw, 22rem) + 1.5rem); /* à gauche de Teuchi */
+    bottom: 35%; /* aligné avec le haut du personnage environ */
+    background-color: var(--blanc);
+    border: 0.125rem solid #333;
+    border-radius: 1rem;
+    padding: 1rem 1.5rem;
+    max-width: 14rem;
+    box-shadow: 0 0.25rem 0.375rem rgba(0,0,0,0.1);
+    animation: fadeIn 1s ease-in;
+    z-index: 500;
+}
+
+/* Petite pointe triangulaire à DROITE de la bulle, pointant vers Teuchi */
+.teuchi-bubble::after {
+    content: '';
+    position: absolute;
+    right: -0.9rem;  /* dépasse à droite */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0; height: 0;
+    border-top: 0.6rem solid transparent;
+    border-bottom: 0.6rem solid transparent;
+    border-left: 0.9rem solid var(--blanc); /* triangle pointant à droite */
+}
+
+/* Bordure de la pointe */
+.teuchi-bubble::before {
+    content: '';
+    position: absolute;
+    right: -1.1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0; height: 0;
+    border-top: 0.7rem solid transparent;
+    border-bottom: 0.7rem solid transparent;
+    border-left: 1rem solid #333;
+}
+
+.teuchi-bubble p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #333;
+    font-family: Arial, sans-serif;
+    line-height: 1.4;
+}
+
+/* Cachée en même temps que Teuchi — sinon elle flotterait toute seule */
+@media (max-width: 1200px) {
+    .teuchi-bubble { display: none; }
+}
+
+
+/* 10. SECTION BIENVENUE — index et produit */
+/* Bannière accueil avec fond image */
+.page-accueil .section-bienvenue {
+    position: relative;
+    background-image: url('../img/FondThéFleur1.jpeg');
+    background-size: cover;
+    background-position: center;
+    width: 90%;
+    max-width: 75rem;
+    margin: 2rem auto;
+    border-radius: 1.25rem;
+    overflow: visible;
+    border: 2px solid var(--beige-fonce);
+    box-shadow: 0 0.625rem 2rem rgba(0,0,0,0.1);
+    padding: 4rem 2rem;
+    min-height: 28rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 .page-accueil .section-bienvenue h1 {
     font-size: 2.5rem;
     margin-bottom: 2rem;
     text-align: center;
     line-height: 1.2;
-    text-shadow: 2px 2px 4px rgba(255,255,255,0.8);
+    text-shadow: 0.125rem 0.125rem 0.25rem rgba(255,255,255,0.8);
 }
 
-/* Recherche */
-.page-accueil .boite-recherche {
-    max-width: 600px;
+/* Bannière produits */
+.page-produits .section-bienvenue {
+    position: relative;
     width: 100%;
-}
-
-.page-accueil .boite-recherche form {
+    margin: 1.5rem auto;
+    border-radius: 1.125rem;
+    overflow: visible;
+    border: 2px solid var(--beige-fonce);
+    box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.08);
+    padding: 4rem 2rem;
+    min-height: 15rem;
     display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
+}
+.page-produits .section-bienvenue h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1.8rem;
+    text-align: center;
 }
 
-.page-accueil .boite-recherche label {
-    display: none;
-}
+/* Barre de recherche (commune aux deux) */
+.boite-recherche { max-width: 37.5rem; width: 100%; }
+.boite-recherche form { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+.boite-recherche label { display: none; }
 
-.page-accueil .champ-recherche {
+.champ-recherche {
     flex: 1;
-    min-width: 250px;
+    min-width: 15rem;
     padding: 1rem;
     border: 2px solid var(--beige-fonce);
-    border-radius: 25px;
+    border-radius: 1.5rem;
     font-size: 1rem;
     font-family: Georgia, serif;
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(255,255,255,0.9);
+    margin-bottom: 0;
 }
-
-.page-accueil .champ-recherche:focus {
+.champ-recherche:focus {
     outline: none;
     border-color: var(--rouge);
     background-color: var(--blanc);
 }
 
-.page-accueil .bouton-recherche {
+.bouton-recherche {
     padding: 1rem 2rem;
     background-color: var(--rouge);
     color: var(--blanc);
     border: none;
-    border-radius: 25px;
+    border-radius: 1.5rem;
     cursor: pointer;
     font-size: 1rem;
     font-weight: bold;
+    font-family: Georgia, serif;
     transition: all 0.3s ease;
 }
+.bouton-recherche:hover { background-color: #B01234; transform: translateY(-2px); }
 
-.page-accueil .bouton-recherche:hover {
-    background-color: #B01234;
-    transform: translateY(-2px);
-}
 
-/* ===============================
-   SECTION FAVORIS
-   =============================== */
+/* 10. Page d'accueil */
 .page-accueil .section-favoris {
     padding: 4rem 2rem;
-    max-width: 1000px;
+    max-width: 62.5rem;
     margin: 0 auto;
 }
-
 .page-accueil .section-favoris h2 {
     text-align: center;
     font-size: 2rem;
     margin-bottom: 3rem;
 }
 
+/* Grille 2 colonnes */
 .page-accueil .grille-presentation {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -272,793 +488,425 @@ body {
 
 .page-accueil .produits-favoris {
     background-color: var(--blanc);
-    border-radius: 10px;
+    border-radius: 0.625rem;
     overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 0.125rem 0.625rem rgba(0,0,0,0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
 .page-accueil .produits-favoris:hover {
     transform: translateY(-8px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    box-shadow: 0 0.5rem 1.25rem rgba(0,0,0,0.15);
 }
-
 .page-accueil .produits-favoris img {
     width: 100%;
-    height: 250px;
+    height: 15rem;
     object-fit: cover;
     display: block;
 }
+.page-accueil .produits-favoris h3 { font-size: 1.3rem; padding: 1rem 1rem 0.5rem; }
+.page-accueil .prix-produit { font-size: 1.5rem; color: var(--rouge); font-weight: bold; padding: 0 1rem 1.5rem; }
 
-.page-accueil .produits-favoris h3 {
-    font-size: 1.3rem;
-    padding: 1rem;
-    padding-bottom: 0.5rem;
-}
-
-.page-accueil .prix-produit {
-    font-size: 1.5rem;
-    color: var(--rouge);
-    font-weight: bold;
-    padding: 0 1rem 1.5rem;
-}
-
-/* CARTE MENU (4ème carte) */
-.page-accueil .carte-menu {
-    position: relative;
-}
-
-.page-accueil .carte-menu a {
-    text-decoration: none;
-    color: inherit;
-    display: block;
-    position: relative;
-}
-
+/* 4ème carte avec overlay */
+.page-accueil .carte-menu { position: relative; }
+.page-accueil .carte-menu a { text-decoration: none; color: inherit; display: block; position: relative; }
 .page-accueil .texte-survol {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: var(--blanc);
-    padding: 2rem;
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    color: var(--blanc); padding: 2rem;
     transition: background 0.3s ease;
 }
+.page-accueil .texte-survol h3 { color: var(--blanc); text-align: center; margin-bottom: 1rem; }
+.page-accueil .texte-survol p  { color: var(--blanc); font-weight: bold; }
+.page-accueil .carte-menu:hover .texte-survol { background: rgba(212,70,74,0.8); }
 
-.page-accueil .texte-survol h3 {
-    color: var(--blanc);
-    text-align: center;
-    margin-bottom: 1rem;
-}
 
-.page-accueil .texte-survol p {
-    color: var(--blanc);
-    font-weight: bold;
-}
+/* 11. Page produits — catégories et cartes */
 
-.page-accueil .carte-menu:hover .texte-survol {
-    background: rgba(212, 70, 74, 0.8);
-}
-
-/* ===============================
-   FOOTER
-   =============================== */
-.page-accueil .bas-de-page {
-    background-color: var(--noir);
-    color: var(--beige-clair);
-    padding: 3rem 2rem 1rem;
-    margin-top: 4rem;
-}
-
-.page-accueil .conteneur-footer {
-    max-width: 1200px;
-    margin: 0 auto;
+/* Grille des 4 catégories cliquables */
+.page-produits .conteneur-categories {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(13.75rem, 1fr));
+    gap: 1.8rem;
+    padding: 0 2rem;
+    max-width: 75rem;
+    margin: 0 auto 3.5rem;
+}
+.page-produits .carte-categorie {
+    position: relative;
+    height: 15rem;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    text-decoration: none;
+    box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,0.12);
+    transition: transform 0.3s ease;
+}
+.page-produits .carte-categorie:hover { transform: translateY(-5px); }
+.page-produits .carte-categorie img {
+    width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;
+}
+.page-produits .carte-categorie:hover img { transform: scale(1.1); }
+.page-produits .overlay {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.4);
+    display: flex; justify-content: center; align-items: center;
+    color: var(--blanc);
+}
+.page-produits .overlay h3 { margin: 0; text-align: center; }
+
+/* Titre de section avec ligne rouge décorative */
+.page-produits .titre-categorie {
+    text-align: center;
+    font-size: 2rem;
+    margin: 3.5rem 0 2rem;
+    padding-bottom: 0.8rem;
+    position: relative;
+}
+.page-produits .titre-categorie::after {
+    content: '';
+    position: absolute; bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 5rem; height: 3px;
+    background: var(--rouge);
+}
+
+/* Grille des cartes produits */
+.page-produits .grille-produits {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(17.5rem, 1fr));
     gap: 2rem;
+    padding: 0 2rem;
+    max-width: 75rem;
+    margin: 0 auto 3.5rem;
 }
-
-.page-accueil .colonne-footer h3 {
-    color: var(--rouge);
-    margin-bottom: 1rem;
-    font-size: 1.2rem;
-}
-
-.page-accueil .colonne-footer p {
-    margin-bottom: 0.8rem;
-}
-
-.page-accueil .colonne-footer a {
-    color: var(--beige-clair);
-    text-decoration: none;
-}
-
-.page-accueil .colonne-footer a:hover {
-    color: var(--rouge);
-}
-
-.page-accueil .reseaux-sociaux {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1rem;
-}
-
-.page-accueil .reseaux-sociaux a {
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    background-color: var(--blanc);
-    color: var(--noir);
-    border-radius: 20px;
-    transition: all 0.3s ease;
-}
-
-.page-accueil .reseaux-sociaux a:hover {
-    background-color: var(--rouge);
-    color: var(--blanc);
-    transform: scale(1.05);
-}
-
-.page-accueil .copyright {
-    text-align: center;
-    padding-top: 2rem;
-    margin-top: 2rem;
-    border-top: 1px solid var(--gris);
-    font-size: 0.9rem;
-}
-
-/* ===============================
-   RESPONSIVE
-   =============================== */
-@media (max-width: 900px) {
-    .page-accueil .grille-presentation {
-        grid-template-columns: 1fr;
-    }
-    
-    .page-accueil .conteneur-footer {
-        grid-template-columns: 1fr;
-    }
-    
-    .page-accueil .perso-accueil {
-        width: 150px;
-        right: 20px;
-        top: -100px;
-    }
-}
-
-@media (max-width: 600px) {
-    .page-accueil .logo-principal {
-        height: 140px;
-    }
-    
-    .page-accueil .section-bienvenue {
-        margin: 1rem auto;
-    }
-    
-    .page-accueil .section-bienvenue h1 {
-        font-size: 1.8rem;
-    }
-    
-    .page-accueil .boite-recherche form {
-        flex-direction: column;
-    }
-    
-    .page-accueil .champ-recherche,
-    .page-accueil .bouton-recherche {
-        width: 100%;
-    }
-    
-    /* Cache le personnage sur mobile */
-    .page-accueil .perso-accueil {
-        display: none;
-    }
-}
-
-/*----- CSS connexion,notaion,inscription------ */
-
-/*root quasi identique*/
-:root {
-    /* Couleurs principales - Format Hexadécimal #RRGGBB */
-    --beige-clair: #F4EAE1;      /* Beige clair pour le fond  */
-    --noir: #2C2C2C;  /* Noir pour le texte principal */
-    --rouge: #D1464A;   /* Rouge pour les boutons et liens  */
-    --gris: #6B6B6B;     /* Gris pour les textes secondaires */
-    --blanc: #FFFFFF;          /* Pour les cartes et formulaires */
-    --beige-fonce: #D4C4A8;    /* Bordures et détails */
-
-
-
-    
-    /* Espacements et arrondis pour la cohérence */
-    --radius: 0.5rem;
-    --padding-standard: 1.5rem;
-}
-
-/*
-   RESET & STYLES DE BASE
-   Pour que le site soit identique sur tous les navigateurs
-   */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: Georgia, serif; 
-    background-color: var(--beige-clair); 
-    color: var(--noir);
-    display: flex;
-    flex-direction: column;
-    line-height: 1.6;
-    min-height: 100vh;
-    position: relative;
-    overflow-x: hidden;
-    
-    /* Pattern un peu japonais*/
-    background-image: 
-        radial-gradient(circle at 20% 80%, rgba(209, 70, 74, 0.03) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(209, 70, 74, 0.03) 0%, transparent 50%);
-}
-
-/* Le main prend tout l'espace restant */
-main {
-    flex: 1;
-}
-
-
-/* Image de fond ADAPTATIVE avec pseudo-élément */
-body::before {
-    content: '';
-    position: fixed;
-    right: 2%;
-    bottom: 5%;
-    width: clamp(15rem, 20vw, 25rem); /* Entre 240px et 400px, s'adapte à l'écran */
-    aspect-ratio: 2/3; /* Garde les proportions de l'image */
-    
-    background-image: url('../img/Teuchi.jpg');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: bottom right;
-    background-color: var(--beige-clair);
-    background-blend-mode: multiply; 
-
-    opacity: 0.85;
-    z-index: 0;
-    pointer-events: none; /* On peut cliquer à travers */
-}
-
-/* Cercle décoratif gauche pour remplir l'espace vide (pas encore fini) */
-body::after {
-    content: '';
-    position: fixed;
-    left: -5%;
-    top: 20%;
-    width: 20rem;
-    height: 20rem;
-    background: radial-gradient(circle, rgba(209, 70, 74, 0.04) 0%, transparent 70%);
-    border-radius: 50%;
-    z-index: 0;
-    pointer-events: none;
-}
-
-/* Le contenu passe devant l'image et le cercle */
-header, main, footer {
-    position: relative;
-    z-index: 1;
-}
-footer{
-    margin-top: auto;
-}
-/*
- HEADER (En-tête avec menu burger)
-   */
-.entete-principale {
-    background-color: var(--beige-clair);
-    padding: 1.5rem 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-}
-
-.conteneur-logo {
-    text-align: center;
-}
-
-.logo-principal {
-    height: 14rem; /* 224px en rem */
-    width: auto;
-}
-
-.slogan-header {
-    font-size: 0.75rem;
-    letter-spacing: 0.3125rem; /* 5px en rem */
-    color: var(--gris);
-    margin-top: 0.3125rem;
-    text-transform: uppercase;
-}
-
-/* MENU BURGER */
-.menu-burger {
-    width: 3.125rem; /* 50px */
-    height: 3.125rem;
-    font-size: 3.125rem;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--noir);
-    transition: color 0.3s ease;
-    position: absolute;
-    left: 2rem;
-    top: 1rem;
-}
-
-.menu-burger:hover {
-    color: var(--rouge);
-}
-
-/*NAVIGATION*/
-.navigation {
-    display: none;
-    position: absolute;
-    top: 6.25rem; /* 100px */
-    left: 2rem;
+.page-produits .carte-produit {
     background: var(--blanc);
-    padding: 1rem;
-    border-radius: 0.625rem; /* 10px */
-    box-shadow: 0 0.25rem 0.625rem rgba(0,0,0,0.1);
-    z-index: 1000;
+    border-radius: 0.75rem;
+    border: 1px solid var(--beige-fonce);
+    overflow: hidden;
+    box-shadow: 0 0.2rem 0.5rem rgba(0,0,0,0.06);
+    display: flex; flex-direction: column;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
-
-.liste-du-haut {
-    list-style: none;
+.page-produits .carte-produit:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.4rem 1rem rgba(0,0,0,0.1);
 }
-
-.liste-du-haut li {
-    margin-bottom: 0.5rem;
+.page-produits .image-conteneur img { width: 100%; height: 12.5rem; object-fit: cover; }
+.page-produits .infos-produit {
+    padding: 1.5rem; flex-grow: 1;
+    display: flex; flex-direction: column;
 }
-
-.liste-du-haut a {
-    color: var(--noir);
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    display: block;
-    border-radius: 0.3125rem; /* 5px */
-    transition: all 0.3s;
+.page-produits .entete-carte { display: flex; justify-content: space-between; margin-bottom: 0.8rem; }
+.page-produits .prix { color: var(--rouge); font-weight: bold; font-size: 1.2rem; }
+.page-produits .description { font-size: 0.9rem; color: var(--gris); margin-bottom: 1.2rem; flex-grow: 1; }
+.page-produits .pied-carte { display: flex; justify-content: space-between; align-items: center; }
+.page-produits .badge { font-size: 0.75rem; background: var(--beige-clair); padding: 0.25rem 0.625rem; border-radius: 0.3rem; }
+.page-produits .btn-ajouter {
+    background: var(--rouge); color: var(--blanc); border: none;
+    padding: 0.5rem 1rem; border-radius: 1.125rem;
+    cursor: pointer; font-weight: bold; transition: all 0.3s;
 }
+.page-produits .btn-ajouter:hover { background: #B01234; transform: scale(1.05); }
 
-.liste-du-haut a:hover {
-    background-color: var(--beige-clair);
-    color: var(--rouge);
-}
-
-/* Affichage au survol */
-.menu-burger:hover + .navigation, 
-.navigation:hover {
-    display: block;
-}
-
-/* 
-TYPOGRAPHIE (Titres et Liens)
-   */
-h1, h2 {
-    margin-bottom: 1rem;
-    color: var(--noir);
+/* Bandeau Menu Enfant */
+.page-produits .bandeau-enfant {
+    position: relative;
+    background: linear-gradient(135deg, #FFE8E8 0%, #FFF5E5 100%);
+    width: 92%; max-width: 60rem;
+    margin: 3.5rem auto;
+    padding: 2.5rem 2rem;
+    border-radius: 1.5rem;
+    border: 3px dashed var(--rouge);
+    box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.08);
     text-align: center;
 }
-
-a {
-    color: var(--rouge);
-    text-decoration: none;
-    transition: 0.3s;
+.page-produits .samourai-deco {
+    position: absolute; left: -1.5rem; bottom: 0;
+    height: 70vh; width: auto;
+    mix-blend-mode: multiply;
 }
-
-a:hover {
-    text-decoration: underline;
-    opacity: 0.8;
-}
-
-/*
-   COMPOSANTS RÉUTILISABLES (Boutons, Cartes)
-  */
-.bouton-validation {
-    background-color: var(--rouge);
-    color: var(--blanc);
-    padding: 0.875rem 1.5rem; /* 14px 24px */
-    border: none;
-    border-radius: var(--radius);
-    cursor: pointer;
-    font-weight: bold;
-    width: 100%;
+.page-produits .contenu-enfant { padding-left: 20%; }
+.page-produits .emoji-samourai { font-size: 3.5rem; display: block; margin-bottom: 0.8rem; }
+.page-produits .bandeau-enfant h2 { color: var(--rouge); font-size: 2rem; margin-bottom: 0.5rem; }
+.page-produits .prix-enfant { font-size: 1.8rem; color: var(--rouge); font-weight: bold; margin-bottom: 0.8rem; }
+.page-produits .desc-enfant { font-size: 1.1rem; color: var(--noir); margin-bottom: 1.5rem; }
+.page-produits .btn-enfant {
+    background: var(--rouge); color: var(--blanc); border: none;
+    padding: 0.75rem 2rem; border-radius: 1.75rem;
+    cursor: pointer; font-size: 1.05rem; font-weight: bold;
     transition: all 0.3s;
-    font-size: 1rem;
+}
+.page-produits .btn-enfant:hover {
+    background: #B01234; transform: translateY(-3px);
+    box-shadow: 0 0.3rem 1rem rgba(209,70,74,0.3);
 }
 
+
+/* 12. Boutons généraux */
+.bouton-validation {
+    background-color: var(--rouge); color: var(--blanc);
+    padding: 0.875rem 1.5rem; border: none;
+    border-radius: var(--radius); cursor: pointer;
+    font-weight: bold; width: 100%;
+    transition: all 0.3s; font-size: 1rem; font-family: Georgia, serif;
+}
 .bouton-validation:hover {
-    background-color: #A63539;
-    transform: translateY(-0.125rem); /* Léger effet de soulèvement */
+    background-color: #A63539; transform: translateY(-0.125rem);
     box-shadow: 0 0.25rem 0.5rem rgba(0,0,0,0.15);
 }
 
-/* Boîte blanche pour les formulaires avec amélioration visuelle */
+.btn { padding: 12px 28px; border-radius: 4px; font-weight: bold; display: inline-block; cursor: pointer; transition: all 0.3s ease; }
+.btn.primary { background-color: var(--rouge); color: var(--blanc); border-radius: 30px; }
+.btn.primary:hover { background-color: #A63539; transform: scale(1.05); text-decoration: none; }
+.btn.secondary { border: 2px solid var(--noir); color: var(--noir); }
+
+
+/* 13. Formulaires (connexion, inscription, notation) */
 .boite-formulaire {
-    background: var(--blanc);
-    padding: 2.5rem;
-    border-radius: 0.75rem; /* 12px */
-    max-width: 31.25rem; /* 500px */
+    background: var(--blanc); padding: 2.5rem;
+    border-radius: 0.75rem; max-width: 31.25rem;
     margin: 2rem auto;
-    box-shadow: 0 0.625rem 1.875rem rgba(0,0,0,0.15); /* Ombre plus marquée */
-    border-top: 0.3125rem solid var(--rouge); /* Barre rouge en haut */
+    box-shadow: 0 0.625rem 1.875rem rgba(0,0,0,0.15);
+    border-top: 0.3125rem solid var(--rouge);
     animation: slideUp 0.5s ease-out;
 }
-
-/* Animation d'entrée */
-@keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(1.875rem); /* 30px */
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Amélioration des titres h2 dans les formulaires */
 .boite-formulaire h2 {
-    color: var(--rouge);
-    font-size: 1.6rem;
-    margin-bottom: 1.5rem;
-    text-align: center;
-    padding-bottom: 1rem;
-    border-bottom: 0.125rem solid var(--beige-clair); /* 2px */
+    color: var(--rouge); font-size: 1.6rem;
+    margin-bottom: 1.5rem; text-align: center;
+    padding-bottom: 1rem; border-bottom: 0.125rem solid var(--beige-clair);
 }
 
-/* 
-   FORMULAIRES (Inscription, Connexion)
-  */
-fieldset {
-    border: 0.125rem solid var(--beige-clair); /* 2px */
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-    border-radius: var(--radius);
-    background-color: #fafafa;
+fieldset { border: 0.125rem solid var(--beige-clair); padding: 1.5rem; margin-bottom: 1.5rem; border-radius: var(--radius); background-color: #fafafa; }
+legend { font-weight: bold; padding: 0 0.8rem; color: var(--rouge); font-size: 1.1rem; }
+
+label { display: block; margin-bottom: 0.5rem; font-size: 0.95rem; font-weight: 500; color: var(--noir); }
+
+input[type="text"], input[type="email"], input[type="password"], input[type="tel"], textarea {
+    width: 100%; padding: 0.75rem; margin-bottom: 1rem;
+    border: 0.0625rem solid #ccc; border-radius: 0.25rem;
+    font-family: Georgia, serif; font-size: 1rem; transition: all 0.3s;
+}
+input::placeholder, textarea::placeholder { color: var(--gris); font-style: italic; }
+input[type="text"]:focus, input[type="email"]:focus,
+input[type="password"]:focus, input[type="tel"]:focus, textarea:focus {
+    outline: none; border-color: var(--rouge);
+    box-shadow: 0 0 0 0.1875rem rgba(209,70,74,0.1); transform: scale(1.01);
 }
 
-legend {
-    font-weight: bold;
-    padding: 0 0.8rem;
-    color: var(--rouge);
-    font-size: 1.1rem;
-}
+.options { margin: 1rem 0; display: flex; align-items: center; gap: 0.5rem; }
+.options input[type="checkbox"] { width: auto; margin: 0; cursor: pointer; }
+.options label { margin: 0; cursor: pointer; font-weight: normal; }
 
-label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: var(--noir);
-}
+.footer-form { text-align: center; margin-top: 1.5rem; font-size: 0.9rem; color: var(--gris); }
+.footer-form a { color: var(--rouge); font-weight: 500; }
 
-input[type="text"], 
-input[type="email"], 
-input[type="password"], 
-input[type="tel"],
-textarea {
-    width: 100%;
-    padding: 0.75rem; /* 12px */
-    margin-bottom: 1rem;
-    border: 0.0625rem solid #ccc; /* 1px */
-    border-radius: 0.25rem; /* 4px */
-    font-family: Georgia, serif;
-    font-size: 1rem;
-    transition: all 0.3s;
-}
-
-/* Placeholders */
-input::placeholder, 
-textarea::placeholder {
-    color: var(--gris);
-    font-style: italic;
-}
-
-/* Animation au focus */
-input[type="text"]:focus, 
-input[type="email"]:focus, 
-input[type="password"]:focus, 
-input[type="tel"]:focus,
-textarea:focus {
-    outline: none;
-    border-color: var(--rouge);
-    box-shadow: 0 0 0 0.1875rem rgba(209, 70, 74, 0.1); /* 3px */
-    transform: scale(1.01);
-}
-
-/* Options (checkbox) */
-.options {
-    margin: 1rem 0;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.options input[type="checkbox"] {
-    width: auto;
-    margin: 0;
-    cursor: pointer;
-}
-
-.options label {
-    margin: 0;
-    cursor: pointer;
-    font-weight: normal;
-}
-
-/* Footer du formulaire */
-.footer-form {
-    text-align: center;
-    margin-top: 1.5rem;
-    font-size: 0.9rem;
-    color: var(--gris);
-}
-
-.footer-form a {
-    color: var(--rouge);
-    font-weight: 500;
-}
-
-/* Étoiles pour notation */
-.stars {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.stars input[type="radio"] {
-    margin-right: 0.5rem;
-    cursor: pointer;
-}
-
+/* Étoiles (notation) */
+.stars { display: flex; flex-direction: column; gap: 0.5rem; margin: 0.5rem 0; }
+.stars input[type="radio"] { width: 1.1rem; height: 1.1rem; margin-right: 0.5rem; cursor: pointer; }
 .stars label {
-    cursor: pointer;
-    transition: color 0.3s;
+    display: flex; align-items: center; cursor: pointer;
+    font-size: 1.08em; gap: 0.75rem; padding: 0.5rem 0.75rem;
+    transition: background-color 0.2s, color 0.2s; font-weight: normal;
 }
+.stars label:hover { color: var(--rouge); }
 
-.stars label:hover {
-    color: var(--rouge);
+
+/* 14. Page admin */
+.admin { text-align: center; margin-top: 10px; }
+.admin table { width: 80%; margin: 40px auto; border-collapse: collapse; background: var(--blanc); }
+.admin th, .admin td { padding: 12px; border: 1px solid var(--beige-fonce); text-align: center; }
+.admin th { background-color: var(--beige-clair); }
+
+
+/* 15. Page commandes */
+.orders {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px; padding: 40px 60px; max-width: 1200px; margin: auto;
 }
-
-/*
-BULLE DE DIALOGUE ADAPTATIVE
- */
-.teuchi-bubble {
-    position: fixed;
-    right: calc(clamp(15rem, 20vw, 25rem) + 2rem); /* À gauche de l'image + 2rem */
-    bottom: 25%;
-    
-    background-color: white;
-    border: 0.125rem solid #333; /* 2px */
-    border-radius: 1rem; /* 16px */
-    padding: 1rem 1.5rem;
-    max-width: clamp(12rem, 15vw, 18rem); /* Entre 192px et 288px */
-    
-    box-shadow: 0 0.25rem 0.375rem rgba(0,0,0,0.1);
-    animation: fadeIn 1s ease-in;
-    z-index: 500;
+.order-card {
+    background-color: var(--blanc); padding: 25px; border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08); transition: all 0.35s ease; cursor: pointer;
 }
+.order-card:hover { transform: translateY(-10px) scale(1.02); box-shadow: 0 15px 35px rgba(0,0,0,0.15); }
+.order-card h3 { margin-bottom: 0.5rem; color: var(--rouge); }
+.order-card p  { color: var(--gris); font-size: 0.9rem; margin-bottom: 0.25rem; }
 
-/* La petite pointe de la bulle */
-.teuchi-bubble::after {
-    content: '';
-    position: absolute;
-    right: -0.9375rem; /* 15px */
-    bottom: 1.875rem; /* 30px */
-    
-    width: 0;
-    height: 0;
-    border-left: 0.9375rem solid white;
-    border-top: 0.625rem solid transparent; /* 10px */
-    border-bottom: 0.625rem solid transparent;
+
+/* 16. Page livraison */
+.delivery-card {
+    background: var(--blanc); padding: 30px 40px; border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    max-width: 400px; width: 90%; text-align: center; margin: 20px auto;
+    transition: transform 0.2s ease;
 }
+.delivery-card:hover { transform: translateY(-5px); }
+.delivery-card h2 { margin-bottom: 20px; color: var(--rouge); }
+.delivery-card p  { margin: 8px 0; color: #555; }
 
-/* Bordure de la pointe */
-.teuchi-bubble::before {
-    content: '';
-    position: absolute;
-    right: -1.125rem; /* 18px */
-    bottom: 1.8125rem; /* 29px */
-    
-    width: 0;
-    height: 0;
-    border-left: 0.9375rem solid #333;
-    border-top: 0.6875rem solid transparent; /* 11px */
-    border-bottom: 0.6875rem solid transparent;
+
+/* 17. Page profil */
+.page-profil .entete-principale { padding: 0.8rem 2rem; }
+.page-profil .logo-principal    { height: 10rem; }
+
+.page-profil .section-hero-profil {
+    background: linear-gradient(135deg, var(--beige-fonce) 0%, var(--beige-clair) 100%);
+    border: 2px solid var(--beige-fonce); border-radius: 1.125rem;
+    width: 92%; max-width: 75rem; margin: 1.5rem auto; padding: 2rem 2.5rem;
+    display: flex; align-items: center; gap: 2rem;
+    box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.08);
 }
-
-/* Animation */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(0.625rem); /* 10px */
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.page-profil .avatar-conteneur { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+.page-profil .avatar {
+    width: 5rem; height: 5rem; background-color: var(--blanc); border-radius: 50%;
+    border: 3px solid var(--rouge); display: flex; justify-content: center; align-items: center;
+    font-size: 2.5rem; box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,0.1);
 }
+.page-profil .badge-fidelite { background-color: var(--rouge); color: var(--blanc); padding: 0.2rem 0.75rem; border-radius: 1rem; font-size: 0.75rem; font-weight: bold; white-space: nowrap; }
+.page-profil .hero-infos h1 { font-size: 2rem; margin-bottom: 0.3rem; text-align: left; }
+.page-profil .nom-utilisateur { color: var(--rouge); }
+.page-profil .membre-depuis   { color: var(--gris); font-size: 0.9rem; }
 
-/* Style du texte dans la bulle */
-.teuchi-bubble p {
-    margin: 0;
-    font-size: clamp(0.875rem, 1.5vw, 1rem); /* Entre 14px et 16px */
-    color: #333;
-    font-family: Arial, sans-serif;
-    line-height: 1.4;
+.page-profil .grille-profil { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; width: 92%; max-width: 75rem; margin: 0 auto 3rem; }
+.page-profil .colonne-gauche,
+.page-profil .colonne-droite { display: flex; flex-direction: column; gap: 1.5rem; }
+
+.page-profil .bloc-profil { background: var(--blanc); border-radius: 0.75rem; border: 1px solid var(--beige-fonce); box-shadow: 0 0.2rem 0.5rem rgba(0,0,0,0.06); overflow: hidden; }
+.page-profil .bloc-entete  { background-color: var(--beige-clair); border-bottom: 2px solid var(--beige-fonce); padding: 1rem 1.5rem; }
+.page-profil .bloc-entete h2 { font-size: 1.1rem; color: var(--noir); text-align: left; margin-bottom: 0; }
+
+.page-profil .liste-infos { padding: 0.5rem 0; }
+.page-profil .ligne-info { display: flex; align-items: center; padding: 0.75rem 1.5rem; border-bottom: 1px solid var(--beige-clair); gap: 1rem; transition: background 0.2s; }
+.page-profil .ligne-info:last-child { border-bottom: none; }
+.page-profil .ligne-info:hover { background-color: var(--beige-clair); }
+.page-profil .label-info { font-size: 0.8rem; color: var(--gris); text-transform: uppercase; letter-spacing: 0.05rem; min-width: 9rem; flex-shrink: 0; }
+.page-profil .valeur-info { flex-grow: 1; font-size: 0.95rem; color: var(--noir); }
+.page-profil .btn-crayon  { background: none; border: none; cursor: pointer; font-size: 0.9rem; padding: 0.25rem; border-radius: 0.25rem; opacity: 0.4; transition: opacity 0.2s, transform 0.2s; flex-shrink: 0; }
+.page-profil .btn-crayon:hover { opacity: 1; transform: scale(1.2); }
+
+.page-profil .fidelite-contenu { padding: 1.5rem; display: flex; gap: 1.5rem; align-items: flex-start; }
+.page-profil .points-cercle {
+    background: linear-gradient(135deg, var(--rouge) 0%, #B01234 100%);
+    color: var(--blanc); border-radius: 50%; width: 6rem; height: 6rem;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    flex-shrink: 0; box-shadow: 0 0.25rem 0.75rem rgba(209,70,74,0.4);
 }
+.page-profil .points-nombre { font-size: 1.8rem; font-weight: bold; line-height: 1; }
+.page-profil .points-label  { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05rem; }
+.page-profil .fidelite-details { flex-grow: 1; }
+.page-profil .fidelite-statut { font-size: 0.95rem; margin-bottom: 0.3rem; }
+.page-profil .fidelite-info   { font-size: 0.85rem; color: var(--gris); margin-bottom: 0.75rem; }
+.page-profil .barre-progression-conteneur { margin-bottom: 1rem; }
+.page-profil .barre-progression { background-color: var(--beige-fonce); border-radius: 1rem; height: 0.5rem; overflow: hidden; margin-bottom: 0.25rem; }
+.page-profil .barre-remplie    { background: linear-gradient(90deg, var(--rouge), #B01234); height: 100%; border-radius: 1rem; transition: width 0.5s ease; }
+.page-profil .progression-texte { font-size: 0.75rem; color: var(--gris); }
+.page-profil .avantages-titre   { font-size: 0.85rem; font-weight: bold; margin-bottom: 0.4rem; }
+.page-profil .liste-avantages   { list-style: none; display: flex; flex-direction: column; gap: 0.25rem; }
+.page-profil .liste-avantages li { font-size: 0.82rem; color: var(--gris); }
+.page-profil .liste-avantages li:nth-child(4) { opacity: 0.5; }
+
+.page-profil .liste-commandes { padding: 0.5rem 0; }
+.page-profil .commande-item { padding: 1rem 1.5rem; border-bottom: 1px solid var(--beige-clair); transition: background 0.2s; }
+.page-profil .commande-item:last-child { border-bottom: none; }
+.page-profil .commande-item:hover { background-color: var(--beige-clair); }
+.page-profil .commande-entete { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
+.page-profil .commande-date   { font-size: 0.85rem; font-weight: bold; }
+.page-profil .commande-detail { font-size: 0.85rem; color: var(--gris); margin-bottom: 0.5rem; line-height: 1.4; }
+.page-profil .commande-statut { font-size: 0.75rem; padding: 0.2rem 0.6rem; border-radius: 1rem; font-weight: bold; }
+.page-profil .statut-livre    { background-color: #E8F5E9; color: #2E7D32; }
+.page-profil .statut-en-cours { background-color: #FFF3E0; color: #E65100; }
+.page-profil .commande-pied   { display: flex; justify-content: space-between; align-items: center; }
+.page-profil .commande-total  { font-size: 0.9rem; font-weight: bold; }
+.page-profil .commande-points { font-size: 0.8rem; color: var(--rouge); font-weight: bold; background-color: #FFE8E8; padding: 0.15rem 0.5rem; border-radius: 1rem; }
+
+.page-profil .popup-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center; }
+.page-profil .popup { background: var(--blanc); border-radius: 1rem; padding: 2rem; max-width: 22rem; text-align: center; border: 2px solid var(--beige-fonce); box-shadow: 0 1rem 2rem rgba(0,0,0,0.2); }
+.page-profil .popup p { font-size: 1rem; margin-bottom: 1.2rem; line-height: 1.6; }
+.page-profil .popup-fermer { background: var(--rouge); color: var(--blanc); border: none; padding: 0.6rem 1.8rem; border-radius: 1.5rem; cursor: pointer; font-size: 0.95rem; font-weight: bold; transition: background 0.3s; }
+.page-profil .popup-fermer:hover { background: #B01234; }
 
 
-/* 
-   FOOTER ADAPTATIF
-   */
-footer {
-    background: #2C2C2C;
-    color: white;
-    text-align: center;
-    padding: 1.5rem 2rem;
-    margin-top: 3rem;
+/* 18. Footer(commun à toutes les pages) */
+footer, .bas-de-page {
+    background-color: var(--noir);
+    color: var(--beige-clair);
+    padding: 3rem 2rem 1rem;
+    margin-top: auto;
     width: 100%;
-    position: relative;
+}
+footer p, .bas-de-page p { margin-bottom: 0.8rem; }
+footer a, .bas-de-page a { color: var(--beige-clair); text-decoration: none; }
+footer a:hover, .bas-de-page a:hover { color: var(--rouge); }
+
+.conteneur-footer { max-width: 75rem; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+.colonne-footer h3 { color: var(--rouge); margin-bottom: 1rem; font-size: 1.2rem; }
+.colonne-footer p  { margin-bottom: 0.8rem; }
+.colonne-footer a  { color: var(--beige-clair); text-decoration: none; }
+.colonne-footer a:hover { color: var(--rouge); }
+
+.reseaux-sociaux { display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap; }
+.reseaux-sociaux a { display: inline-block; padding: 0.5rem 1rem; background-color: var(--blanc); color: var(--noir); border-radius: 1.25rem; transition: all 0.3s ease; text-decoration: none; }
+.reseaux-sociaux a:hover { background-color: var(--rouge); color: var(--blanc); transform: scale(1.05); }
+
+.copyright { text-align: center; padding-top: 2rem; margin-top: 2rem; border-top: 1px solid var(--gris); font-size: 0.9rem; }
+
+
+/* 19. Animations */
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(1.875rem); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(0.625rem); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
-footer p {
-    margin: 0.5rem 0;
-    font-size: clamp(0.875rem, 2vw, 1rem);
+
+/* 20. Responsive */
+
+/* Tablette */
+@media (max-width: 56rem) {
+    .page-accueil .grille-presentation,
+    .page-produits .grille-produits,
+    .page-produits .conteneur-categories,
+    .conteneur-footer { grid-template-columns: 1fr; }
+
+    .page-accueil .perso-accueil  { width: 9rem; right: 1.25rem; top: -6rem; }
+    .page-produits .perso-accueil { width: 9rem; top: -10rem; }
+
+    .page-profil .grille-profil { grid-template-columns: 1fr; }
+    .page-profil .fidelite-contenu { flex-direction: column; align-items: center; }
 }
 
-footer a {
-    color: var(--rouge);
-    text-decoration: none;
-    transition: color 0.3s;
-}
+/* Mobile */
+@media (max-width: 37.5rem) {
+    .page-accueil .logo-principal  { height: 8.75rem; }
+    .page-produits .logo-principal { height: 7.5rem; }
 
-footer a:hover {
-    color: #ff6b6b;
-    text-decoration: underline;
-}
+    .page-accueil .section-bienvenue { margin: 1rem auto; }
+    .page-accueil .section-bienvenue h1,
+    .page-produits .section-bienvenue h1 { font-size: 1.8rem; }
 
-/* 
-RESPONSIVE DESIGN (Adaptation Mobile)
-   Indispensable pour le profil "Livreur" sur smartphone 
-   */
-/* Cache l'image et la bulle quand l'écran est trop petit */
-@media (max-width: 1200px) {
-    body::before,
-    .teuchi-bubble {
-        display: none;
-    }
-}
-/* Tablettes */
-@media (max-width: 968px) {
-    body {
-        font-size: 1.125rem; /* 18px */
-    }
-    
-    /* Image plus petite */
-    body::before {
-        width: clamp(12rem, 25vw, 18rem);
-        right: 1%;
-        bottom: 3%;
-    }
-    
-    /* Cercle décoratif plus petit */
-    body::after {
-        width: 15rem;
-        height: 15rem;
-    }
-    
-    /* Bulle s'adapte */
-    .teuchi-bubble {
-        right: calc(clamp(12rem, 25vw, 18rem) + 1rem);
-        bottom: 20%;
-        padding: 0.875rem 1.25rem;
-    }
-    
-    /* Formulaires */
-    .boite-formulaire {
-        width: 90%;
-        padding: 1.5rem;
-    }
-    
-    /* Boutons plus grands pour les doigts */
-    .bouton-validation {
-        padding: 1rem;
-    }
-    
-    input, textarea {
-        min-height: 2.75rem; /* 44px - taille minimale tactile */
-    }
-    
-    /* Logo plus petit */
-    .logo-principal {
-        height: 10rem; /* 160px */
-    }
-}
+    .page-accueil .boite-recherche form,
+    .page-produits .boite-recherche form { flex-direction: column; }
 
-/* Smartphones */
-@media (max-width: 600px) {
-    /* Cache l'image et la bulle sur mobile */
-    body::before,
-    body::after,
-    .teuchi-bubble {
-        display: none;
-    }
-    
-    /* Logo encore plus petit */
-    .logo-principal {
-        height: 8.75rem; /* 140px */
-    }
-    
-    /* Menu burger ajusté */
-    .menu-burger {
-        left: 1rem;
-        top: 0.5rem;
-    }
-    
-    .navigation {
-        left: 1rem;
-        top: 4rem;
-    }
-    
-    /* Formulaires pleine largeur */
-    .boite-formulaire {
-        width: 95%;
-        padding: 1.25rem;
-        margin: 1rem auto;
-    }
-    
-    .boite-formulaire h2 {
-        font-size: 1.3rem;
-    }
-    
-    /* Footer */
-    footer {
-        padding: 1rem;
-    }
-    
-    /* Texte plus petit */
-    fieldset {
-        padding: 1rem;
-    }
-    
-    legend {
-        font-size: 1rem;
-    }
-}
+    .page-accueil .perso-accueil,
+    .page-produits .perso-accueil  { display: none; }
 
-/* Très grands écrans */
-@media (min-width: 1920px) {
-    body::before {
-        width: clamp(20rem, 22vw, 28rem); /* Image plus grande */
-        right: 3%;
-        bottom: 5%;
-    }
-    
-    .teuchi-bubble {
-        right: calc(clamp(20rem, 22vw, 28rem) + 2.5rem);
-        bottom: 28%;
-    }
-    
-    body::after {
-        width: 25rem;
-        height: 25rem;
-    }
+    .page-produits .samourai-deco { display: none; }
+    .page-produits .contenu-enfant { padding-left: 0; }
+
+    .orders { padding: 20px; }
+    .delivery-card { padding: 20px; }
+
+    .page-profil .logo-principal { height: 7.5rem; }
+    .page-profil .section-hero-profil { flex-direction: column; text-align: center; }
+    .page-profil .hero-infos h1 { font-size: 1.5rem; text-align: center; }
+    .page-profil .label-info { min-width: 6rem; font-size: 0.72rem; }
+
+    footer, .bas-de-page { padding: 1.5rem 1rem; }
+}
 }
 
 
