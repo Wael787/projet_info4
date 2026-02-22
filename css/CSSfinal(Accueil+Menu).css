@@ -1,5 +1,5 @@
 /* ===============================
-   VARIABLES ( CSS Commun)
+   VARIABLES GLOBALES
    =============================== */
 :root {
     --beige-clair: #F4EAE1;
@@ -11,14 +11,15 @@
 }
 
 /* ===============================
-   RESET ( CSS Commun)
+   RESET
    =============================== */
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    box-sizing: border-box; /* le padding est inclus dans la largeur totale */
 }
 
+/* style de base pour toute la page */
 body {
     font-family: Georgia, serif;
     background-color: var(--beige-clair);
@@ -34,6 +35,8 @@ body {
 /* ===============================
    HEADER
    =============================== */
+
+/* bande du haut avec le logo centré et le burger en absolu à gauche */
 .page-accueil .entete-principale {
     background-color: var(--beige-clair);
     padding: 0.5rem 2rem;
@@ -41,86 +44,90 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    position: relative;
+    position: relative; /* ancre le burger positionné en absolu à l'intérieur */
 }
 
+/* groupe logo + slogan centré */
 .page-accueil .conteneur-logo {
     text-align: center;
 }
 
-/* LOGO PLUS GRAND */
+/* logo principal de la page d'accueil */
 .page-accueil .logo-principal {
-    height: 225px;
+    height: 14rem;
     width: auto;
 }
 
+/* petit texte espacé sous le logo */
 .page-accueil .slogan-header {
     font-size: 0.75rem;
-    letter-spacing: 5px;
+    letter-spacing: 0.3rem;
     color: var(--gris);
-    margin-top: 5px;
+    margin-top: 0.3rem;
     text-transform: uppercase;
 }
 
-/* --- LE CONTENEUR (L'ancrage) --- */
+/* conteneur du bouton burger et de son menu déroulant collé en haut à gauche du header */
 .page-accueil .section-menu-burger {
-    position: absolute;
-    top: 1.5rem;   /* Aligné sur le padding du header */
+    position: absolute; /* sort du flux sans décaler le logo */
+    top: 1.5rem;
     left: 2rem;
-    z-index: 1000;
+    z-index: 1000; /* passe par-dessus tous les autres éléments */
 }
 
-/* --- LE BOUTON (Simple et propre) --- */
+/* bouton ☰ sans style par défaut des navigateurs */
 .page-accueil .menu-burger {
-    font-size: 3rem;      /* Un peu plus petit pour l'élégance */
+    font-size: 3rem;
     background: none;
     border: none;
     cursor: pointer;
     color: var(--noir);
-    display: block;       /* Prend sa place naturellement */
+    display: block;
     transition: 0.3s;
 }
 
+/* le ☰ passe au rouge au survol */
 .page-accueil .menu-burger:hover {
     color: var(--rouge);
 }
 
-/* --- LA NAVIGATION (Le menu) --- */
+/* menu déroulant caché par défaut et révélé au survol avec un fondu */
 .page-accueil .navigation {
-    visibility: hidden;    /* Plus "propre" que display:none pour les liseuses */
-    opacity: 0;            /* Préparation pour une transition douce */
+    visibility: hidden; /* caché mais garde sa place pour permettre la transition */
+    opacity: 0;         /* transparent pour le fondu en 0.3s */
     position: absolute;
-    top: 100%;             /* Se place pile sous le bouton */
+    top: 100%; /* se place juste sous le bouton burger */
     left: 0;
     background: var(--blanc);
-    min-width: 180px;
-    border-radius: 8px;
+    min-width: 11rem;
+    border-radius: 0.5rem;
     border: 1px solid var(--beige-fonce);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    transition: all 0.3s ease; /* Animation fluide */
+    box-shadow: 0 0.3rem 1rem rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
 }
 
-/* --- LOGIQUE DE SURVOL SIMPLIFIÉE --- */
-/* Quand on survole le bloc entier, on montre le menu */
+/* rend le menu visible quand la souris survole le bloc entier */
 .page-accueil .section-menu-burger:hover .navigation {
     visibility: visible;
     opacity: 1;
 }
 
-/* --- DESIGN DES LIENS --- */
+/* liste des liens du menu sans puces */
 .page-accueil .liste-du-haut {
     list-style: none;
-    padding: 10px 0;
+    padding: 0.625rem 0;
 }
 
+/* liens du menu déroulant */
 .page-accueil .liste-du-haut a {
     text-decoration: none;
     color: var(--noir);
-    padding: 10px 20px;
-    display: block;
+    padding: 0.625rem 1.25rem;
+    display: block; /* toute la ligne est cliquable pas juste le texte */
     transition: 0.2s;
 }
 
+/* lien rouge au survol */
 .page-accueil .liste-du-haut a:hover {
     color: var(--rouge);
 }
@@ -128,127 +135,134 @@ body {
 /* ===============================
    SECTION BIENVENUE
    =============================== */
+
+/* grande bannière avec image de fond titre centré barre de recherche et personnage qui dépasse en haut à droite */
 .page-accueil .section-bienvenue {
-    position: relative;
-    background-image: url('FondThéFleur1.jpeg'); 
+    position: relative; /* ancre le personnage positionné en absolu */
+    background-image: url('FondThéFleur1.jpeg');
     background-size: cover;
     background-position: center;
-    
     width: 90%;
-    max-width: 1200px;
+    max-width: 75rem;
     margin: 2rem auto;
-    border-radius: 20px;
-    overflow: visible;
+    border-radius: 1.25rem;
+    overflow: visible; /* permet au personnage de dépasser sans être coupé */
     border: 2px solid var(--beige-fonce);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0.625rem 2rem rgba(0, 0, 0, 0.1);
     padding: 4rem 2rem;
-    min-height: 450px;
-    
+    min-height: 28rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-/* PERSONNAGE AU-DESSUS du cadre */
+/* personnage Teuchi et sa bulle de dialogue sortis en haut à droite de la bannière */
 .page-accueil .perso-accueil {
     position: absolute;
-    top: -265px;
-    right: 50px;
-    width: 200px;
+    top: -16.5rem; /* valeur négative pour remonter au-dessus du cadre */
+    right: 3rem;
+    width: 12.5rem;
     z-index: 100;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
 }
 
+/* image du personnage avec ombre qui suit son contour */
 .page-accueil .perso-accueil img {
     width: 80%;
     height: auto;
-    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2));
+    filter: drop-shadow(0 0.3rem 1rem rgba(0,0,0,0.2)); /* ombre suit le contour du PNG contrairement à box-shadow */
 }
 
-/* Bulle */
+/* bulle de dialogue ronde au-dessus du personnage */
 .page-accueil .bulle-bienvenue {
     background: var(--blanc);
     border: 2px solid var(--noir);
-    padding: 8px 15px;
-    border-radius: 20px;
+    padding: 0.5rem 0.9rem;
+    border-radius: 1.25rem;
     font-size: 0.9rem;
     font-weight: bold;
-    margin-bottom: 10px;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
-    position: relative;
+    margin-bottom: 0.625rem;
+    box-shadow: 0.125rem 0.125rem 0.3rem rgba(0,0,0,0.1);
+    position: relative; /* ancre la pointe ::after */
 }
 
-/* Triangle de la bulle (simple) */
+/* pointe triangulaire en bas de la bulle créée avec les bordures CSS */
 .page-accueil .bulle-bienvenue::after {
-    content: "";
+    content: ""; /* obligatoire pour afficher le pseudo-élément */
     position: absolute;
-    bottom: -10px;
-    right: 30px;
+    bottom: -0.625rem; /* dépasse sous la bulle */
+    right: 1.875rem;
     width: 0;
     height: 0;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-top: 10px solid var(--blanc);
+    border-left: 0.625rem solid transparent;  /* côtés invisibles */
+    border-right: 0.625rem solid transparent; /* côtés invisibles */
+    border-top: 0.625rem solid var(--blanc);  /* seul le haut visible = triangle pointant vers le bas */
 }
 
-/* Titre */
+/* titre principal de la bannière */
 .page-accueil .section-bienvenue h1 {
     font-size: 2.5rem;
     margin-bottom: 2rem;
     text-align: center;
     line-height: 1.2;
-    text-shadow: 2px 2px 4px rgba(255,255,255,0.8);
+    text-shadow: 0.125rem 0.125rem 0.25rem rgba(255,255,255,0.8);
 }
 
-/* Recherche */
+/* conteneur de la barre de recherche limité en largeur */
 .page-accueil .boite-recherche {
-    max-width: 600px;
+    max-width: 37.5rem;
     width: 100%;
 }
 
+/* champ texte et bouton posés côte à côte */
 .page-accueil .boite-recherche form {
     display: flex;
     gap: 1rem;
-    flex-wrap: wrap;
+    flex-wrap: wrap; /* le bouton passe en dessous si l'écran est trop petit */
     justify-content: center;
 }
 
+/* label caché visuellement */
 .page-accueil .boite-recherche label {
     display: none;
 }
 
+/* champ de saisie qui prend tout l'espace disponible */
 .page-accueil .champ-recherche {
-    flex: 1;
-    min-width: 250px;
+    flex: 1; /* prend tout l'espace restant après le bouton */
+    min-width: 15rem;
     padding: 1rem;
     border: 2px solid var(--beige-fonce);
-    border-radius: 25px;
+    border-radius: 1.5rem;
     font-size: 1rem;
     font-family: Georgia, serif;
     background-color: rgba(255, 255, 255, 0.9);
 }
 
+/* style quand l'utilisateur clique dans le champ */
 .page-accueil .champ-recherche:focus {
-    outline: none;
+    outline: none; /* supprime le contour bleu par défaut du navigateur */
     border-color: var(--rouge);
     background-color: var(--blanc);
 }
 
+/* bouton de soumission rouge */
 .page-accueil .bouton-recherche {
     padding: 1rem 2rem;
     background-color: var(--rouge);
     color: var(--blanc);
     border: none;
-    border-radius: 25px;
+    border-radius: 1.5rem;
     cursor: pointer;
     font-size: 1rem;
     font-weight: bold;
     transition: all 0.3s ease;
 }
 
+/* rouge plus foncé et légèrement remonté au survol */
 .page-accueil .bouton-recherche:hover {
     background-color: #B01234;
     transform: translateY(-2px);
@@ -257,50 +271,59 @@ body {
 /* ===============================
    SECTION FAVORIS
    =============================== */
+
+/* section des 4 cartes produits mis en avant sur la page d'accueil */
 .page-accueil .section-favoris {
     padding: 4rem 2rem;
-    max-width: 1000px;
+    max-width: 62.5rem;
     margin: 0 auto;
 }
 
+/* titre centré de la section */
 .page-accueil .section-favoris h2 {
     text-align: center;
     font-size: 2rem;
     margin-bottom: 3rem;
 }
 
+/* grille à 2 colonnes pour les cartes produits */
 .page-accueil .grille-presentation {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
 }
 
+/* carte d'un produit favori avec image nom et prix */
 .page-accueil .produits-favoris {
     background-color: var(--blanc);
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    border-radius: 0.625rem;
+    overflow: hidden; /* l'image ne déborde pas des coins arrondis */
+    box-shadow: 0 0.125rem 0.625rem rgba(0,0,0,0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+/* la carte remonte et l'ombre s'accentue au survol */
 .page-accueil .produits-favoris:hover {
     transform: translateY(-8px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    box-shadow: 0 0.5rem 1.25rem rgba(0,0,0,0.15);
 }
 
+/* image de la carte recadrée proprement */
 .page-accueil .produits-favoris img {
     width: 100%;
-    height: 250px;
-    object-fit: cover;
+    height: 15rem;
+    object-fit: cover; /* recadre l'image sans la déformer */
     display: block;
 }
 
+/* nom du plat */
 .page-accueil .produits-favoris h3 {
     font-size: 1.3rem;
     padding: 1rem;
     padding-bottom: 0.5rem;
 }
 
+/* prix affiché en rouge et grand */
 .page-accueil .prix-produit {
     font-size: 1.5rem;
     color: var(--rouge);
@@ -308,11 +331,12 @@ body {
     padding: 0 1rem 1.5rem;
 }
 
-/* CARTE MENU (4ème carte) */
+/* 4ème carte cliquable vers la page menu avec overlay au survol */
 .page-accueil .carte-menu {
-    position: relative;
+    position: relative; /* ancre l'overlay positionné en absolu */
 }
 
+/* le lien occupe tout le bloc de la carte */
 .page-accueil .carte-menu a {
     text-decoration: none;
     color: inherit;
@@ -320,12 +344,10 @@ body {
     position: relative;
 }
 
+/* couche sombre posée par-dessus l'image qui devient rouge au survol */
 .page-accueil .texte-survol {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0; /* raccourci pour top/right/bottom/left: 0 */
     background: rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
@@ -336,17 +358,20 @@ body {
     transition: background 0.3s ease;
 }
 
+/* texte blanc centré sur l'overlay */
 .page-accueil .texte-survol h3 {
     color: var(--blanc);
     text-align: center;
     margin-bottom: 1rem;
 }
 
+/* sous-texte de l'overlay */
 .page-accueil .texte-survol p {
     color: var(--blanc);
     font-weight: bold;
 }
 
+/* l'overlay passe du noir au rouge au survol */
 .page-accueil .carte-menu:hover .texte-survol {
     background: rgba(212, 70, 74, 0.8);
 }
@@ -354,6 +379,8 @@ body {
 /* ===============================
    FOOTER
    =============================== */
+
+/* pied de page en 3 colonnes sur fond noir */
 .page-accueil .bas-de-page {
     background-color: var(--noir);
     color: var(--beige-clair);
@@ -361,54 +388,63 @@ body {
     margin-top: 4rem;
 }
 
+/* grille 3 colonnes : Infos / Contact / Réseaux sociaux */
 .page-accueil .conteneur-footer {
-    max-width: 1200px;
+    max-width: 75rem;
     margin: 0 auto;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
 }
 
+/* titre de chaque colonne du footer */
 .page-accueil .colonne-footer h3 {
     color: var(--rouge);
     margin-bottom: 1rem;
     font-size: 1.2rem;
 }
 
+/* lignes de texte dans le footer */
 .page-accueil .colonne-footer p {
     margin-bottom: 0.8rem;
 }
 
+/* liens du footer en beige clair sur fond noir */
 .page-accueil .colonne-footer a {
     color: var(--beige-clair);
     text-decoration: none;
 }
 
+/* lien rouge au survol */
 .page-accueil .colonne-footer a:hover {
     color: var(--rouge);
 }
 
+/* boutons des réseaux sociaux côte à côte */
 .page-accueil .reseaux-sociaux {
     display: flex;
     gap: 1rem;
     margin-top: 1rem;
 }
 
+/* chaque bouton réseau social blanc sur fond noir */
 .page-accueil .reseaux-sociaux a {
     display: inline-block;
     padding: 0.5rem 1rem;
     background-color: var(--blanc);
     color: var(--noir);
-    border-radius: 20px;
+    border-radius: 1.25rem;
     transition: all 0.3s ease;
 }
 
+/* rouge au survol */
 .page-accueil .reseaux-sociaux a:hover {
     background-color: var(--rouge);
     color: var(--blanc);
     transform: scale(1.05);
 }
 
+/* ligne de copyright séparée du reste par un trait */
 .page-accueil .copyright {
     text-align: center;
     padding-top: 2rem;
@@ -420,58 +456,63 @@ body {
 /* ===============================
    RESPONSIVE
    =============================== */
-@media (max-width: 900px) {
+
+/* tablette : les grilles passent en colonne unique */
+@media (max-width: 56rem) {
     .page-accueil .grille-presentation {
         grid-template-columns: 1fr;
     }
-    
+
     .page-accueil .conteneur-footer {
         grid-template-columns: 1fr;
     }
-    
+
+    /* personnage réduit et repositionné */
     .page-accueil .perso-accueil {
-        width: 150px;
-        right: 20px;
-        top: -100px;
+        width: 9rem;
+        right: 1.25rem;
+        top: -6rem;
     }
 }
 
-@media (max-width: 600px) {
+/* mobile : logo réduit barre de recherche en colonne personnage masqué */
+@media (max-width: 37.5rem) {
     .page-accueil .logo-principal {
-        height: 140px;
+        height: 8.75rem;
     }
-    
+
     .page-accueil .section-bienvenue {
         margin: 1rem auto;
     }
-    
+
     .page-accueil .section-bienvenue h1 {
         font-size: 1.8rem;
     }
-    
+
     .page-accueil .boite-recherche form {
-        flex-direction: column;
+        flex-direction: column; /* champ et bouton empilés */
     }
-    
+
     .page-accueil .champ-recherche,
     .page-accueil .bouton-recherche {
         width: 100%;
     }
-    
-    /* Cache le personnage sur mobile */
+
     .page-accueil .perso-accueil {
         display: none;
     }
 }
 
-/* ===============================
-    PAGE PRODUIT
-   =============================== */
-
 
 /* ===============================
-    HEADER
+   PAGE PRODUITS
    =============================== */
+
+/* ===============================
+   HEADER
+   =============================== */
+
+/* même structure que l'accueil mais logo plus petit car la page a déjà beaucoup de contenu */
 .page-produits .entete-principale {
     background-color: var(--beige-clair);
     padding: 0.8rem 2rem;
@@ -481,15 +522,18 @@ body {
     position: relative;
 }
 
+/* groupe logo + slogan centré */
 .page-produits .conteneur-logo {
     text-align: center;
 }
 
+/* logo plus compact que sur l'accueil */
 .page-produits .logo-principal {
     height: 10rem;
     width: auto;
 }
 
+/* slogan sous le logo */
 .page-produits .slogan-header {
     font-size: 0.75rem;
     letter-spacing: 0.25rem;
@@ -498,6 +542,7 @@ body {
     text-transform: uppercase;
 }
 
+/* conteneur du burger positionné en absolu en haut à gauche */
 .page-produits .section-menu-burger {
     position: absolute;
     top: 1.5rem;
@@ -505,6 +550,7 @@ body {
     z-index: 1000;
 }
 
+/* bouton ☰ sans style navigateur */
 .page-produits .menu-burger {
     font-size: 3rem;
     background: none;
@@ -514,13 +560,15 @@ body {
     transition: color 0.3s;
 }
 
+/* rouge au survol */
 .page-produits .menu-burger:hover {
     color: var(--rouge);
 }
 
+/* menu déroulant caché par défaut avec fondu au survol */
 .page-produits .navigation {
-    visibility: hidden;
-    opacity: 0;
+    visibility: hidden; /* caché mais garde sa place pour permettre la transition */
+    opacity: 0;         /* transparent pour le fondu en 0.3s */
     position: absolute;
     top: 100%;
     left: 0;
@@ -532,37 +580,43 @@ body {
     transition: all 0.3s ease;
 }
 
+/* menu visible au survol du bloc burger */
 .page-produits .section-menu-burger:hover .navigation {
     visibility: visible;
     opacity: 1;
 }
 
+/* liste des liens sans puces */
 .page-produits .liste-du-haut {
     list-style: none;
     padding: 0.5rem 0;
 }
 
+/* liens du menu déroulant */
 .page-produits .liste-du-haut a {
     text-decoration: none;
     color: var(--noir);
     padding: 0.625rem 1.125rem;
-    display: block;
+    display: block; /* toute la ligne est cliquable */
     transition: color 0.2s;
 }
 
+/* rouge au survol */
 .page-produits .liste-du-haut a:hover {
     color: var(--rouge);
 }
 
 /* ===============================
-    SECTION BIENVENUE
+   SECTION BIENVENUE
    =============================== */
+
+/* bannière avec titre barre de recherche et personnage qui dépasse en haut à droite */
 .page-produits .section-bienvenue {
     position: relative;
     width: 100%;
     margin: 1.5rem auto;
     border-radius: 1.125rem;
-    overflow: visible;
+    overflow: visible; /* permet au personnage de dépasser sans être coupé */
     border: 2px solid var(--beige-fonce);
     box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.08);
     padding: 4rem 2rem;
@@ -573,15 +627,17 @@ body {
     align-items: center;
 }
 
+/* titre centré de la bannière */
 .page-produits .section-bienvenue h1 {
     font-size: 2.5rem;
     margin-bottom: 1.8rem;
     text-align: center;
 }
 
+/* personnage et bulle positionnés en dehors du cadre en haut à droite */
 .page-produits .perso-accueil {
     position: absolute;
-    top: -10rem;
+    top: -10rem; /* valeur négative pour remonter au-dessus du cadre */
     right: 3rem;
     width: 12.5rem;
     z-index: 100;
@@ -590,12 +646,14 @@ body {
     align-items: flex-end;
 }
 
+/* image du personnage dont la hauteur s'adapte à l'écran */
 .page-produits .perso-accueil img {
     width: 80%;
-    height: 40vh;
-    filter: drop-shadow(0 0.3rem 1rem rgba(0,0,0,0.2));
+    height: 40vh; /* vh = proportionnel à la hauteur de l'écran */
+    filter: drop-shadow(0 0.3rem 1rem rgba(0,0,0,0.2)); /* ombre suit le contour du PNG */
 }
 
+/* bulle de dialogue ronde au-dessus du personnage */
 .page-produits .bulle-bienvenue {
     background: var(--blanc);
     border: 2px solid var(--noir);
@@ -605,34 +663,38 @@ body {
     font-weight: bold;
     margin-bottom: 0.75rem;
     box-shadow: 0.125rem 0.125rem 0.3rem rgba(0,0,0,0.1);
-    position: relative;
+    position: relative; /* ancre la pointe ::after */
 }
 
+/* pointe triangulaire en bas de la bulle */
 .page-produits .bulle-bienvenue::after {
-    content: "";
+    content: ""; /* obligatoire pour afficher le pseudo-élément */
     position: absolute;
     bottom: -0.625rem;
     right: 1.875rem;
     width: 0;
     height: 0;
-    border-left: 0.625rem solid transparent;
-    border-right: 0.625rem solid transparent;
-    border-top: 0.625rem solid var(--blanc);
+    border-left: 0.625rem solid transparent;  /* côtés invisibles */
+    border-right: 0.625rem solid transparent; /* côtés invisibles */
+    border-top: 0.625rem solid var(--blanc);  /* seul le haut visible = triangle pointant vers le bas */
 }
 
+/* barre de recherche centrée et limitée en largeur */
 .page-produits .boite-recherche {
     max-width: 37.5rem;
     width: 100%;
 }
 
+/* champ et bouton côte à côte */
 .page-produits .boite-recherche form {
     display: flex;
     gap: 1rem;
-    flex-wrap: wrap;
+    flex-wrap: wrap; /* le bouton passe en dessous si l'écran est trop petit */
 }
 
+/* champ de saisie qui prend tout l'espace disponible */
 .page-produits .champ-recherche {
-    flex: 1;
+    flex: 1; /* prend tout l'espace restant après le bouton */
     min-width: 15rem;
     padding: 0.9rem;
     border: 2px solid var(--beige-fonce);
@@ -642,12 +704,14 @@ body {
     background-color: rgba(255, 255, 255, 0.9);
 }
 
+/* style quand l'utilisateur clique dans le champ */
 .page-produits .champ-recherche:focus {
-    outline: none;
+    outline: none; /* supprime le contour bleu par défaut du navigateur */
     border-color: var(--rouge);
     background-color: var(--blanc);
 }
 
+/* bouton de soumission rouge */
 .page-produits .bouton-recherche {
     padding: 0.9rem 1.8rem;
     background-color: var(--rouge);
@@ -660,51 +724,59 @@ body {
     transition: all 0.3s ease;
 }
 
+/* rouge plus foncé et légèrement remonté au survol */
 .page-produits .bouton-recherche:hover {
     background-color: #B01234;
     transform: translateY(-2px);
 }
 
 /* ===============================
-    CATÉGORIES
+   CATÉGORIES
    =============================== */
+
+/* grille des 4 images cliquables de catégories qui s'adapte automatiquement à la largeur */
 .page-produits .conteneur-categories {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(13.75rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(13.75rem, 1fr)); /* colonnes auto selon la place disponible */
     gap: 1.8rem;
     padding: 0 2rem;
     max-width: 75rem;
     margin: 0 auto 3.5rem;
 }
 
+/* carte d'une catégorie avec image recadrée overlay et zoom au survol */
 .page-produits .carte-categorie {
-    position: relative;
+    position: relative; /* ancre l'overlay positionné en absolu */
     height: 15rem;
     border-radius: 0.75rem;
-    overflow: hidden;
+    overflow: hidden; /* le zoom de l'image ne déborde pas des coins arrondis */
     text-decoration: none;
     box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,0.12);
     transition: transform 0.3s ease;
 }
 
+/* la carte remonte légèrement au survol */
 .page-produits .carte-categorie:hover {
     transform: translateY(-5px);
 }
 
+/* image de la catégorie qui zoome au survol */
 .page-produits .carte-categorie img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: cover; /* recadre l'image sans la déformer */
     transition: transform 0.5s;
 }
 
+/* zoom sur l'image au survol */
 .page-produits .carte-categorie:hover img {
     transform: scale(1.1);
 }
 
+/* couche sombre par-dessus l'image avec le nom de la catégorie */
 .page-produits .overlay {
     position: absolute;
-    inset: 0;
+    inset: 0; /* raccourci pour top/right/bottom/left: 0 */
     background: rgba(0,0,0,0.4);
     display: flex;
     justify-content: center;
@@ -713,36 +785,41 @@ body {
 }
 
 /* ===============================
-    SECTIONS PRODUITS
+   SECTIONS PRODUITS
    =============================== */
+
+/* titre de section avec une ligne rouge décorative centrée en dessous */
 .page-produits .titre-categorie {
     text-align: center;
     font-size: 2rem;
     margin: 3.5rem 0 2rem;
     padding-bottom: 0.8rem;
-    position: relative;
+    position: relative; /* ancre la ligne ::after */
 }
 
+/* ligne rouge décorative centrée sous le titre */
 .page-produits .titre-categorie::after {
     content: '';
     position: absolute;
     bottom: 0;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%); /* recule de 50% de sa largeur pour un centrage parfait */
     width: 5rem;
     height: 3px;
     background: var(--rouge);
 }
 
+/* grille des cartes produits qui s'adapte automatiquement à la largeur disponible */
 .page-produits .grille-produits {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(17.5rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(17.5rem, 1fr)); /* colonnes auto selon la place disponible */
     gap: 2rem;
     padding: 0 2rem;
     max-width: 75rem;
     margin: 0 auto 3.5rem;
 }
 
+/* carte d'un produit avec image en haut infos en bas et bouton toujours aligné en bas */
 .page-produits .carte-produit {
     background: var(--blanc);
     border-radius: 0.75rem;
@@ -750,53 +827,61 @@ body {
     overflow: hidden;
     box-shadow: 0 0.2rem 0.5rem rgba(0,0,0,0.06);
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* empile image et infos verticalement */
     transition: transform 0.3s, box-shadow 0.3s;
 }
 
+/* la carte remonte et l'ombre s'accentue au survol */
 .page-produits .carte-produit:hover {
     transform: translateY(-5px);
     box-shadow: 0 0.4rem 1rem rgba(0,0,0,0.1);
 }
 
+/* image du produit recadrée */
 .page-produits .image-conteneur img {
     width: 100%;
     height: 12.5rem;
     object-fit: cover;
 }
 
+/* zone des infos textuelles qui s'étire pour aligner tous les boutons en bas */
 .page-produits .infos-produit {
     padding: 1.5rem;
-    flex-grow: 1;
+    flex-grow: 1; /* prend tout l'espace restant pour pousser le pied-carte vers le bas */
     display: flex;
     flex-direction: column;
 }
 
+/* nom du plat à gauche et prix à droite */
 .page-produits .entete-carte {
     display: flex;
     justify-content: space-between;
     margin-bottom: 0.8rem;
 }
 
+/* prix en rouge et gras */
 .page-produits .prix {
     color: var(--rouge);
     font-weight: bold;
     font-size: 1.2rem;
 }
 
+/* description grise qui pousse le pied-carte vers le bas */
 .page-produits .description {
     font-size: 0.9rem;
     color: var(--gris);
     margin-bottom: 1.2rem;
-    flex-grow: 1;
+    flex-grow: 1; /* pousse le .pied-carte en bas même si la description est courte */
 }
 
+/* badge et bouton Ajouter côte à côte en bas de la carte */
 .page-produits .pied-carte {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
+/* petit badge indicatif ex: 🌶️ Doux */
 .page-produits .badge {
     font-size: 0.75rem;
     background: var(--beige-clair);
@@ -804,6 +889,7 @@ body {
     border-radius: 0.3rem;
 }
 
+/* bouton Ajouter rouge arrondi */
 .page-produits .btn-ajouter {
     background: var(--rouge);
     color: var(--blanc);
@@ -815,16 +901,19 @@ body {
     transition: all 0.3s;
 }
 
+/* légèrement agrandi au survol */
 .page-produits .btn-ajouter:hover {
     background: #B01234;
     transform: scale(1.05);
 }
 
 /* ===============================
-    MENU ENFANT
+   MENU ENFANT
    =============================== */
+
+/* bandeau Menu Petit Samouraï avec dégradé rose bordure pointillés et personnage décoratif à gauche */
 .page-produits .bandeau-enfant {
-    position: relative;
+    position: relative; /* ancre le samouraï positionné en absolu */
     background: linear-gradient(135deg, #FFE8E8 0%, #FFF5E5 100%);
     width: 92%;
     max-width: 60rem;
@@ -836,31 +925,36 @@ body {
     text-align: center;
 }
 
+/* image décorative du samouraï collée en bas à gauche du bandeau */
 .page-produits .samourai-deco {
     position: absolute;
     left: -1.5rem;
     bottom: 0;
     height: 70vh;
     width: auto;
-    mix-blend-mode: multiply;
+    mix-blend-mode: multiply; /* rend le fond blanc de l'image transparent sur le dégradé */
 }
 
+/* décale le texte vers la droite pour ne pas couvrir le samouraï */
 .page-produits .contenu-enfant {
-    padding-left: 20%;
+    padding-left: 20%; /* % relatif à la largeur du bandeau donc s'adapte à tous les écrans */
 }
 
+/* grand emoji affiché sur sa propre ligne */
 .page-produits .emoji-samourai {
     font-size: 3.5rem;
-    display: block;
+    display: block; /* force le passage à la ligne car les emojis sont inline par défaut */
     margin-bottom: 0.8rem;
 }
 
+/* titre du menu enfant */
 .page-produits .bandeau-enfant h2 {
     color: var(--rouge);
     font-size: 2rem;
     margin-bottom: 0.5rem;
 }
 
+/* prix du menu enfant affiché grand */
 .page-produits .prix-enfant {
     font-size: 1.8rem;
     color: var(--rouge);
@@ -868,12 +962,14 @@ body {
     margin-bottom: 0.8rem;
 }
 
+/* description du menu enfant */
 .page-produits .desc-enfant {
     font-size: 1.1rem;
     color: var(--noir);
     margin-bottom: 1.5rem;
 }
 
+/* bouton Ajouter au panier du menu enfant */
 .page-produits .btn-enfant {
     background: var(--rouge);
     color: var(--blanc);
@@ -886,6 +982,7 @@ body {
     transition: all 0.3s;
 }
 
+/* remonté avec ombre rouge au survol */
 .page-produits .btn-enfant:hover {
     background: #B01234;
     transform: translateY(-3px);
@@ -893,8 +990,10 @@ body {
 }
 
 /* ===============================
-    FOOTER
+   FOOTER
    =============================== */
+
+/* pied de page en 3 colonnes sur fond noir */
 .page-produits .bas-de-page {
     background-color: var(--noir);
     color: var(--beige-clair);
@@ -902,6 +1001,7 @@ body {
     margin-top: 4rem;
 }
 
+/* grille 3 colonnes : Infos / Contact / Réseaux sociaux */
 .page-produits .conteneur-footer {
     max-width: 75rem;
     margin: 0 auto;
@@ -910,31 +1010,37 @@ body {
     gap: 2rem;
 }
 
+/* titre de chaque colonne du footer */
 .page-produits .colonne-footer h3 {
     color: var(--rouge);
     margin-bottom: 1rem;
     font-size: 1.2rem;
 }
 
+/* lignes de texte dans le footer */
 .page-produits .colonne-footer p {
     margin-bottom: 0.8rem;
 }
 
+/* liens du footer en beige clair sur fond noir */
 .page-produits .colonne-footer a {
     color: var(--beige-clair);
     text-decoration: none;
 }
 
+/* rouge au survol */
 .page-produits .colonne-footer a:hover {
     color: var(--rouge);
 }
 
+/* boutons des réseaux sociaux côte à côte */
 .page-produits .reseaux-sociaux {
     display: flex;
     gap: 1rem;
     margin-top: 1rem;
 }
 
+/* chaque bouton réseau social blanc sur fond noir */
 .page-produits .reseaux-sociaux a {
     display: inline-block;
     padding: 0.5rem 0.875rem;
@@ -944,12 +1050,14 @@ body {
     transition: all 0.3s ease;
 }
 
+/* rouge au survol */
 .page-produits .reseaux-sociaux a:hover {
     background-color: var(--rouge);
     color: var(--blanc);
     transform: scale(1.05);
 }
 
+/* ligne de copyright séparée du reste par un trait */
 .page-produits .copyright {
     text-align: center;
     padding-top: 2rem;
@@ -959,8 +1067,10 @@ body {
 }
 
 /* ===============================
-    RESPONSIVE
+   RESPONSIVE
    =============================== */
+
+/* tablette : les grilles passent en colonne unique */
 @media (max-width: 56rem) {
     .page-produits .grille-produits,
     .page-produits .conteneur-categories {
@@ -971,12 +1081,14 @@ body {
         grid-template-columns: 1fr;
     }
 
+    /* personnage réduit et repositionné */
     .page-produits .perso-accueil {
         width: 9rem;
         top: -10rem;
     }
 }
 
+/* mobile : logo réduit personnage et samouraï masqués padding réinitialisé */
 @media (max-width: 37.5rem) {
     .page-produits .logo-principal {
         height: 7.5rem;
@@ -995,6 +1107,6 @@ body {
     }
 
     .page-produits .contenu-enfant {
-        padding-left: 0;
+        padding-left: 0; /* reset car le samouraï est caché sur mobile */
     }
 }
