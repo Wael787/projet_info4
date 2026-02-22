@@ -126,20 +126,24 @@ footer{
     text-transform: uppercase;
 }
 
+/* --- LE CONTENEUR (L'ancrage) --- */
+.section-menu-burger {
+    position: absolute;
+    top: 1.5rem;   /* Aligné sur le padding du header */
+    left: 2rem;
+    z-index: 1000;
+}
+
 /* MENU BURGER */
 .menu-burger {
-    width: 3.125rem; /* 50px */
-    height: 3.125rem;
     font-size: 3.125rem;
     background: none;
     border: none;
     cursor: pointer;
     color: var(--noir);
     transition: color 0.3s ease;
-    display: block;       /* Prend sa place naturellement */
-    position: absolute;
-    left: 2rem;
-    top: 1rem;
+    display: block;
+    line-height: 1;
 }
 
 .menu-burger:hover {
@@ -148,31 +152,36 @@ footer{
 
 /*NAVIGATION*/
 .navigation {
-    display: none;
+    font-family: Georgia, serif; 
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
     position: absolute;
-    top: 6.25rem; /* 100px */
-    left: 2rem;
+    top: 100%;  /* juste sous .section-menu-burger */
+    left: 0;
     background: var(--blanc);
-    padding: 1rem;
-    border-radius: 0.625rem; /* 10px */
+    min-width: 11rem;
+    border-radius: 0.625rem;
+    border: 1px solid var(--beige-fonce);
     box-shadow: 0 0.25rem 0.625rem rgba(0,0,0,0.1);
     z-index: 3000;
 }
 
 .liste-du-haut {
     list-style: none;
+    padding: 0.5rem 0;
 }
 
 .liste-du-haut li {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0;
 }
 
 .liste-du-haut a {
     color: var(--noir);
     text-decoration: none;
-    padding: 0.5rem 1rem;
+    padding: 0.625rem 1rem;
     display: block;
-    border-radius: 0.3125rem; /* 5px */
+    border-radius: 0.3125rem;
     transition: all 0.3s;
 }
 
@@ -181,10 +190,10 @@ footer{
     color: var(--rouge);
 }
 
-/* Affichage au survol */
-.menu-burger:hover + .navigation, 
-.navigation:hover {
-    display: block;
+/* Hover sur le conteneur entier → pas de gap entre bouton et menu */
+.section-menu-burger:hover .navigation {
+    visibility: visible;
+    opacity: 1;
 }
 
 /* 
@@ -556,16 +565,8 @@ footer a:hover {
         height: 8.75rem; /* 140px */
     }
     
-    /* Menu burger ajusté */
-    .menu-burger {
-        left: 1rem;
-        top: 0.5rem;
-    }
-    
-    .navigation {
-        left: 1rem;
-        top: 4rem;
-    }
+    /* Navigation : top:100% et left:0 définis dans le CSS de base,
+       pas besoin de les redéfinir ici */
     
     /* Formulaires pleine largeur */
     .boite-formulaire {
