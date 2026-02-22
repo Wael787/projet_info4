@@ -2,76 +2,70 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Administration – Le Jardin de Kyoto</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="../css/style.css">
 </head>
-
 <body class="admin-page">
 
 <header class="header admin-header">
+  <!-- Checkbox burger (doit être avant le label pour le CSS) -->
+  <input type="checkbox" id="menu-toggle" aria-hidden="true">
 
-  <!-- checkbox burger -->
-  <input type="checkbox" id="menu-toggle">
-
-  <!-- bouton burger -->
-  <label for="menu-toggle" class="burger-left">
+  <!-- Bouton burger -->
+  <label for="menu-toggle" class="burger-left" aria-label="Ouvrir le menu">
     <span></span>
     <span></span>
     <span></span>
   </label>
 
-  <!-- menu -->
-  <nav class="menu-left">
-    <a href="index.html">Accueil</a>
-    <a href="orders.html">Commandes</a>
-    <a href="delivery.html">Livraison</a>
-    <a href="inscription.html">Inscription</a>
+  <!-- Menu de navigation -->
+  <nav class="menu-left" aria-label="Navigation administration">
     <a href="connexion.html">Connexion</a>
-    <a href="profil.html">Profil</a>
-    <hr>
+    <a href="inscriptions.html">Inscription</a>
+
     <a href="admin.html">Administrateur</a>
     <a href="commandes.html">Commandes</a>
     <a href="livraison.html">Livraison</a>
   </nav>
 
   <h1 class="admin-title">Administrateur</h1>
-
 </header>
 
-<section class="admin">
-
+<main class="admin">
   <h2 class="admin-subtitle">Liste des utilisateurs</h2>
 
   <table>
-    <tr>
-      <th>Nom</th>
-      <th>Email</th>
-      <th>Rôle</th>
-      <th>Commandes</th>
-    </tr>
-
-    <tr>
-      <td>Dupont</td>
-      <td>dupont@mail.com</td>
-      <td>Client</td>
-      <td>3</td>
-    </tr>
-
-    <tr>
-      <td>Martin</td>
-      <td>martin@mail.com</td>
-      <td>Livreur</td>
-      <td>12</td>
-    </tr>
-
-    <tr>
-      <td>Admin</td>
-      <td>admin@kyoto.com</td>
-      <td>Administrateur</td>
-      <td>-</td>
-    </tr>
+    <thead>
+      <tr>
+        <th scope="col">Nom</th>
+        <th scope="col">Email</th>
+        <th scope="col">Rôle</th>
+        <th scope="col">Commandes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Dupont</td>
+        <td><a href="mailto:dupont@example.com">dupont@example.com</a></td>
+        <td>Client</td>
+        <td>3</td>
+      </tr>
+      <tr>
+        <td>Martin</td>
+        <td><a href="mailto:martin@example.com">martin@example.com</a></td>
+        <td>Client</td>
+        <td>5</td>
+      </tr>
+      <tr>
+        <td>Admin</td>
+        <td><a href="mailto:admin@lejardindekyoto.fr">admin@lejardindekyoto.fr</a></td>
+        <td>Administrateur</td>
+        <td>—</td>
+      </tr>
+    </tbody>
   </table>
-</section>
+</main>
 
 </body>
 </html>

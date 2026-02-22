@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <title>Le Jardin de Kyoto - Restaurant Japonais</title>
+</head>
+
+<body class="page-accueil">
+
+    <!-- HEADER
+         .section-menu-burger est positionné en absolu dans le header.
+         Son pseudo-élément ::after (invisible, 25rem de haut) prolonge
+         la zone de hover vers le bas → le menu reste ouvert même
+         quand la souris descend sur le 4ème, 5ème lien, etc. -->
+    <header class="entete-principale">
+        
+        <div class="conteneur-logo">
+            <img src="../img/logo.png" alt="Logo Jardin De Kyoto" class="logo-principal">
+            <p class="slogan-header">ART CULINAIRE & SÉRÉNITÉ</p>
+        </div>
+        
+        <div class="section-menu-burger">
+            <button class="menu-burger" aria-label="Menu">☰</button>
+            <nav class="navigation">
+                <ul class="liste-du-haut">
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="produit.html">Menu</a></li>
+                    <li><a href="profil.html">Mon profil</a></li>
+                    <li><a href="connexion.html">Connexion</a></li>
+                    <li><a href="inscriptions.html">Inscription</a></li>
+                    <li><a href="notation.html">Noter ma commande</a></li>
+
+                </ul>
+            </nav>
+        </div>
+        
+    </header>
+
+    <main>
+        
+        <!-- SECTION BIENVENUE -->
+        <section class="section-bienvenue">
+            
+            <div class="perso-accueil">
+                <div class="bulle-bienvenue">Bienvenue !</div>
+                <img src="../img/Character_Teuchi.webp" alt="Cuisinier Ramen">
+            </div>
+            
+            <h1>Savourez l'excellence de la cuisine Japonaise</h1>
+
+            <div class="boite-recherche">
+                <form action="#" method="get">
+                    <input type="text" id="nom_plat" name="barre-recherche"
+                           placeholder="Rechercher un plat" class="champ-recherche">
+                    <button type="submit" class="bouton-recherche">Rechercher</button>
+                </form>
+            </div>
+            
+        </section>
+
+        <!-- SECTION FAVORIS -->
+        <section class="section-favoris">
+            <h2>Les favoris du moment</h2>
+            <div class="grille-presentation">
+
+                <article class="produits-favoris">
+                    <img src="../img/PlateauKyoto2.jpg" alt="Plateau Kyoto Mix">
+                    <h3>Plateau Kyoto Mix</h3>
+                    <p class="prix-produit">17,90 €</p>
+                </article>
+
+                <article class="produits-favoris">
+                    <img src="../img/RamenIchiraku.jpg" alt="Ramen Ichiraku">
+                    <h3>Ramen Ichiraku</h3>
+                    <p class="prix-produit">14,50 €</p>
+                </article>
+
+                <article class="produits-favoris">
+                    <img src="../img/MochiSakura.jpg" alt="Mochis Glacé">
+                    <h3>Perles de Sakura</h3>
+                    <p class="prix-produit">6,90 €</p>
+                </article>  
+
+                <article class="produits-favoris carte-menu">
+                    <a href="produit.html">
+                        <img src="../img/LanterneJapon.jpg" alt="Voir le menu">
+                        <div class="texte-survol">
+                            <h3>Découvrir les autres plats</h3>
+                            <p>Cliquez pour ouvrir le menu →</p>
+                        </div>
+                    </a>
+                </article>
+
+            </div>
+        </section>
+        
+    </main>
+
+    <footer class="bas-de-page">
+        <div class="conteneur-footer">
+            <div class="colonne-footer">
+                <h3>Information</h3>
+                <p><a href="#">Mentions légales</a></p>
+                <p><a href="#">Politique de confidentialité</a></p>
+            </div>
+            <div class="colonne-footer">
+                <h3>Contact</h3>
+                <p>📍 15 rue de la Paix, 75002 Paris</p>
+                <p>📞 01 42 XX XX XX</p>
+                <p>✉️ contact@jardinkyoto.fr</p>
+            </div>
+            <div class="colonne-footer">
+                <h3>Suivez-nous</h3>
+                <div class="reseaux-sociaux">
+                    <a href="#">Instagram</a>
+                    <a href="#">Facebook</a>
+                    <a href="#">TikTok</a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 Le Jardin de Kyoto - Tous droits réservés</p>
+        </div>
+    </footer>
+    
+</body>
+</html>

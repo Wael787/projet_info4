@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Profil - Le Jardin de Kyoto</title>
+    <link rel="stylesheet" href="../css/style.css"
+    
+</head>
+
+<body class="page-profil">
+
+    <!-- HEADER -->
+    <header class="entete-principale">
+
+        <div class="conteneur-logo">
+            <img src="../img/logo.png" alt="Logo Jardin De Kyoto" class="logo-principal">
+            <p class="slogan-header">Authenticité Japonaise</p>
+        </div>
+
+        <div class="section-menu-burger">
+            <button class="menu-burger" aria-label="Menu">☰</button>
+            <nav class="navigation">
+                <ul class="liste-du-haut">
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="produit.html">Menu</a></li>
+                    <li><a href="profil.html">Mon profil</a></li>
+                    <li><a href="connexion.html">Connexion</a></li>
+                    <li><a href="inscriptions.html">Inscription</a></li>
+                    <li><a href="notation.html">Noter ma commande</a></li>
+                </ul>
+            </nav>
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- SECTION HERO PROFIL -->
+        <section class="section-hero-profil">
+            <div class="avatar-conteneur">
+                <div class="avatar">🧑</div>
+                <div class="badge-fidelite">⭐ Membre Or</div>
+            </div>
+            <div class="hero-infos">
+                <h1>Bonjour, <span class="nom-utilisateur">Kenji Tanaka</span> !</h1>
+                <p class="membre-depuis">Membre depuis janvier 2024</p>
+            </div>
+        </section>
+
+        <!-- GRILLE PRINCIPALE -->
+        <div class="grille-profil">
+
+            <!-- COLONNE GAUCHE -->
+            <div class="colonne-gauche">
+
+                <!-- BLOC INFORMATIONS PERSONNELLES -->
+                <section class="bloc-profil">
+                    <div class="bloc-entete">
+                        <h2>Informations personnelles</h2>
+                    </div>
+
+                    <div class="liste-infos">
+
+                        <div class="ligne-info">
+                            <span class="label-info">Prénom</span>
+                            <span class="valeur-info" id="prenom">Kenji</span>
+                            <button class="btn-crayon" title="Modifier" onclick="activerModification('prenom')">✏️</button>
+                        </div>
+
+                        <div class="ligne-info">
+                            <span class="label-info">Nom</span>
+                            <span class="valeur-info" id="nom">Tanaka</span>
+                            <button class="btn-crayon" title="Modifier" onclick="activerModification('nom')">✏️</button>
+                        </div>
+
+                        <div class="ligne-info">
+                            <span class="label-info">Email</span>
+                            <span class="valeur-info" id="email">kenji.tanaka@mail.fr</span>
+                            <button class="btn-crayon" title="Modifier" onclick="activerModification('email')">✏️</button>
+                        </div>
+
+                        <div class="ligne-info">
+                            <span class="label-info">Téléphone</span>
+                            <span class="valeur-info" id="telephone">06 12 34 56 78</span>
+                            <button class="btn-crayon" title="Modifier" onclick="activerModification('telephone')">✏️</button>
+                        </div>
+
+                        <div class="ligne-info">
+                            <span class="label-info">Date de naissance</span>
+                            <span class="valeur-info" id="naissance">15/03/1995</span>
+                            <button class="btn-crayon" title="Modifier" onclick="activerModification('naissance')">✏️</button>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- BLOC ADRESSE DE LIVRAISON -->
+                <section class="bloc-profil">
+                    <div class="bloc-entete">
+                        <h2>Adresse de livraison</h2>
+                    </div>
+
+                    <div class="liste-infos">
+
+                        <div class="ligne-info">
+                            <span class="label-info">Adresse</span>
+                            <span class="valeur-info" id="adresse">12 rue des Cerisiers</span>
+                            <button class="btn-crayon" title="Modifier" onclick="activerModification('adresse')">✏️</button>
+                        </div>
+
+                        <div class="ligne-info">
+                            <span class="label-info">Ville</span>
+                            <span class="valeur-info" id="ville">Paris 75011</span>
+                            <button class="btn-crayon" title="Modifier" onclick="activerModification('ville')">✏️</button>
+                        </div>
+
+                        <div class="ligne-info">
+                            <span class="label-info">Code interphone</span>
+                            <span class="valeur-info" id="interphone">4271</span>
+                            <button class="btn-crayon" title="Modifier" onclick="activerModification('interphone')">✏️</button>
+                        </div>
+
+                        <div class="ligne-info">
+                            <span class="label-info">Étage</span>
+                            <span class="valeur-info" id="etage">3ème étage, porte droite</span>
+                            <button class="btn-crayon" title="Modifier" onclick="activerModification('etage')">✏️</button>
+                        </div>
+
+                        <div class="ligne-info">
+                            <span class="label-info">Commentaire</span>
+                            <span class="valeur-info" id="commentaire">Sonner deux fois</span>
+                            <button class="btn-crayon" title="Modifier" onclick="activerModification('commentaire')">✏️</button>
+                        </div>
+
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- COLONNE DROITE -->
+            <div class="colonne-droite">
+
+                <!-- BLOC FIDÉLITÉ -->
+                <section class="bloc-profil bloc-fidelite">
+                    <div class="bloc-entete">
+                        <h2>🎁 Mon compte fidélité</h2>
+                    </div>
+
+                    <div class="fidelite-contenu">
+
+                        <div class="points-cercle">
+                            <span class="points-nombre">340</span>
+                            <span class="points-label">points</span>
+                        </div>
+
+                        <div class="fidelite-details">
+                            <p class="fidelite-statut">Statut : <strong>Membre Or ⭐</strong></p>
+                            <p class="fidelite-info">Prochain palier : <strong>Membre Platine</strong> à 500 pts</p>
+
+                            <div class="barre-progression-conteneur">
+                                <div class="barre-progression">
+                                    <div class="barre-remplie" style="width: 68%"></div>
+                                </div>
+                                <span class="progression-texte">340 / 500 pts</span>
+                            </div>
+
+                            <div class="avantages">
+                                <p class="avantages-titre">Vos avantages actuels :</p>
+                                <ul class="liste-avantages">
+                                    <li>✅ -10% sur toutes les commandes</li>
+                                    <li>✅ Livraison offerte dès 20€</li>
+                                    <li>✅ 1 Mochi offert tous les mois</li>
+                                    <li>🔒 Accès Platine : dessert offert</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- BLOC HISTORIQUE COMMANDES -->
+                <section class="bloc-profil">
+                    <div class="bloc-entete">
+                        <h2>📦 Mes commandes</h2>
+                    </div>
+
+                    <div class="liste-commandes">
+
+                        <div class="commande-item">
+                            <div class="commande-entete">
+                                <span class="commande-date">18 fév. 2026</span>
+                                <span class="commande-statut statut-livre">Livrée ✓</span>
+                            </div>
+                            <p class="commande-detail">Plateau Kyoto Mix × 1 — Dragon Roll × 1 — Ramen Ichiraku × 2</p>
+                            <div class="commande-pied">
+                                <span class="commande-total">Total : 58,90 €</span>
+                                <span class="commande-points">+58 pts</span>
+                            </div>
+                        </div>
+
+                        <div class="commande-item">
+                            <div class="commande-entete">
+                                <span class="commande-date">10 fév. 2026</span>
+                                <span class="commande-statut statut-livre">Livrée ✓</span>
+                            </div>
+                            <p class="commande-detail">Nigiri Saumon × 2 — Yakitori Poulet × 3 — Mochi Glacé × 1</p>
+                            <div class="commande-pied">
+                                <span class="commande-total">Total : 34,00 €</span>
+                                <span class="commande-points">+34 pts</span>
+                            </div>
+                        </div>
+
+                        
+
+                    </div>
+                </section>
+
+            </div>
+        </div>
+
+        <!-- POPUP MESSAGE "non disponible phase 1" -->
+        <div class="popup-overlay" id="popupOverlay">
+            <div class="popup">
+                <p>✏️ La modification sera disponible en <strong>phase 3</strong> du projet.</p>
+                <button class="popup-fermer" onclick="fermerPopup()">Compris !</button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bas-de-page">
+
+        <div class="conteneur-footer">
+
+            <div class="colonne-footer">
+                <h3>Information</h3>
+                <p><a href="#">Mentions légales</a></p>
+                <p><a href="#">Politique de confidentialité</a></p>
+            </div>
+
+            <div class="colonne-footer">
+                <h3>Contact</h3>
+                <p>📍 15 rue de la Paix, 75002 Paris</p>
+                <p>📞 01 42 XX XX XX</p>
+                <p>✉️ contact@jardinkyoto.fr</p>
+            </div>
+
+            <div class="colonne-footer">
+                <h3>Suivez-nous</h3>
+                <div class="reseaux-sociaux">
+                    <a href="#">Instagram</a>
+                    <a href="#">Facebook</a>
+                    <a href="#">TikTok</a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="copyright">
+            <p>&copy; 2025 Le Jardin de Kyoto - Tous droits réservés</p>
+        </div>
+
+    </footer>
+
+    <script>
+        // Affiche la popup quand on clique sur un crayon
+        function activerModification(champ) {
+            document.getElementById('popupOverlay').style.display = 'flex';
+        }
+
+        // Ferme la popup
+        function fermerPopup() {
+            document.getElementById('popupOverlay').style.display = 'none';
+        }
+
+        // Ferme aussi en cliquant en dehors de la popup
+        document.getElementById('popupOverlay').addEventListener('click', function(e) {
+            if (e.target === this) fermerPopup();
+        });
+    </script>
+
+</body>
+</html>
