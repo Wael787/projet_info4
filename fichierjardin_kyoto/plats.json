@@ -1,0 +1,295 @@
+[
+    {
+        "id": "P001",
+        "nom": "California Roll",
+        "categorie": "sushis",
+        "prix": 8.5,
+        "description": "8 pièces de riz vinaigré, avocat et crabe enrobées de tobiko et de sésame.",
+        "image": "img/CaliforniaRoll1.jpg",
+        "badge": "Doux",
+        "allergenes": [
+            "gluten",
+            "crustacés",
+            "sesame"
+        ],
+        "disponible": true,
+        "menu_classique": false
+    },
+    {
+        "id": "P002",
+        "nom": "Nigiri Saumon",
+        "categorie": "sushis",
+        "prix": 6.0,
+        "description": "6 pièces de saumon frais sur riz vinaigré, wasabi inclus.",
+        "image": "img/NagirSaumon2.jpg",
+        "badge": "Cru",
+        "allergenes": [
+            "poisson"
+        ],
+        "disponible": true,
+        "menu_classique": true
+    },
+    {
+        "id": "P003",
+        "nom": "Nigiri Thon",
+        "categorie": "sushis",
+        "prix": 7.5,
+        "description": "6 pièces de thon rouge sur riz vinaigré.",
+        "image": "img/NagiriThon1.jpg",
+        "badge": "Cru",
+        "allergenes": [
+            "poisson"
+        ],
+        "disponible": true,
+        "menu_classique": true
+    },
+    {
+        "id": "P004",
+        "nom": "Veggie Roll",
+        "categorie": "sushis",
+        "prix": 7.0,
+        "description": "8 pièces : avocat, concombre, cream cheese, topped sésame.",
+        "image": "img/VegieRoll1.jpg",
+        "badge": "Végé",
+        "allergenes": [
+            "lactose",
+            "sesame"
+        ],
+        "disponible": true,
+        "menu_classique": true
+    },
+    {
+        "id": "P005",
+        "nom": "Dragon Roll",
+        "categorie": "sushis",
+        "prix": 12.0,
+        "description": "8 pièces : tempura crevettes, concombre, cream cheese, mayo spicy et tobiko.",
+        "image": "img/DragonRoll.jpg",
+        "badge": "Mer",
+        "allergenes": [
+            "gluten",
+            "crustacés",
+            "lactose",
+            "oeufs"
+        ],
+        "disponible": true,
+        "menu_classique": false
+    },
+    {
+        "id": "P006",
+        "nom": "Plateau Kyoto Mix",
+        "categorie": "sushis",
+        "prix": 17.9,
+        "description": "18 pièces variées : nigiris, makis, rolls et sashimis.",
+        "image": "img/PlateauKyoto2.jpg",
+        "badge": "2 pers",
+        "allergenes": [
+            "poisson",
+            "crustacés",
+            "sesame",
+            "gluten"
+        ],
+        "disponible": true,
+        "menu_classique": false
+    },
+    {
+        "id": "P007",
+        "nom": "Yakitori Poulet",
+        "categorie": "brochettes",
+        "prix": 5.5,
+        "description": "3 brochettes de poulet mariné, sauce teriyaki.",
+        "image": "img/BrochettesPoulet.jpg",
+        "badge": "Poulet",
+        "allergenes": [
+            "gluten",
+            "soja"
+        ],
+        "disponible": true,
+        "menu_classique": true
+    },
+    {
+        "id": "P008",
+        "nom": "Yakitori Boeuf",
+        "categorie": "brochettes",
+        "prix": 5.5,
+        "description": "3 brochettes de bœuf tendre, sauce soja sucrée.",
+        "image": "img/BrochettesBoeuf.jpg",
+        "badge": "Bœuf",
+        "allergenes": [
+            "gluten",
+            "soja"
+        ],
+        "disponible": true,
+        "menu_classique": true
+    },
+    {
+        "id": "P009",
+        "nom": "Yakitori Bœuf Fromage",
+        "categorie": "brochettes",
+        "prix": 6.5,
+        "description": "3 brochettes de bœuf tendre au fromage, sauce soja sucrée.",
+        "image": "img/BrochettesBoeufFromage.jpg",
+        "badge": "Bœuf Fromage",
+        "allergenes": [
+            "gluten",
+            "soja",
+            "lactose"
+        ],
+        "disponible": true,
+        "menu_classique": false
+    },
+    {
+        "id": "P010",
+        "nom": "Yakitori Saumon",
+        "categorie": "brochettes",
+        "prix": 7.0,
+        "description": "3 brochettes de saumon grillées.",
+        "image": "img/BrochettesSaumon.jpg",
+        "badge": "Mer",
+        "allergenes": [
+            "poisson"
+        ],
+        "disponible": true,
+        "menu_classique": false
+    },
+    {
+        "id": "P011",
+        "nom": "Mix Yakitori",
+        "categorie": "brochettes",
+        "prix": 16.5,
+        "description": "2 yakitoris de chaque, accompagnés de portions de riz.",
+        "image": "img/MixYakitori.jpg",
+        "badge": "2 pers",
+        "allergenes": [
+            "gluten",
+            "soja",
+            "poisson"
+        ],
+        "disponible": true,
+        "menu_classique": false
+    },
+    {
+        "id": "P012",
+        "nom": "Ramen Ichiraku",
+        "categorie": "plats_chauds",
+        "prix": 14.5,
+        "description": "Bouillon au poulet, nouilles, œuf mariné.",
+        "image": "img/RamenIchiraku.jpg",
+        "badge": "Spécialité du Chef",
+        "allergenes": [
+            "gluten",
+            "oeufs",
+            "soja"
+        ],
+        "disponible": true,
+        "menu_classique": true
+    },
+    {
+        "id": "P013",
+        "nom": "Ramen Végétarien",
+        "categorie": "plats_chauds",
+        "prix": 12.0,
+        "description": "Bouillon miso, nouilles, légumes, tofu grillé.",
+        "image": "img/RamenVege.jpg",
+        "badge": "Végé",
+        "allergenes": [
+            "gluten",
+            "soja"
+        ],
+        "disponible": true,
+        "menu_classique": true
+    },
+    {
+        "id": "P014",
+        "nom": "Curry Japonais",
+        "categorie": "plats_chauds",
+        "prix": 13.5,
+        "description": "Curry doux, poulet pané et légumes, riz.",
+        "image": "img/CurryJaponais.jpg",
+        "badge": "Doux",
+        "allergenes": [
+            "gluten",
+            "celeri"
+        ],
+        "disponible": true,
+        "menu_classique": true
+    },
+    {
+        "id": "P015",
+        "nom": "Tempura Mix",
+        "categorie": "plats_chauds",
+        "prix": 9.5,
+        "description": "Crevettes et légumes croustillants, riz vinaigré.",
+        "image": "img/Tempura.jpg",
+        "badge": "Mer",
+        "allergenes": [
+            "gluten",
+            "crustacés",
+            "oeufs"
+        ],
+        "disponible": true,
+        "menu_classique": true
+    },
+    {
+        "id": "P016",
+        "nom": "Mochi Glacé",
+        "categorie": "desserts",
+        "prix": 5.5,
+        "description": "3 pièces : Fraise, Vanille, Litchi.",
+        "image": "img/MochiSakura.jpg",
+        "badge": "Frais",
+        "allergenes": [
+            "gluten",
+            "lactose"
+        ],
+        "disponible": true,
+        "menu_classique": true
+    },
+    {
+        "id": "P017",
+        "nom": "Dorayaki",
+        "categorie": "desserts",
+        "prix": 4.5,
+        "description": "2 pancakes fourrés à la pâte d'haricots rouges avec un verre de thé.",
+        "image": "img/Doryaki2.jpg",
+        "badge": "Sucré",
+        "allergenes": [
+            "gluten",
+            "oeufs",
+            "lactose"
+        ],
+        "disponible": true,
+        "menu_classique": true
+    },
+    {
+        "id": "P018",
+        "nom": "Cheesecake Matcha",
+        "categorie": "desserts",
+        "prix": 6.0,
+        "description": "Crémeux thé vert matcha, base biscuit.",
+        "image": "img/CheeseCakeMatcha.jpg",
+        "badge": "Matcha",
+        "allergenes": [
+            "gluten",
+            "lactose",
+            "oeufs"
+        ],
+        "disponible": true,
+        "menu_classique": true
+    },
+    {
+        "id": "P019",
+        "nom": "Menu Petit Samouraï",
+        "categorie": "menus_enfant",
+        "prix": 9.5,
+        "description": "Nuggets de poulet, riz, 2 makis, jus d'orange et 1 Mochi surprise !",
+        "image": "img/SamouraiEnfant.jpg",
+        "badge": "Enfant",
+        "allergenes": [
+            "gluten",
+            "oeufs"
+        ],
+        "disponible": true,
+        "menu_classique": true
+    }
+]

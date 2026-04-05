@@ -1,0 +1,32 @@
+[
+    {
+        "id": "M001",
+        "nom": "Menu Découverte Solo",
+        "description": "L'essentiel du Jardin de Kyoto pour une personne : un Plateau Kyoto Mix, un Mochi Glacé et une boisson. Idéal pour découvrir notre cuisine.",
+        "plats": ["P006", "P016"],
+        "prix_total": 21.90,
+        "personnes_min": 1,
+        "creneaux": null,
+        "disponible": true
+    },
+    {
+        "id": "M002",
+        "nom": "Menu Midi Express",
+        "description": "Formule déjeuner rapide disponible uniquement le midi en semaine : Ramen Ichiraku (spécialité du chef) + Dorayaki. Servi en moins de 15 minutes.",
+        "plats": ["P012", "P017"],
+        "prix_total": 17.00,
+        "personnes_min": 1,
+        "creneaux": "11:30-14:30",
+        "disponible": true
+    },
+    {
+        "id": "M003",
+        "nom": "Menu Duo Festif",
+        "description": "Conçu pour être partagé à deux : Plateau Kyoto Mix 18 pièces, Mix Yakitori (toutes brochettes), et 2 Mochis Glacés. Économisez 4€ par rapport à la carte.",
+        "plats": ["P006", "P011", "P016", "P016"],
+        "prix_total": 43.40,
+        "personnes_min": 2,
+        "creneaux": null,
+        "disponible": true
+    }
+]

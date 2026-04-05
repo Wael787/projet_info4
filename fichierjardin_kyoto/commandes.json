@@ -1,0 +1,32 @@
+[
+    {
+        "id": "44F9851A33",
+        "client_id": "U7590D1536B",
+        "articles": [
+            {
+                "plat_id": "MENU_CLASSIQUE_P003_P008_P018",
+                "type": "menu",
+                "nom": "Menu Classique",
+                "description": "Nigiri Thon + Yakitori Boeuf + Cheesecake Matcha + Ramune offerte",
+                "quantite": 1,
+                "prix_unit": 17.9
+            }
+        ],
+        "type_livraison": "livraison",
+        "adresse": "Adresse de Wael",
+        "infos_livraison": "",
+        "commentaire": "sauce soja sucrée svp",
+        "heure_souhaitee": "2026-04-05T21:20",
+        "sous_total": 17.9,
+        "remise": 0,
+        "reduction": 0,
+        "total": 17.9,
+        "statut": "en_preparation",
+        "paiement_statut": "paye",
+        "livreur_id": null,
+        "date": "2026-04-05 20:20:43",
+        "date_paiement": "2026-04-05 20:20:57"
+    }
+
+    
+]
