@@ -1,0 +1,24 @@
+Identité Visuelle - Le Jardin de Kyoto
+
+Pour coller à l'univers du restaurant de Teuchi, on a voulu une charte graphique qui mélange tradition japonaise et confort de lecture. L'objectif était d'avoir un site "Zen" mais efficace.
+Nos choix de couleurs (Variables CSS)
+
+Pas de blanc (pur) et de noir total pour éviter de fatiguer les yeux.
+
+    Le Fond (--beige-clair) : Un beige très doux (#F4EAE1) qui rappelle le papier traditionnel ou le bois clair. Ça donne tout de suite un côté plus "haut de gamme" qu'un fond blanc classique.
+
+    L'Action (--rouge) : Un rouge profond (#D1464A). On l'utilise pour tout ce qui est cliquable (boutons, liens) et pour les prix. C'est la couleur du Japon, elle attire l'œil sans être agressive.
+
+    Le Texte (--noir) : Un gris très foncé (#2C2C2C) pour que ce soit bien lisible sans le contraste trop violent du noir pur.
+
+Typographie & Style
+
+    Police : On est partis sur la Georgia. C'est une police avec empattement (serif) qui fait très "menu de restaurant" et qui renforce le côté artisanal/traditionnel.
+
+    Bords arrondis : On a mis un border-radius de 0.5rem partout. Ça enlèves le côté rigide du web et ça rend l'interface plus accueillante.
+
+Expérience Utilisateur (UX)
+
+    Le fil rouge : Le personnage de Teuchi nous sert de guide. Il apparaît dans des bulles pour valider une inscription ou confirmer un ajout au panier.
+
+    Adaptabilité : Le site est pensé pour être utilisé aussi bien sur PC que sur mobile (avec un menu burger pour ne pas encombrer l'écran sur téléphone).
