@@ -1,0 +1,2180 @@
+/* 1. VARIABLES (Charte graphique) */
+:root {
+    --beige-clair:  #F4EAE1;
+    --beige-fonce:  #D4C4A8;
+    --noir:         #2C2C2C;
+    --rouge:        #D1464A;
+    --gris:         #6B6B6B;
+    --blanc:        #FFFFFF;
+    --radius:       0.5rem;
+}
+
+
+/* 2. RESET */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* 3. BASE */
+body {
+    font-family: Georgia, serif;
+    background-color: var(--beige-clair);
+    color: var(--noir);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    line-height: 1.6;
+}
+
+main { flex: 1; }
+
+a {
+    color: var(--rouge);
+    text-decoration: none;
+    transition: 0.3s;
+}
+a:hover { text-decoration: underline; opacity: 0.8; }
+
+h1, h2 { margin-bottom: 1rem; color: var(--noir); text-align: center; }
+
+
+/* 4. MENU BURGER(connexion, inscriptions,
+      notation, profil, index, produit) */
+
+/* Conteneur ancré en haut à gauche du header */
+.section-menu-burger {
+    position: absolute;
+    top: 1.5rem;
+    left: 2rem;
+    z-index: 1000;
+}
+
+.section-menu-burger::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 25rem; /* couvre le bouton + tout le menu déroulant */
+    z-index: -1;   /* derrière les éléments, donc non-cliquable par erreur */
+}
+
+/* Bouton ☰ — pas de position:absolute sur lui */
+.menu-burger {
+    font-size: 3rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--noir);
+    transition: color 0.3s ease;
+    display: block;
+    line-height: 1;
+}
+.menu-burger:hover { color: var(--rouge); }
+
+
+.navigation {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    position: absolute;
+    top: 100%;   /* juste sous le bouton ☰ */
+    left: 0;
+    background: var(--blanc);
+    min-width: 11rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--beige-fonce);
+    box-shadow: 0 0.3rem 1rem rgba(0,0,0,0.1);
+    z-index: 3000;
+    font-family: Georgia, serif;
+}
+
+/* Hover sur le CONTENEUR entier (pas juste le bouton) */
+.section-menu-burger:hover .navigation {
+    visibility: visible;
+    opacity: 1;
+}
+
+.liste-du-haut {
+    list-style: none;
+    padding: 0.5rem 0;
+}
+.liste-du-haut a {
+    text-decoration: none;
+    color: var(--noir);
+    padding: 0.625rem 1.25rem;
+    display: block;
+    transition: color 0.2s;
+}
+.liste-du-haut a:hover {
+    color: var(--rouge);
+    text-decoration: none;
+}
+
+
+/* 5. MENU BURGER (admin, commandes, livraison) */
+#menu-toggle { display: none; }
+
+.burger-left {
+    position: fixed;
+    top: 25px;
+    left: 25px;
+    width: 28px;
+    cursor: pointer;
+    z-index: 1000;
+}
+.burger-left span {
+    display: block;
+    height: 2px;
+    background-color: var(--noir);
+    margin: 6px 0;
+    border-radius: 2px;
+    opacity: 0.85;
+}
+
+.menu-left {
+    position: fixed;
+    top: 0;
+    left: -260px;
+    width: 250px;
+    height: 100vh;
+    background: var(--blanc);
+    padding: 80px 25px;
+    display: flex;
+    flex-direction: column;
+    transition: left 0.3s ease;
+    box-shadow: 5px 0 20px rgba(0,0,0,0.08);
+    z-index: 999;
+    font-family: Georgia, serif;
+}
+.menu-left a {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--beige-fonce);
+    font-size: 15px;
+    color: var(--noir);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+.menu-left a:hover { color: var(--rouge); text-decoration: none; }
+.menu-left hr { margin: 20px 0; border: none; border-top: 1px solid var(--beige-fonce); }
+
+/* Panneau coulisse vers la droite quand cochée */
+#menu-toggle:checked ~ .menu-left { left: 0; }
+
+
+/* 6. HEADER STANDARD (index, produit, connexion, inscriptions,
+      notation, profil) */
+.entete-principale {
+    background-color: var(--beige-clair);
+    padding: 0.8rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.conteneur-logo { text-align: center; }
+
+/* Logo grand pour l'accueil, plus petit pour les autres */
+.page-accueil .logo-principal  { height: 14rem; width: auto; }
+.page-produits .logo-principal { height: 10rem; width: auto; }
+.logo-principal                { height: 9rem;  width: auto; } /* défaut */
+
+.slogan-header {
+    font-size: 0.75rem;
+    letter-spacing: 0.3rem;
+    color: var(--gris);
+    margin-top: 0.3rem;
+    text-transform: uppercase;
+}
+
+/* Header admin/commandes/livraison */
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px 20px;
+    text-align: center;
+    position: relative;
+}
+.admin-header  { padding-top: 60px; }
+.admin-title   { font-size: 42px; font-weight: 600; text-align: center; }
+.admin-subtitle { font-size: 18px; font-weight: 500; color: #666; margin-bottom: 20px; text-align: center; }
+.delivery-header { text-align: center; margin-top: 40px; }
+.delivery-header h1 { font-size: 42px; font-weight: 600; margin: 30px 0 15px; }
+
+
+/* 7. FOND SAKURA  */
+body.admin-page::before,
+body.orders-page::before,
+body.delivery::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: url('img/sakura.jpg') center / cover no-repeat;
+    opacity: 0.12;
+    filter: blur(2px);
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* body.delivery centré */
+body.delivery { align-items: center; }
+
+
+/* 8. DÉCORATION PAGES FORMULAIRES — body.page-deco
+      Activé sur : connexion.html, inscriptions.html, notation.html */
+
+/* Personnage Teuchi fixé en bas à droite sur les pages formulaires */
+body.page-deco::before {
+    content: '';
+    position: fixed;
+    right: 2%;
+    bottom: 0;
+    width: clamp(12rem, 18vw, 22rem); /* s'adapte à la taille d'écran */
+    aspect-ratio: 2/3;
+    background-image: url('img/Character_Teuchi.webp');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom right;
+    opacity: 0.9;
+    z-index: 200;
+    pointer-events: none; /* on peut cliquer à travers */
+}
+
+/* Cercle décoratif rouge discret à gauche */
+body.page-deco::after {
+    content: '';
+    position: fixed;
+    left: -5%;
+    top: 20%;
+    width: 20rem;
+    height: 20rem;
+    background: radial-gradient(circle, rgba(209,70,74,0.04) 0%, transparent 70%);
+    border-radius: 50%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Cache Teuchi sous 1200px pour ne pas gêner le contenu */
+@media (max-width: 1200px) {
+    body.page-deco::before { display: none; }
+}
+
+/* 9. PERSONNAGE TEUCHI + BULLE — index, produit */
+
+/* Personnage dépassant en haut à droite de la bannière */
+.page-accueil .perso-accueil {
+    position: absolute;
+    top: -16.5rem;
+    right: 3rem;
+    width: 12.5rem;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+.page-accueil .perso-accueil img {
+    width: 80%;
+    height: auto;
+    filter: drop-shadow(0 0.3rem 1rem rgba(0,0,0,0.2));
+}
+
+.page-produits .perso-accueil {
+    position: absolute;
+    top: -10rem;
+    right: 3rem;
+    width: 12.5rem;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+.page-produits .perso-accueil img {
+    width: 80%;
+    height: 40vh;
+    filter: drop-shadow(0 0.3rem 1rem rgba(0,0,0,0.2));
+}
+
+/* Bulle de dialogue */
+.bulle-bienvenue {
+    background: var(--blanc);
+    border: 2px solid var(--noir);
+    padding: 0.5rem 0.9rem;
+    border-radius: 1.25rem;
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-bottom: 0.625rem;
+    box-shadow: 0.125rem 0.125rem 0.3rem rgba(0,0,0,0.1);
+    position: relative;
+}
+/* Pointe triangulaire en bas de la bulle */
+.bulle-bienvenue::after {
+    content: "";
+    position: absolute;
+    bottom: -0.625rem;
+    right: 1.875rem;
+    width: 0; height: 0;
+    border-left: 0.625rem solid transparent;
+    border-right: 0.625rem solid transparent;
+    border-top: 0.625rem solid var(--blanc);
+}
+
+/* BULLE DE DIALOGUE TEUCHI (pages formulaires) */
+.teuchi-bubble {
+    position: fixed;
+    right: calc(clamp(12rem, 18vw, 22rem) + 1.5rem); /* à gauche de Teuchi */
+    bottom: 35%; /* aligné avec le haut du personnage environ */
+    background-color: var(--blanc);
+    border: 0.125rem solid #333;
+    border-radius: 1rem;
+    padding: 1rem 1.5rem;
+    max-width: 14rem;
+    box-shadow: 0 0.25rem 0.375rem rgba(0,0,0,0.1);
+    animation: fadeIn 1s ease-in;
+    z-index: 500;
+}
+
+/* Petite pointe triangulaire à DROITE de la bulle, pointant vers Teuchi */
+.teuchi-bubble::after {
+    content: '';
+    position: absolute;
+    right: -0.9rem;  /* dépasse à droite */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0; height: 0;
+    border-top: 0.6rem solid transparent;
+    border-bottom: 0.6rem solid transparent;
+    border-left: 0.9rem solid var(--blanc); /* triangle pointant à droite */
+}
+
+/* Bordure de la pointe */
+.teuchi-bubble::before {
+    content: '';
+    position: absolute;
+    right: -1.1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0; height: 0;
+    border-top: 0.7rem solid transparent;
+    border-bottom: 0.7rem solid transparent;
+    border-left: 1rem solid #333;
+}
+
+.teuchi-bubble p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #333;
+    font-family: Arial, sans-serif;
+    line-height: 1.4;
+}
+
+/* Cachée en même temps que Teuchi — sinon elle flotterait toute seule */
+@media (max-width: 1200px) {
+    .teuchi-bubble { display: none; }
+}
+
+
+/* 10. SECTION BIENVENUE — index et produit */
+/* Bannière accueil avec fond image */
+.page-accueil .section-bienvenue {
+    position: relative;
+    background-image: url('img/FondThéFleur1.jpeg');
+    background-size: cover;
+    background-position: center;
+    width: 90%;
+    max-width: 75rem;
+    margin: 2rem auto;
+    border-radius: 1.25rem;
+    overflow: visible;
+    border: 2px solid var(--beige-fonce);
+    box-shadow: 0 0.625rem 2rem rgba(0,0,0,0.1);
+    padding: 4rem 2rem;
+    min-height: 28rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.page-accueil .section-bienvenue h1 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    line-height: 1.2;
+    text-shadow: 0.125rem 0.125rem 0.25rem rgba(255,255,255,0.8);
+}
+
+/* Bannière produits */
+.page-produits .section-bienvenue {
+    position: relative;
+    width: 100%;
+    margin: 1.5rem auto;
+    border-radius: 1.125rem;
+    overflow: visible;
+    border: 2px solid var(--beige-fonce);
+    box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.08);
+    padding: 4rem 2rem;
+    min-height: 15rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.page-produits .section-bienvenue h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1.8rem;
+    text-align: center;
+}
+
+/* Barre de recherche (commune aux deux) */
+.boite-recherche { max-width: 37.5rem; width: 100%; }
+.boite-recherche form { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+.boite-recherche label { display: none; }
+
+.champ-recherche {
+    flex: 1;
+    min-width: 15rem;
+    padding: 1rem;
+    border: 2px solid var(--beige-fonce);
+    border-radius: 1.5rem;
+    font-size: 1rem;
+    font-family: Georgia, serif;
+    background-color: rgba(255,255,255,0.9);
+    margin-bottom: 0;
+}
+.champ-recherche:focus {
+    outline: none;
+    border-color: var(--rouge);
+    background-color: var(--blanc);
+}
+
+.bouton-recherche {
+    padding: 1rem 2rem;
+    background-color: var(--rouge);
+    color: var(--blanc);
+    border: none;
+    border-radius: 1.5rem;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    font-family: Georgia, serif;
+    transition: all 0.3s ease;
+}
+.bouton-recherche:hover { background-color: #B01234; transform: translateY(-2px); }
+
+
+/* 10. Page d'accueil */
+.page-accueil .section-favoris {
+    padding: 4rem 2rem;
+    max-width: 62.5rem;
+    margin: 0 auto;
+}
+.page-accueil .section-favoris h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 3rem;
+}
+
+/* Grille 2 colonnes */
+.page-accueil .grille-presentation {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+}
+
+.page-accueil .produits-favoris {
+    background-color: var(--blanc);
+    border-radius: 0.625rem;
+    overflow: hidden;
+    box-shadow: 0 0.125rem 0.625rem rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.page-accueil .produits-favoris:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 0.5rem 1.25rem rgba(0,0,0,0.15);
+}
+.page-accueil .produits-favoris img {
+    width: 100%;
+    height: 15rem;
+    object-fit: cover;
+    display: block;
+}
+.page-accueil .produits-favoris h3 { font-size: 1.3rem; padding: 1rem 1rem 0.5rem; }
+.page-accueil .prix-produit { font-size: 1.5rem; color: var(--rouge); font-weight: bold; padding: 0 1rem 1.5rem; }
+
+/* 4ème carte avec overlay */
+.page-accueil .carte-menu { position: relative; }
+.page-accueil .carte-menu a { text-decoration: none; color: inherit; display: block; position: relative; }
+.page-accueil .texte-survol {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    color: var(--blanc); padding: 2rem;
+    transition: background 0.3s ease;
+}
+.page-accueil .texte-survol h3 { color: var(--blanc); text-align: center; margin-bottom: 1rem; }
+.page-accueil .texte-survol p  { color: var(--blanc); font-weight: bold; }
+.page-accueil .carte-menu:hover .texte-survol { background: rgba(212,70,74,0.8); }
+
+
+/* 11. Page produits — catégories et cartes */
+
+/* Grille des 4 catégories cliquables */
+.page-produits .conteneur-categories {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13.75rem, 1fr));
+    gap: 1.8rem;
+    padding: 0 2rem;
+    max-width: 75rem;
+    margin: 0 auto 3.5rem;
+}
+.page-produits .carte-categorie {
+    position: relative;
+    height: 15rem;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    text-decoration: none;
+    box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,0.12);
+    transition: transform 0.3s ease;
+}
+.page-produits .carte-categorie:hover { transform: translateY(-5px); }
+.page-produits .carte-categorie img {
+    width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;
+}
+.page-produits .carte-categorie:hover img { transform: scale(1.1); }
+.page-produits .overlay {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.4);
+    display: flex; justify-content: center; align-items: center;
+    color: var(--blanc);
+}
+.page-produits .overlay h3 { margin: 0; text-align: center; }
+
+/* Titre de section avec ligne rouge décorative */
+.page-produits .titre-categorie {
+    text-align: center;
+    font-size: 2rem;
+    margin: 3.5rem 0 2rem;
+    padding-bottom: 0.8rem;
+    position: relative;
+}
+.page-produits .titre-categorie::after {
+    content: '';
+    position: absolute; bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 5rem; height: 3px;
+    background: var(--rouge);
+}
+
+/* Grille des cartes produits */
+.page-produits .grille-produits {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(17.5rem, 1fr));
+    gap: 2rem;
+    padding: 0 2rem;
+    max-width: 75rem;
+    margin: 0 auto 3.5rem;
+}
+.page-produits .carte-produit {
+    background: var(--blanc);
+    border-radius: 0.75rem;
+    border: 1px solid var(--beige-fonce);
+    overflow: hidden;
+    box-shadow: 0 0.2rem 0.5rem rgba(0,0,0,0.06);
+    display: flex; flex-direction: column;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.page-produits .carte-produit:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.4rem 1rem rgba(0,0,0,0.1);
+}
+.page-produits .image-conteneur img { width: 100%; height: 12.5rem; object-fit: cover; }
+.page-produits .infos-produit {
+    padding: 1.5rem; flex-grow: 1;
+    display: flex; flex-direction: column;
+}
+.page-produits .entete-carte { display: flex; justify-content: space-between; margin-bottom: 0.8rem; }
+.page-produits .prix { color: var(--rouge); font-weight: bold; font-size: 1.2rem; }
+.page-produits .description { font-size: 0.9rem; color: var(--gris); margin-bottom: 1.2rem; flex-grow: 1; }
+.page-produits .pied-carte { display: flex; justify-content: space-between; align-items: center; }
+.page-produits .badge { font-size: 0.75rem; background: var(--beige-clair); padding: 0.25rem 0.625rem; border-radius: 0.3rem; }
+.page-produits .btn-ajouter {
+    background: var(--rouge); color: var(--blanc); border: none;
+    padding: 0.5rem 1rem; border-radius: 1.125rem;
+    cursor: pointer; font-weight: bold; transition: all 0.3s;
+}
+.page-produits .btn-ajouter:hover { background: #B01234; transform: scale(1.05); }
+
+/* Bandeau Menu Enfant */
+.page-produits .bandeau-enfant {
+    position: relative;
+    background: linear-gradient(135deg, #FFE8E8 0%, #FFF5E5 100%);
+    width: 92%; max-width: 60rem;
+    margin: 3.5rem auto;
+    padding: 1.5rem 2rem;
+    border-radius: 1.5rem;
+    border: 3px dashed var(--rouge);
+    box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.08);
+    text-align: center;
+}
+.page-produits .samourai-deco {
+    position: absolute; left: -1.5rem; bottom: 0;
+    height: 70vh; width: auto;
+    mix-blend-mode: multiply;
+}
+.page-produits .contenu-enfant { padding-left: 0; }
+.page-produits .emoji-samourai { font-size: 3.5rem; display: block; margin-bottom: 0.8rem; }
+.page-produits .bandeau-enfant h2 { color: var(--rouge); font-size: 2rem; margin-bottom: 0.5rem; }
+.page-produits .prix-enfant { font-size: 1.8rem; color: var(--rouge); font-weight: bold; margin-bottom: 0.8rem; }
+.page-produits .desc-enfant { font-size: 1.1rem; color: var(--noir); margin-bottom: 1.5rem; }
+.page-produits .btn-enfant {
+    background: var(--rouge); color: var(--blanc); border: none;
+    padding: 0.75rem 2rem; border-radius: 1.75rem;
+    cursor: pointer; font-size: 1.05rem; font-weight: bold;
+    transition: all 0.3s;
+}
+.page-produits .btn-enfant:hover {
+    background: #B01234; transform: translateY(-3px);
+    box-shadow: 0 0.3rem 1rem rgba(209,70,74,0.3);
+}
+
+
+/* 12. Boutons généraux */
+.bouton-validation {
+    background-color: var(--rouge); color: var(--blanc);
+    padding: 0.875rem 1.5rem; border: none;
+    border-radius: var(--radius); cursor: pointer;
+    font-weight: bold; width: 100%;
+    transition: all 0.3s; font-size: 1rem; font-family: Georgia, serif;
+}
+.bouton-validation:hover {
+    background-color: #A63539; transform: translateY(-0.125rem);
+    box-shadow: 0 0.25rem 0.5rem rgba(0,0,0,0.15);
+}
+
+.btn { padding: 12px 28px; border-radius: 4px; font-weight: bold; display: inline-block; cursor: pointer; transition: all 0.3s ease; }
+.btn.primary { background-color: var(--rouge); color: var(--blanc); border-radius: 30px; }
+.btn.primary:hover { background-color: #A63539; transform: scale(1.05); text-decoration: none; }
+.btn.secondary { border: 2px solid var(--noir); color: var(--noir); }
+
+
+/* 13. Formulaires (connexion, inscription, notation) */
+.boite-formulaire {
+    background: var(--blanc); padding: 2.5rem;
+    border-radius: 0.75rem; max-width: 31.25rem;
+    margin: 2rem auto;
+    box-shadow: 0 0.625rem 1.875rem rgba(0,0,0,0.15);
+    border-top: 0.3125rem solid var(--rouge);
+    animation: slideUp 0.5s ease-out;
+}
+.boite-formulaire h2 {
+    color: var(--rouge); font-size: 1.6rem;
+    margin-bottom: 1.5rem; text-align: center;
+    padding-bottom: 1rem; border-bottom: 0.125rem solid var(--beige-clair);
+}
+
+fieldset { border: 0.125rem solid var(--beige-clair); padding: 1.5rem; margin-bottom: 1.5rem; border-radius: var(--radius); background-color: #fafafa; }
+legend { font-weight: bold; padding: 0 0.8rem; color: var(--rouge); font-size: 1.1rem; }
+
+label { display: block; margin-bottom: 0.5rem; font-size: 0.95rem; font-weight: 500; color: var(--noir); }
+
+input[type="text"], input[type="email"], input[type="password"], input[type="tel"], textarea {
+    width: 100%; padding: 0.75rem; margin-bottom: 1rem;
+    border: 0.0625rem solid #ccc; border-radius: 0.25rem;
+    font-family: Georgia, serif; font-size: 1rem; transition: all 0.3s;
+}
+input::placeholder, textarea::placeholder { color: var(--gris); font-style: italic; }
+input[type="text"]:focus, input[type="email"]:focus,
+input[type="password"]:focus, input[type="tel"]:focus, textarea:focus {
+    outline: none; border-color: var(--rouge);
+    box-shadow: 0 0 0 0.1875rem rgba(209,70,74,0.1); transform: scale(1.01);
+}
+
+.options { margin: 1rem 0; display: flex; align-items: center; gap: 0.5rem; }
+.options input[type="checkbox"] { width: auto; margin: 0; cursor: pointer; }
+.options label { margin: 0; cursor: pointer; font-weight: normal; }
+
+.footer-form { text-align: center; margin-top: 1.5rem; font-size: 0.9rem; color: var(--gris); }
+.footer-form a { color: var(--rouge); font-weight: 500; }
+
+/* Étoiles (notation) */
+.stars { display: flex; flex-direction: column; gap: 0.5rem; margin: 0.5rem 0; }
+.stars input[type="radio"] { width: 1.1rem; height: 1.1rem; margin-right: 0.5rem; cursor: pointer; }
+.stars label {
+    display: flex; align-items: center; cursor: pointer;
+    font-size: 1.08em; gap: 0.75rem; padding: 0.5rem 0.75rem;
+    transition: background-color 0.2s, color 0.2s; font-weight: normal;
+}
+.stars label:hover { color: var(--rouge); }
+
+
+/* 14. Page admin */
+.admin { text-align: center; margin-top: 10px; }
+.admin table { width: 80%; margin: 40px auto; border-collapse: collapse; background: var(--blanc); }
+.admin th, .admin td { padding: 12px; border: 1px solid var(--beige-fonce); text-align: center; }
+.admin th { background-color: var(--beige-clair); }
+
+
+/* 15. Page commandes */
+.orders {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px; padding: 40px 60px; max-width: 1200px; margin: auto;
+}
+.order-card {
+    background-color: var(--blanc); padding: 25px; border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08); transition: all 0.35s ease; cursor: pointer;
+}
+.order-card:hover { transform: translateY(-10px) scale(1.02); box-shadow: 0 15px 35px rgba(0,0,0,0.15); }
+.order-card h3 { margin-bottom: 0.5rem; color: var(--rouge); }
+.order-card p  { color: var(--gris); font-size: 0.9rem; margin-bottom: 0.25rem; }
+
+
+/* 16. Page livraison */
+.delivery-card {
+    background: var(--blanc); padding: 30px 40px; border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    max-width: 400px; width: 90%; text-align: center; margin: 20px auto;
+    transition: transform 0.2s ease;
+}
+.delivery-card:hover { transform: translateY(-5px); }
+.delivery-card h2 { margin-bottom: 20px; color: var(--rouge); }
+.delivery-card p  { margin: 8px 0; color: #555; }
+
+
+/* 17. Page profil */
+.page-profil .entete-principale { padding: 0.8rem 2rem; }
+.page-profil .logo-principal    { height: 10rem; }
+
+.page-profil .section-hero-profil {
+    background: linear-gradient(135deg, var(--beige-fonce) 0%, var(--beige-clair) 100%);
+    border: 2px solid var(--beige-fonce); border-radius: 1.125rem;
+    width: 92%; max-width: 75rem; margin: 1.5rem auto; padding: 2rem 2.5rem;
+    display: flex; align-items: center; gap: 2rem;
+    box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.08);
+}
+.page-profil .avatar-conteneur { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+.page-profil .avatar {
+    width: 5rem; height: 5rem; background-color: var(--blanc); border-radius: 50%;
+    border: 3px solid var(--rouge); display: flex; justify-content: center; align-items: center;
+    font-size: 2.5rem; box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,0.1);
+}
+.page-profil .badge-fidelite { background-color: var(--rouge); color: var(--blanc); padding: 0.2rem 0.75rem; border-radius: 1rem; font-size: 0.75rem; font-weight: bold; white-space: nowrap; }
+.page-profil .hero-infos h1 { font-size: 2rem; margin-bottom: 0.3rem; text-align: left; }
+.page-profil .nom-utilisateur { color: var(--rouge); }
+.page-profil .membre-depuis   { color: var(--gris); font-size: 0.9rem; }
+
+.page-profil .grille-profil { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; width: 92%; max-width: 75rem; margin: 0 auto 3rem; }
+.page-profil .colonne-gauche,
+.page-profil .colonne-droite { display: flex; flex-direction: column; gap: 1.5rem; }
+
+.page-profil .bloc-profil { background: var(--blanc); border-radius: 0.75rem; border: 1px solid var(--beige-fonce); box-shadow: 0 0.2rem 0.5rem rgba(0,0,0,0.06); overflow: hidden; }
+.page-profil .bloc-entete  { background-color: var(--beige-clair); border-bottom: 2px solid var(--beige-fonce); padding: 1rem 1.5rem; }
+.page-profil .bloc-entete h2 { font-size: 1.1rem; color: var(--noir); text-align: left; margin-bottom: 0; }
+
+.page-profil .liste-infos { padding: 0.5rem 0; }
+.page-profil .ligne-info { display: flex; align-items: center; padding: 0.75rem 1.5rem; border-bottom: 1px solid var(--beige-clair); gap: 1rem; transition: background 0.2s; }
+.page-profil .ligne-info:last-child { border-bottom: none; }
+.page-profil .ligne-info:hover { background-color: var(--beige-clair); }
+.page-profil .label-info { font-size: 0.8rem; color: var(--gris); text-transform: uppercase; letter-spacing: 0.05rem; min-width: 9rem; flex-shrink: 0; }
+.page-profil .valeur-info { flex-grow: 1; font-size: 0.95rem; color: var(--noir); }
+.page-profil .btn-crayon  { background: none; border: none; cursor: pointer; font-size: 0.9rem; padding: 0.25rem; border-radius: 0.25rem; opacity: 0.4; transition: opacity 0.2s, transform 0.2s; flex-shrink: 0; }
+.page-profil .btn-crayon:hover { opacity: 1; transform: scale(1.2); }
+
+.page-profil .fidelite-contenu { padding: 1.5rem; display: flex; gap: 1.5rem; align-items: flex-start; }
+.page-profil .points-cercle {
+    background: linear-gradient(135deg, var(--rouge) 0%, #B01234 100%);
+    color: var(--blanc); border-radius: 50%; width: 6rem; height: 6rem;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    flex-shrink: 0; box-shadow: 0 0.25rem 0.75rem rgba(209,70,74,0.4);
+}
+.page-profil .points-nombre { font-size: 1.8rem; font-weight: bold; line-height: 1; }
+.page-profil .points-label  { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05rem; }
+.page-profil .fidelite-details { flex-grow: 1; }
+.page-profil .fidelite-statut { font-size: 0.95rem; margin-bottom: 0.3rem; }
+.page-profil .fidelite-info   { font-size: 0.85rem; color: var(--gris); margin-bottom: 0.75rem; }
+.page-profil .barre-progression-conteneur { margin-bottom: 1rem; }
+.page-profil .barre-progression { background-color: var(--beige-fonce); border-radius: 1rem; height: 0.5rem; overflow: hidden; margin-bottom: 0.25rem; }
+.page-profil .barre-remplie    { background: linear-gradient(90deg, var(--rouge), #B01234); height: 100%; border-radius: 1rem; transition: width 0.5s ease; }
+.page-profil .progression-texte { font-size: 0.75rem; color: var(--gris); }
+.page-profil .avantages-titre   { font-size: 0.85rem; font-weight: bold; margin-bottom: 0.4rem; }
+.page-profil .liste-avantages   { list-style: none; display: flex; flex-direction: column; gap: 0.25rem; }
+.page-profil .liste-avantages li { font-size: 0.82rem; color: var(--gris); }
+.page-profil .liste-avantages li:nth-child(4) { opacity: 0.5; }
+
+.page-profil .liste-commandes { padding: 0.5rem 0; }
+.page-profil .commande-item { padding: 1rem 1.5rem; border-bottom: 1px solid var(--beige-clair); transition: background 0.2s; }
+.page-profil .commande-item:last-child { border-bottom: none; }
+.page-profil .commande-item:hover { background-color: var(--beige-clair); }
+.page-profil .commande-entete { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
+.page-profil .commande-date   { font-size: 0.85rem; font-weight: bold; }
+.page-profil .commande-detail { font-size: 0.85rem; color: var(--gris); margin-bottom: 0.5rem; line-height: 1.4; }
+.page-profil .commande-statut { font-size: 0.75rem; padding: 0.2rem 0.6rem; border-radius: 1rem; font-weight: bold; }
+.page-profil .statut-livre    { background-color: #E8F5E9; color: #2E7D32; }
+.page-profil .statut-en-cours { background-color: #FFF3E0; color: #E65100; }
+.page-profil .commande-pied   { display: flex; justify-content: space-between; align-items: center; }
+.page-profil .commande-total  { font-size: 0.9rem; font-weight: bold; }
+.page-profil .commande-points { font-size: 0.8rem; color: var(--rouge); font-weight: bold; background-color: #FFE8E8; padding: 0.15rem 0.5rem; border-radius: 1rem; }
+
+.page-profil .popup-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center; }
+.page-profil .popup { background: var(--blanc); border-radius: 1rem; padding: 2rem; max-width: 22rem; text-align: center; border: 2px solid var(--beige-fonce); box-shadow: 0 1rem 2rem rgba(0,0,0,0.2); }
+.page-profil .popup p { font-size: 1rem; margin-bottom: 1.2rem; line-height: 1.6; }
+.page-profil .popup-fermer { background: var(--rouge); color: var(--blanc); border: none; padding: 0.6rem 1.8rem; border-radius: 1.5rem; cursor: pointer; font-size: 0.95rem; font-weight: bold; transition: background 0.3s; }
+.page-profil .popup-fermer:hover { background: #B01234; }
+
+
+/* 18. Footer(commun à toutes les pages) */
+footer, .bas-de-page {
+    background-color: var(--noir);
+    color: var(--beige-clair);
+    padding: 3rem 2rem 1rem;
+    margin-top: auto;
+    width: 100%;
+}
+footer p, .bas-de-page p { margin-bottom: 0.8rem; }
+footer a, .bas-de-page a { color: var(--beige-clair); text-decoration: none; }
+footer a:hover, .bas-de-page a:hover { color: var(--rouge); }
+
+.conteneur-footer { max-width: 75rem; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+.colonne-footer h3 { color: var(--rouge); margin-bottom: 1rem; font-size: 1.2rem; }
+.colonne-footer p  { margin-bottom: 0.8rem; }
+.colonne-footer a  { color: var(--beige-clair); text-decoration: none; }
+.colonne-footer a:hover { color: var(--rouge); }
+
+.reseaux-sociaux { display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap; }
+.reseaux-sociaux a { display: inline-block; padding: 0.5rem 1rem; background-color: var(--blanc); color: var(--noir); border-radius: 1.25rem; transition: all 0.3s ease; text-decoration: none; }
+.reseaux-sociaux a:hover { background-color: var(--rouge); color: var(--blanc); transform: scale(1.05); }
+
+.copyright { text-align: center; padding-top: 2rem; margin-top: 2rem; border-top: 1px solid var(--gris); font-size: 0.9rem; }
+
+
+/* 19. Animations */
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(1.875rem); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(0.625rem); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+
+/* 20. Responsive */
+
+/* Tablette */
+@media (max-width: 56rem) {
+    .page-accueil .grille-presentation,
+    .page-produits .grille-produits,
+    .page-produits .conteneur-categories,
+    .conteneur-footer { grid-template-columns: 1fr; }
+
+    .page-accueil .perso-accueil  { width: 9rem; right: 1.25rem; top: -6rem; }
+    .page-produits .perso-accueil { width: 9rem; top: -10rem; }
+
+    .page-profil .grille-profil { grid-template-columns: 1fr; }
+    .page-profil .fidelite-contenu { flex-direction: column; align-items: center; }
+}
+
+/* Mobile */
+@media (max-width: 37.5rem) {
+    .page-accueil .logo-principal  { height: 8.75rem; }
+    .page-produits .logo-principal { height: 7.5rem; }
+
+    .page-accueil .section-bienvenue { margin: 1rem auto; }
+    .page-accueil .section-bienvenue h1,
+    .page-produits .section-bienvenue h1 { font-size: 1.8rem; }
+
+    .page-accueil .boite-recherche form,
+    .page-produits .boite-recherche form { flex-direction: column; }
+
+    .page-accueil .perso-accueil,
+    .page-produits .perso-accueil  { display: none; }
+
+    .page-produits .samourai-deco { display: none; }
+    .page-produits .contenu-enfant { padding-left: 0; }
+
+    .orders { padding: 20px; }
+    .delivery-card { padding: 20px; }
+
+    .page-profil .logo-principal { height: 7.5rem; }
+    .page-profil .section-hero-profil { flex-direction: column; text-align: center; }
+    .page-profil .hero-infos h1 { font-size: 1.5rem; text-align: center; }
+    .page-profil .label-info { min-width: 6rem; font-size: 0.72rem; }
+
+    footer, .bas-de-page { padding: 1.5rem 1rem; }
+}
+
+
+
+
+
+/* ================================================
+   PHASE 2 — Styles complémentaires dynamiques
+   ================================================ */
+
+/* Messages feedback */
+.message-erreur {
+    background: #fdecea;
+    color: #c0392b;
+    border: 1px solid #f5c6cb;
+    border-radius: var(--radius);
+    padding: 10px 16px;
+    margin-bottom: 16px;
+    font-size: .95em;
+}
+.message-succes {
+    background: #eafaf1;
+    color: #1e8449;
+    border: 1px solid #a9dfbf;
+    border-radius: var(--radius);
+    padding: 10px 16px;
+    margin-bottom: 16px;
+    font-size: .95em;
+}
+
+/* Statuts de commande */
+.statut-attente     { color: #e67e22; font-weight: bold; }
+.statut-preparation { color: #2980b9; font-weight: bold; }
+.statut-livraison   { color: #8e44ad; font-weight: bold; }
+.statut-livre       { color: #27ae60; font-weight: bold; }
+.statut-abandon     { color: #c0392b; font-weight: bold; }
+
+/* Bouton panier flottant */
+.btn-panier-flottant {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--rouge);
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 32px;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(0,0,0,.2);
+    text-decoration: none;
+    z-index: 999;
+    transition: transform .2s, box-shadow .2s;
+}
+.btn-panier-flottant:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0,0,0,.25);
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Boutons admin */
+.btn-admin {
+    display: inline-block;
+    padding: 5px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #f9f9f9;
+    cursor: pointer;
+    font-size: .85em;
+    text-decoration: none;
+    color: var(--noir);
+    transition: background .2s;
+}
+.btn-admin:hover { background: #eee; }
+.btn-admin.btn-danger  { background: #fdecea; border-color: #e74c3c; color: #c0392b; }
+.btn-admin.btn-danger:hover { background: #e74c3c; color: #fff; }
+.btn-admin.btn-success { background: #eafaf1; border-color: #27ae60; color: #1e8449; }
+.btn-admin.btn-success:hover { background: #27ae60; color: #fff; }
+.btn-admin.btn-actif   { background: var(--rouge); color: #fff; border-color: var(--rouge); }
+
+.select-admin {
+    padding: 4px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: .85em;
+    background: #fff;
+    cursor: pointer;
+}
+
+/* Admin subtitle */
+.admin-subtitle {
+    font-size: 1.3em;
+    margin-bottom: 20px;
+    color: var(--noir);
+    text-align: left;
+}
+
+/* Delivery page additions */
+.btn.primary {
+    display: inline-block;
+    background: var(--rouge);
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-weight: bold;
+    transition: opacity .2s;
+}
+.btn.primary:hover { opacity: .85; color: #fff; text-decoration: none; }
+
+
+/* ================================================
+   MENU CLASSIQUE ADAPTATIF — choix radio stylés
+   ================================================ */
+.choix-menu {
+    margin-bottom: 1rem;
+}
+.choix-label {
+    display: block;
+    font-weight: bold;
+    font-size: .95rem;
+    color: var(--noir);
+    margin-bottom: .5rem;
+}
+.choix-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+    max-height: 6rem;
+    overflow-y: auto;
+    padding: .4rem;
+    background: rgba(255,255,255,.7);
+    border-radius: .5rem;
+    border: 1px solid rgba(0,0,0,.08);
+}
+.option-radio {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .3rem .6rem;
+    border-radius: 1rem;
+    cursor: pointer;
+    font-size: .88rem;
+    transition: background .2s;
+    white-space: nowrap;
+}
+.option-radio:hover {
+    background: rgba(209,70,74,.08);
+}
+.option-radio input[type="radio"] {
+    accent-color: var(--rouge);
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+.option-radio input[type="radio"]:checked + span {
+    color: var(--rouge);
+    font-weight: bold;
+}
+
+
+/* ================================================
+   BANDEAUX MENUS — images fixes pour Duo et Classique
+   ================================================ */
+.page-produits .bandeau-deco {
+    position: absolute;
+    left: -1.5rem;
+    bottom: 0;
+    height: 55vh;
+    width: auto;
+    max-width: 35%;
+    object-fit: cover;
+    border-radius: 0 1rem 1rem 0;
+    opacity: .85;
+}
+
+/* ================================================
+   PHASE 3 — MODE SOMBRE
+   Principe : on redéfinit les variables CSS sur body.dark-mode
+   Tout le reste du CSS s'adapte automatiquement grâce aux var()
+   ================================================ */
+
+/* --- Palette sombre --- */
+body.dark-mode {
+    --beige-clair:  #1E1E2E;   /* fond principal : bleu nuit profond          */
+    --beige-fonce:  #2E2E3E;   /* fond secondaire / bordures                  */
+    --noir:         #E8E8F0;   /* texte principal : blanc cassé (pas blanc pur, moins fatiguant) */
+    --rouge:        #E8686C;   /* rouge légèrement éclairci pour rester lisible sur fond sombre */
+    --gris:         #A0A0B0;   /* texte secondaire                            */
+    --blanc:        #2A2A3A;   /* "blanc" des cartes/formulaires : fond carte sombre */
+    --radius:       0.5rem;
+}
+
+/* Quelques ajustements que les variables seules ne couvrent pas */
+
+/* Les inputs et textareas ont un fond blanc hardcodé parfois */
+body.dark-mode input[type="text"],
+body.dark-mode input[type="email"],
+body.dark-mode input[type="password"],
+body.dark-mode input[type="tel"],
+body.dark-mode input[type="number"],
+body.dark-mode input[type="datetime-local"],
+body.dark-mode textarea,
+body.dark-mode select {
+    background-color: #2E2E3E;
+    color: var(--noir);
+    border-color: #4E4E6E;
+}
+
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder {
+    color: #7070A0;
+}
+
+/* Les tableaux admin ont des fonds inline parfois */
+body.dark-mode table {
+    background-color: var(--blanc);
+    color: var(--noir);
+}
+body.dark-mode th {
+    background-color: var(--beige-fonce) !important;
+}
+body.dark-mode tr {
+    background-color: var(--blanc) !important;
+}
+body.dark-mode td,
+body.dark-mode th {
+    border-color: #4E4E6E !important;
+    color: var(--noir);
+}
+
+/* Stats rapides (admin) */
+body.dark-mode [style*="background:#f5f5f5"] {
+    /* Les styles inline ne peuvent pas être overridés par variable CSS,
+       on utilise un filtre de luminosité comme fallback */
+    filter: invert(0.85) hue-rotate(180deg);
+}
+
+/* Fond des blocs f9f9f9 (admin profil) */
+body.dark-mode .bloc-profil,
+body.dark-mode .delivery-card,
+body.dark-mode .order-card {
+    background-color: var(--blanc);
+    border-color: #4E4E6E;
+}
+
+/* Fond header */
+body.dark-mode .entete-principale,
+body.dark-mode .header {
+    background-color: var(--beige-clair);
+    border-bottom: 1px solid var(--beige-fonce);
+}
+
+/* Menu burger déroulant */
+body.dark-mode .navigation {
+    background-color: var(--blanc);
+    border-color: #4E4E6E;
+}
+body.dark-mode .liste-du-haut a {
+    color: var(--noir);
+}
+
+/* Footer */
+body.dark-mode footer,
+body.dark-mode .bas-de-page {
+    background-color: #0D0D1A;
+}
+
+/* Messages succès/erreur — rester lisibles en sombre */
+body.dark-mode .message-erreur {
+    background: #3D1A1A;
+    border-color: #8B2E2E;
+    color: #FF9090;
+}
+body.dark-mode .message-succes {
+    background: #1A3D2E;
+    border-color: #2E7D52;
+    color: #90FFB0;
+}
+
+/* Overlay popups */
+body.dark-mode .popup {
+    background-color: var(--blanc);
+    border-color: #4E4E6E;
+    color: var(--noir);
+}
+
+/* Sakura background — légèrement plus visible en sombre */
+body.dark-mode.admin-page::before,
+body.dark-mode.orders-page::before,
+body.dark-mode.delivery::before {
+    opacity: 0.07;
+}
+
+/* Teuchi sur les pages formulaires — légèrement moins opaque */
+body.dark-mode.page-deco::before {
+    opacity: 0.7;
+}
+
+/* --- BOUTON TOGGLE CLAIR/SOMBRE --- */
+/* Positionné en haut à droite du header */
+.btn-theme-toggle {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    background: var(--beige-fonce);
+    border: 2px solid var(--beige-fonce);
+    border-radius: 2rem;
+    padding: 0.4rem 0.9rem;
+    cursor: pointer;
+    font-size: 1.15rem;
+    transition: background 0.3s, transform 0.2s;
+    z-index: 1001;
+    line-height: 1;
+    color: var(--noir);
+}
+.btn-theme-toggle:hover {
+    background: var(--rouge);
+    color: var(--blanc);
+    border-color: var(--rouge);
+    transform: scale(1.1);
+}
+
+/* Transition douce sur tout le body quand on change de thème */
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Mode sombre — menu latéral (pages admin/commandes/livraison) */
+body.dark-mode .menu-left {
+    background-color: #1A1A2E;
+    box-shadow: 5px 0 20px rgba(0,0,0,0.4);
+}
+body.dark-mode .menu-left a {
+    color: var(--noir);
+    border-color: #3E3E5E;
+}
+body.dark-mode .burger-left span {
+    background-color: var(--noir);
+}
+
+/* Mode sombre — select et inputs dans admin */
+body.dark-mode .select-admin {
+    background-color: #2E2E3E;
+    color: var(--noir);
+    border-color: #4E4E6E;
+}
+
+/* Mode sombre — boutons admin */
+body.dark-mode .btn-admin {
+    background: #2E2E3E;
+    border-color: #5E5E7E;
+    color: var(--noir);
+}
+body.dark-mode .btn-admin.btn-danger {
+    background: #3D1A1A;
+    border-color: #8B2E2E;
+    color: #FF9090;
+}
+body.dark-mode .btn-admin.btn-success {
+    background: #1A3D2E;
+    border-color: #2E7D52;
+    color: #90FFB0;
+}
+body.dark-mode .btn-admin.btn-actif {
+    background: var(--rouge);
+    color: #fff;
+}
+
+/* Mode sombre — formulaires panier et profil */
+body.dark-mode .boite-formulaire {
+    background-color: var(--blanc);
+    border-color: #4E4E6E;
+}
+body.dark-mode fieldset {
+    background-color: #252535;
+    border-color: #4E4E6E;
+}
+
+/* Mode sombre — section hero profil */
+body.dark-mode .section-hero-profil {
+    background: linear-gradient(135deg, #2E2E4E 0%, #1E1E2E 100%);
+    border-color: #4E4E6E;
+}
+body.dark-mode .bloc-entete {
+    background-color: #252535;
+    border-color: #4E4E6E;
+}
+
+/* Mode sombre — bannières menus produits */
+body.dark-mode .bandeau-enfant {
+    background: linear-gradient(135deg, #2A1A1A 0%, #1A1A2A 100%) !important;
+    border-color: var(--rouge);
+}
+
+/* Mode sombre — cartes produits */
+body.dark-mode .carte-produit {
+    background-color: var(--blanc);
+    border-color: #4E4E6E;
+}
+
+/* Mode sombre — navigation catégories */
+body.dark-mode .overlay {
+    background: rgba(0,0,0,0.6);
+}
+
+/* Mode sombre — panier tableau */
+body.dark-mode .commande-item:hover,
+body.dark-mode .ligne-info:hover {
+    background-color: var(--beige-fonce);
+}
+
+
+/* === PHASE 3 — Themes (couleur + loupe combinables) === */
+
+
+/* Mode contrasté : noir / blanc / jaune (WCAG) */
+body.contrast-mode {
+    --beige-clair:  #000000;
+    --beige-fonce:  #FFFFFF;
+    --noir:         #FFFFFF;
+    --rouge:        #FFFF00;
+    --gris:         #FFFFFF;
+    --blanc:        #000000;
+    --radius:       0.5rem;
+}
+
+
+/* Mode loupe : grossit le texte. Marche en combinaison avec n'importe quel theme */
+body.large-mode {
+    font-size: 22px;
+    line-height: 1.9;
+    letter-spacing: 0.02em;
+}
+body.large-mode h1 { font-size: 3rem; }
+body.large-mode h2 { font-size: 2.4rem; }
+body.large-mode h3 { font-size: 2rem; }
+body.large-mode p,
+body.large-mode li,
+body.large-mode label,
+body.large-mode td,
+body.large-mode th { font-size: 1.2rem; }
+
+/* Champs/boutons de formulaire plus grands en loupe — MAIS pas les
+   boutons du sélecteur de thème (sinon ils prennent tout l'écran) */
+body.large-mode input,
+body.large-mode textarea,
+body.large-mode select,
+body.large-mode .bouton-validation,
+body.large-mode .btn,
+body.large-mode .btn-admin {
+    font-size: 1.25rem;
+    padding: 1rem 1.4rem;
+}
+body.large-mode .carte-produit,
+body.large-mode .bloc-profil,
+body.large-mode .delivery-card,
+body.large-mode .order-card,
+body.large-mode .boite-formulaire {
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+}
+body.large-mode .liste-du-haut a {
+    padding: 1rem 1.5rem;
+    font-size: 1.2rem;
+}
+
+/* MODE LOUPE — burger ENCORE PLUS GROS (priorité absolue accessibilité) */
+body.large-mode .menu-burger {
+    font-size: 5rem;        /* contre 3rem par défaut */
+}
+body.large-mode .section-menu-burger {
+    top: 2rem;
+    left: 2.5rem;
+}
+
+/* MODE LOUPE — le logo doit rester proportionné (ne pas déborder) */
+body.large-mode .logo-principal { max-height: 9rem; }  /* limite la croissance */
+body.large-mode .page-accueil .logo-principal { max-height: 14rem; }
+
+/* MODE LOUPE — donner plus d'espace au header pour tout caser */
+body.large-mode .entete-principale {
+    padding: 1.5rem 2rem 1rem;
+    min-height: 12rem;
+}
+
+
+/* Override des inline styles color:#666 etc. qui passent à travers du theming */
+body.dark-mode [style*="color:#666"],
+body.dark-mode [style*="color: #666"],
+body.dark-mode [style*="color:#888"],
+body.dark-mode [style*="color: #888"],
+body.dark-mode [style*="color:#777"],
+body.dark-mode [style*="color: #777"] {
+    color: var(--noir) !important;
+}
+body.contrast-mode [style*="color:#666"],
+body.contrast-mode [style*="color: #666"],
+body.contrast-mode [style*="color:#888"],
+body.contrast-mode [style*="color: #888"],
+body.contrast-mode [style*="color:#777"],
+body.contrast-mode [style*="color: #777"] {
+    color: #FFFFFF !important;
+}
+
+/* Forçage couleur sur les textes "neutres" qui n'ont pas de style inline
+   mais qui héritent d'une couleur insuffisante. */
+body.dark-mode main *,
+body.dark-mode form *,
+body.dark-mode table * {
+    color: var(--noir);
+}
+body.contrast-mode main *,
+body.contrast-mode form *,
+body.contrast-mode table * {
+    color: #FFFFFF !important;
+}
+/* Sauf les boutons rouges/colorés qu'on veut garder distincts */
+body.dark-mode .bouton-validation,
+body.dark-mode .btn.primary,
+body.dark-mode button[style*="background:#c0392b"] {
+    color: #fff;
+}
+body.contrast-mode .bouton-validation,
+body.contrast-mode .btn.primary,
+body.contrast-mode button[style*="background:#c0392b"] {
+    color: #000 !important;
+    background: #FFFF00 !important;
+}
+
+
+/* Override des fonds inline (#f5f5f5, #f9f9f9, etc) pour qu'ils suivent le theme */
+
+/* Fond gris clair (#f5f5f5) utilisé dans les stats admin */
+body.dark-mode [style*="background:#f5f5f5"],
+body.dark-mode [style*="background: #f5f5f5"] {
+    background-color: var(--blanc) !important;
+    color: var(--noir) !important;
+    border: 1px solid var(--beige-fonce);
+}
+body.contrast-mode [style*="background:#f5f5f5"],
+body.contrast-mode [style*="background: #f5f5f5"] {
+    background-color: #000000 !important;
+    color: #FFFFFF !important;
+    border: 2px solid #FFFFFF !important;
+}
+
+/* Fond gris très clair (#f9f9f9) utilisé dans les options de livraison */
+body.dark-mode [style*="background:#f9f9f9"],
+body.dark-mode [style*="background: #f9f9f9"] {
+    background-color: var(--blanc) !important;
+    color: var(--noir) !important;
+    border-color: var(--beige-fonce) !important;
+}
+body.contrast-mode [style*="background:#f9f9f9"],
+body.contrast-mode [style*="background: #f9f9f9"] {
+    background-color: #000000 !important;
+    color: #FFFFFF !important;
+    border: 2px solid #FFFFFF !important;
+}
+
+/* Fond rouge clair (#fdecea) utilisé pour les utilisateurs bloqués */
+body.dark-mode [style*="background:#fdecea"] {
+    background-color: #3D1A1A !important;
+}
+body.contrast-mode [style*="background:#fdecea"] {
+    background-color: #330000 !important;
+    color: #FFFF00 !important;
+}
+
+/* Inputs avec inline-styles dans les options livraison */
+body.dark-mode [style*="border:1px solid #ddd"],
+body.dark-mode [style*="border: 1px solid #ddd"] {
+    background-color: var(--blanc) !important;
+    color: var(--noir) !important;
+    border-color: #4E4E6E !important;
+}
+body.contrast-mode [style*="border:1px solid #ddd"],
+body.contrast-mode [style*="border: 1px solid #ddd"] {
+    background-color: #000 !important;
+    color: #fff !important;
+    border: 2px solid #fff !important;
+}
+
+
+/* Selecteur de theme : 2 groupes (couleur + loupe) */
+.theme-selector {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--blanc);
+    padding: 0.35rem;
+    border-radius: 2rem;
+    border: 1px solid var(--beige-fonce);
+    box-shadow: 0 0.2rem 0.6rem rgba(0,0,0,0.1);
+    z-index: 1001;
+}
+.theme-group {
+    display: flex;
+    flex-direction: row;
+    gap: 0.2rem;
+}
+.theme-separator {
+    width: 1px;
+    height: 2rem;
+    background: var(--beige-fonce);
+    margin: 0 0.2rem;
+}
+
+.theme-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.1rem;
+    background: transparent;
+    border: 2px solid transparent;
+    border-radius: 1.5rem;
+    padding: 0.4rem 0.7rem;
+    cursor: pointer;
+    color: var(--noir);
+    font-family: inherit;
+    font-size: 0.9rem;  /* fixé : ne suit pas large-mode */
+    transition: background 0.2s, transform 0.15s, border-color 0.2s;
+    min-width: 3.5rem;
+}
+.theme-btn:hover,
+.theme-btn:focus {
+    background: var(--beige-clair);
+    transform: scale(1.05);
+    outline: none;
+}
+.theme-btn .theme-icon { font-size: 1.2rem; line-height: 1; }
+.theme-btn .theme-label {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+}
+
+/* Bouton couleur ACTIF (3 boutons exclusifs) */
+.theme-btn[aria-current="true"] {
+    background: var(--rouge);
+    border-color: var(--rouge);
+    color: #fff;
+}
+/* Bouton loupe ACTIVÉ (toggle indépendant) */
+.theme-btn-loupe[aria-pressed="true"] {
+    background: var(--rouge);
+    border-color: var(--rouge);
+    color: #fff;
+}
+
+/* IMPORTANT : en large-mode, on FORCE les boutons du sélecteur à rester petits */
+body.large-mode .theme-selector .theme-btn {
+    font-size: 0.9rem !important;
+    padding: 0.4rem 0.7rem !important;
+    min-width: 3.5rem !important;
+}
+body.large-mode .theme-selector .theme-icon { font-size: 1.2rem !important; }
+body.large-mode .theme-selector .theme-label { font-size: 0.7rem !important; }
+
+/* Mode contraste — sélecteur bien visible */
+body.contrast-mode .theme-selector {
+    background: #000 !important;
+    border: 2px solid #fff !important;
+}
+body.contrast-mode .theme-btn { color: #FFFF00 !important; }
+body.contrast-mode .theme-btn[aria-current="true"],
+body.contrast-mode .theme-btn-loupe[aria-pressed="true"] {
+    background: #FFFF00 !important;
+    color: #000 !important;
+    border-color: #fff !important;
+}
+body.contrast-mode .theme-separator { background: #fff; }
+
+/* Petits écrans : on cache les labels */
+@media (max-width: 800px) {
+    .theme-btn .theme-label { display: none; }
+    .theme-btn { min-width: auto; padding: 0.5rem 0.6rem; }
+}
+
+/* Transitions douces */
+body {
+    transition: background-color 0.3s ease, color 0.3s ease, font-size 0.2s ease;
+}
+
+
+/* Styles d'erreur pour la validation des formulaires */
+.champ-invalide {
+    border: 2px solid #D1464A !important;
+    background-color: #FFF5F5 !important;
+    animation: shake-erreur 0.3s ease-in-out;
+}
+body.dark-mode .champ-invalide { background-color: #3D1A1A !important; }
+body.contrast-mode .champ-invalide { border: 3px solid #FFFF00 !important; }
+
+@keyframes shake-erreur {
+    0%, 100% { transform: translateX(0); }
+    25%      { transform: translateX(-4px); }
+    75%      { transform: translateX(4px); }
+}
+
+.erreur-champ {
+    color: #D1464A;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-top: 0.3rem;
+    margin-bottom: 0.5rem;
+    padding: 0.3rem 0.6rem;
+    background: rgba(209, 70, 74, 0.08);
+    border-left: 3px solid #D1464A;
+    border-radius: 0.25rem;
+}
+body.dark-mode .erreur-champ {
+    color: #FF9090 !important;
+    background: rgba(255, 144, 144, 0.1);
+}
+body.contrast-mode .erreur-champ {
+    color: #FFFF00 !important;
+    background: #000 !important;
+    border: 2px solid #FFFF00 !important;
+}
+
+
+/* Icone oeil sur les champs password */
+.password-wrapper {
+    position: relative;
+    display: block;
+    width: 100%;
+}
+.password-wrapper input {
+    width: 100%;
+    padding-right: 2.8rem !important;
+}
+.toggle-password {
+    position: absolute;
+    right: 0.6rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.25rem;
+    line-height: 1;
+    color: var(--noir);
+    transition: background 0.2s;
+}
+.toggle-password:hover { background: var(--beige-fonce); }
+body.contrast-mode .toggle-password {
+    background: #FFFF00 !important;
+    color: #000 !important;
+}
+
+
+/* Bloc "options de livraison" du panier - thematisable */
+.bloc-options {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+.bloc-options h3 { margin-top: 0; }
+.bloc-options .champ-bloc { margin-bottom: 16px; }
+.bloc-options .champ-bloc-titre {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 8px;
+}
+.bloc-options input[type="text"],
+.bloc-options textarea,
+.bloc-options input[type="datetime-local"] {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+.bloc-options input[type="radio"] { margin-right: 6px; }
+.bloc-options .radio-inline { margin-right: 20px; display: inline-block; }
+
+/* Thématisation du bloc-options */
+body.dark-mode .bloc-options {
+    background: var(--blanc) !important;
+    border-color: #4E4E6E !important;
+    color: var(--noir) !important;
+}
+body.dark-mode .bloc-options input,
+body.dark-mode .bloc-options textarea {
+    background-color: #2E2E3E !important;
+    color: var(--noir) !important;
+    border-color: #4E4E6E !important;
+}
+body.contrast-mode .bloc-options {
+    background: #000 !important;
+    border: 3px solid #fff !important;
+    color: #fff !important;
+}
+body.contrast-mode .bloc-options input,
+body.contrast-mode .bloc-options textarea {
+    background-color: #000 !important;
+    color: #fff !important;
+    border: 2px solid #fff !important;
+}
+
+
+/* Stats du dashboard admin */
+.bloc-stats {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+}
+.bloc-stats .stat-card {
+    background: #f5f5f5;
+    border-radius: 8px;
+    padding: 16px 24px;
+    min-width: 100px;
+    text-align: center;
+}
+.bloc-stats .stat-valeur {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: var(--noir);
+}
+.bloc-stats .stat-label {
+    font-size: 0.85em;
+    color: #666;
+}
+body.dark-mode .bloc-stats .stat-card {
+    background: var(--blanc) !important;
+    border: 1px solid var(--beige-fonce);
+}
+body.dark-mode .bloc-stats .stat-label { color: var(--noir) !important; opacity: 0.8; }
+body.contrast-mode .bloc-stats .stat-card {
+    background: #000 !important;
+    border: 3px solid #fff !important;
+}
+body.contrast-mode .bloc-stats .stat-valeur,
+body.contrast-mode .bloc-stats .stat-label { color: #FFFF00 !important; }
+
+
+/* Fix : sur certaines pages le header ne prenait pas toute la largeur */
+body.delivery .entete-principale,
+body.admin-page .entete-principale,
+body.orders-page .entete-principale {
+    width: 100%;
+    align-self: stretch;
+}
+
+
+/* Bandeau d'alerte gros (paiement refusé, session bloquée...) */
+.bandeau-alerte {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    background: linear-gradient(135deg, #FFF1F1 0%, #FFE0E0 100%);
+    border-left: 6px solid #D1464A;
+    border-radius: 0.5rem;
+    padding: 1.2rem 1.5rem;
+    margin: 1.5rem 0;
+    box-shadow: 0 0.3rem 1rem rgba(209, 70, 74, 0.15);
+    animation: alerte-apparition 0.4s ease-out;
+}
+
+@keyframes alerte-apparition {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.bandeau-alerte-icone {
+    font-size: 2.5rem;
+    line-height: 1;
+    flex-shrink: 0;
+}
+.bandeau-alerte-contenu { flex: 1; }
+.bandeau-alerte-titre {
+    color: #B23438;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 0 0 0.4rem 0;
+}
+.bandeau-alerte-message {
+    color: #6B2729;
+    font-size: 1rem;
+    margin: 0 0 0.5rem 0;
+    line-height: 1.5;
+}
+.bandeau-alerte-conseil {
+    color: #8B3D40;
+    font-size: 0.95rem;
+    margin: 0;
+    font-style: italic;
+    background: rgba(255, 255, 255, 0.5);
+    padding: 0.5rem 0.8rem;
+    border-radius: 0.3rem;
+}
+
+/* Mode sombre */
+body.dark-mode .bandeau-alerte {
+    background: linear-gradient(135deg, #3D1A1A 0%, #2D1010 100%);
+    border-left-color: #FF6B6B;
+}
+body.dark-mode .bandeau-alerte-titre { color: #FFB0B0 !important; }
+body.dark-mode .bandeau-alerte-message { color: #FFD0D0 !important; }
+body.dark-mode .bandeau-alerte-conseil {
+    color: #FFE0E0 !important;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+/* Mode contraste */
+body.contrast-mode .bandeau-alerte {
+    background: #000 !important;
+    border: 3px solid #FFFF00 !important;
+    border-left-width: 8px !important;
+}
+body.contrast-mode .bandeau-alerte-titre,
+body.contrast-mode .bandeau-alerte-message,
+body.contrast-mode .bandeau-alerte-conseil {
+    color: #FFFF00 !important;
+    background: #000 !important;
+}
+
+
+/* === Patches divers (corrections trouvées au cours des tests) === */
+
+
+/* Étend la liste de couleurs inline foncées à intercepter (#555 etc.) */
+body.dark-mode [style*="color:#555"],
+body.dark-mode [style*="color: #555"],
+body.dark-mode [style*="color:#444"],
+body.dark-mode [style*="color: #444"],
+body.dark-mode [style*="color:#333"],
+body.dark-mode [style*="color: #333"],
+body.dark-mode [style*="color:#222"],
+body.dark-mode [style*="color: #222"] {
+    color: var(--noir) !important;
+}
+body.contrast-mode [style*="color:#555"],
+body.contrast-mode [style*="color: #555"],
+body.contrast-mode [style*="color:#444"],
+body.contrast-mode [style*="color: #444"],
+body.contrast-mode [style*="color:#333"],
+body.contrast-mode [style*="color: #333"],
+body.contrast-mode [style*="color:#222"],
+body.contrast-mode [style*="color: #222"] {
+    color: #FFFFFF !important;
+}
+
+
+/* Footer : on force des couleurs fixes parce que les variables
+   du theme s'inversent et rendent le footer illisible en sombre */
+body.dark-mode footer,
+body.dark-mode .bas-de-page {
+    background-color: #0D0D1A !important;
+    color: #E8E8F0 !important;
+}
+body.dark-mode footer p,
+body.dark-mode .bas-de-page p,
+body.dark-mode footer a,
+body.dark-mode .bas-de-page a,
+body.dark-mode .colonne-footer p,
+body.dark-mode .colonne-footer a,
+body.dark-mode .copyright,
+body.dark-mode .copyright p {
+    color: #E8E8F0 !important;
+}
+body.dark-mode .colonne-footer h3 {
+    color: #FF9090 !important;  /* touche colorée pour les titres */
+}
+body.dark-mode footer a:hover,
+body.dark-mode .bas-de-page a:hover {
+    color: #FFCCCC !important;
+}
+body.dark-mode .reseaux-sociaux a {
+    background-color: #2A2A3A !important;
+    color: #E8E8F0 !important;
+}
+body.dark-mode .reseaux-sociaux a:hover {
+    background-color: #FF6B6B !important;
+    color: #fff !important;
+}
+body.dark-mode .copyright {
+    border-top-color: #4E4E6E !important;
+}
+
+body.contrast-mode footer,
+body.contrast-mode .bas-de-page {
+    background-color: #000000 !important;
+    color: #FFFFFF !important;
+    border-top: 3px solid #FFFFFF !important;
+}
+body.contrast-mode footer p,
+body.contrast-mode .bas-de-page p,
+body.contrast-mode footer a,
+body.contrast-mode .bas-de-page a,
+body.contrast-mode .colonne-footer p,
+body.contrast-mode .colonne-footer a,
+body.contrast-mode .copyright,
+body.contrast-mode .copyright p {
+    color: #FFFFFF !important;
+}
+body.contrast-mode .colonne-footer h3 {
+    color: #FFFF00 !important;
+}
+body.contrast-mode .reseaux-sociaux a {
+    background-color: #FFFF00 !important;
+    color: #000000 !important;
+    border: 2px solid #FFFFFF !important;
+}
+body.contrast-mode .reseaux-sociaux a:hover {
+    background-color: #FFFFFF !important;
+    color: #000000 !important;
+}
+
+
+/* L'image du petit samouraï dépassait du bandeau */
+.page-produits .bandeau-enfant {
+    overflow: hidden;
+}
+
+
+/* Boutons jaunes en mode contraste : texte forcé en noir */
+body.contrast-mode button:not(.theme-btn),
+body.contrast-mode .bouton-validation,
+body.contrast-mode input[type="submit"],
+body.contrast-mode .btn,
+body.contrast-mode .btn-admin,
+body.contrast-mode .btn-admin.btn-actif,
+body.contrast-mode .btn-actif {
+    background-color: #FFFF00 !important;
+    color: #000000 !important;
+    border: 2px solid #FFFFFF !important;
+    font-weight: bold;
+}
+body.contrast-mode button:not(.theme-btn) *,
+body.contrast-mode .bouton-validation *,
+body.contrast-mode .btn *,
+body.contrast-mode .btn-admin *,
+body.contrast-mode .btn-admin.btn-actif *,
+body.contrast-mode .btn-actif * {
+    color: #000000 !important;
+}
+
+
+/* Messages succès/erreur ont un fond clair, donc texte noir */
+body.contrast-mode .message-succes {
+    background: #d4edda !important;
+    color: #000000 !important;
+    border: 3px solid #155724 !important;
+}
+body.contrast-mode .message-succes,
+body.contrast-mode .message-succes * {
+    color: #000000 !important;
+}
+body.contrast-mode .message-erreur {
+    background: #fdecea !important;
+    color: #000000 !important;
+    border: 3px solid #c0392b !important;
+}
+body.contrast-mode .message-erreur,
+body.contrast-mode .message-erreur * {
+    color: #000000 !important;
+}
+
+
+/* Hero "Savourez l'excellence" : son fond image reste clair même en sombre,
+   donc le texte doit rester sombre avec une ombre blanche pour ressortir */
+body.dark-mode .page-accueil .section-bienvenue,
+body.dark-mode .page-accueil .section-bienvenue h1 {
+    color: #2C2C2C !important;
+    text-shadow: 0 0 0.6rem rgba(255,255,255,0.95),
+                 0 0 1rem rgba(255,255,255,0.8) !important;
+}
+body.contrast-mode .page-accueil .section-bienvenue {
+    background-image: none !important;
+    background-color: #FFFFFF !important;
+    border: 3px solid #000 !important;
+}
+body.contrast-mode .page-accueil .section-bienvenue,
+body.contrast-mode .page-accueil .section-bienvenue h1 {
+    color: #000000 !important;
+    text-shadow: none !important;
+}
+
+/* Carrousel "Découvrir les autres plats" — overlay sombre + texte blanc
+   pour garantir la lisibilité quelle que soit l'image */
+body.dark-mode .texte-survol {
+    background: rgba(0,0,0,0.55) !important;
+}
+body.dark-mode .texte-survol h3,
+body.dark-mode .texte-survol p {
+    color: #FFFFFF !important;
+    text-shadow: 0 0 0.6rem rgba(0,0,0,0.95),
+                 0 0 1rem rgba(0,0,0,0.7) !important;
+}
+body.contrast-mode .texte-survol {
+    background: rgba(0,0,0,0.9) !important;
+    border: 2px solid #FFFF00 !important;
+}
+body.contrast-mode .texte-survol h3,
+body.contrast-mode .texte-survol p {
+    color: #FFFF00 !important;
+    text-shadow: none !important;
+}
+
+
+/* Barre de recherche : le placeholder était invisible en sombre */
+body.dark-mode .champ-recherche {
+    background-color: #2A2A3A !important;
+    color: #E8E8F0 !important;
+    border-color: #4E4E6E !important;
+}
+body.dark-mode .champ-recherche::placeholder {
+    color: #A0A0B0 !important;
+}
+body.contrast-mode .champ-recherche {
+    background-color: #000 !important;
+    color: #FFF !important;
+    border: 3px solid #FFFF00 !important;
+}
+body.contrast-mode .champ-recherche::placeholder {
+    color: #CCCC00 !important;
+}
+
+
+/* Compteur de caractères qui apparait sous les champs data-max */
+.compteur-chars {
+    font-size: 0.8rem;
+    color: #666;
+    text-align: right;
+    margin-top: 0.2rem;
+    margin-bottom: 0.5rem;
+    padding: 0.15rem 0.4rem;
+    transition: color 0.2s, background 0.2s;
+    font-variant-numeric: tabular-nums;  /* chiffres de largeur fixe = pas de "tremblement" */
+}
+.compteur-chars.compteur-warning {
+    color: #B8740C;
+    font-weight: 500;
+}
+.compteur-chars.compteur-danger {
+    color: #D1464A;
+    font-weight: bold;
+    background: rgba(209, 70, 74, 0.08);
+    border-radius: 0.3rem;
+}
+
+/* Mode sombre */
+body.dark-mode .compteur-chars { color: #A0A0B0; }
+body.dark-mode .compteur-chars.compteur-warning { color: #FFB84D; }
+body.dark-mode .compteur-chars.compteur-danger {
+    color: #FF9090;
+    background: rgba(255, 144, 144, 0.15);
+}
+
+/* Mode contraste */
+body.contrast-mode .compteur-chars { color: #FFFF00 !important; }
+body.contrast-mode .compteur-chars.compteur-warning,
+body.contrast-mode .compteur-chars.compteur-danger {
+    color: #FFFF00 !important;
+    background: #000 !important;
+    border: 2px solid #FFFF00 !important;
+}
+
+
+/* Badges actif/bloqué dans le tableau admin */
+.badge-statut {
+    display: inline-block;
+    padding: 0.3rem 0.7rem;
+    border-radius: 1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+.badge-actif {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #b7dfc0;
+}
+.badge-bloque {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f0b9bd;
+}
+
+body.dark-mode .badge-actif {
+    background: #1A3D2E;
+    color: #90FFB0;
+    border-color: #2E7D52;
+}
+body.dark-mode .badge-bloque {
+    background: #3D1A1A;
+    color: #FF9090;
+    border-color: #8B2E2E;
+}
+
+body.contrast-mode .badge-actif,
+body.contrast-mode .badge-bloque {
+    background: #000 !important;
+    color: #FFFF00 !important;
+    border: 2px solid #FFFF00 !important;
+}
+
+/* Ligne d'utilisateur bloqué */
+.ligne-bloquee { background: #fdecea; transition: background 0.3s; }
+body.dark-mode .ligne-bloquee { background: #3D1A1A !important; }
+body.contrast-mode .ligne-bloquee { background: #1A0000 !important; }
+
+
+/* Toast = mini notif en haut a droite, disparait après quelques secondes */
+.toast {
+    position: fixed;
+    top: 1.5rem;
+    right: 1.5rem;
+    z-index: 9999;
+    background: #2C3E50;
+    color: #fff;
+    padding: 0.9rem 1.3rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.4rem 1.2rem rgba(0,0,0,0.25);
+    max-width: 25rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+
+    /* Animation : on apparaît depuis la droite */
+    opacity: 0;
+    transform: translateX(2rem);
+    transition: opacity 0.3s, transform 0.3s;
+}
+.toast-visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+.toast-succes { background: #1E8449; }
+.toast-erreur { background: #B23438; }
+
+body.contrast-mode .toast {
+    background: #000 !important;
+    color: #FFFF00 !important;
+    border: 3px solid #FFFF00 !important;
+}
+
+/* En mode loupe, on grossit le toast */
+body.large-mode .toast {
+    font-size: 1.15rem;
+    padding: 1.2rem 1.6rem;
+    max-width: 32rem;
+}
+
+
+/* Sur les inputs (pas textarea), le compteur doit être plus discret */
+
+/* Compteur qui suit un INPUT (pas un textarea) : plus petit, gris, à droite */
+input ~ .compteur-chars {
+    font-size: 0.75rem;
+    margin-top: 0.1rem;
+    margin-bottom: 0.3rem;
+    padding: 0;
+}
+
+/* En mode loupe, on garde le compteur lisible quand même */
+body.large-mode input ~ .compteur-chars {
+    font-size: 1rem;
+}
