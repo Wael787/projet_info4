@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noter ma commande – Le Jardin de Kyoto</title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+</head>
+<body class="page-deco">
+
+    <!-- Toast container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Header avec menu burger -->
+    <header class="entete-principale">
+        <div class="section-menu-burger">
+            <button class="menu-burger" aria-label="Ouvrir le menu">☰</button>
+            <nav class="navigation">
+                <ul class="liste-du-haut">
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="produit.html">Menu</a></li>
+                    <li><a href="profil.html">Mon profil</a></li>
+                    <li><a href="connexion.html">Connexion</a></li>
+                    <li><a href="inscriptions.html">Inscription</a></li>
+                    <li><a href="notation.html">Noter ma commande</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="conteneur-logo">
+            <img src="../img/logo.png" alt="Logo JDK" class="logo-principal">
+            <p class="slogan-header">Authenticité Japonaise</p>
+        </div>
+    </header>
+
+    <main class="rating-container">
+
+        <!-- Zone principale : injectée dynamiquement par JS -->
+        <div id="zoneNotation"></div>
+
+        <!-- Bulle de dialogue Teuchi -->
+        <div class="teuchi-bubble" id="teuchiBulle">
+            <p>Votre avis nous aide à améliorer nos plats ! ⭐</p>
+        </div>
+
+    </main>
+
+    <footer>
+        <p><a href="profil.html">Retour à mes commandes</a></p>
+        <p>&copy; 2025-2026 Le Jardin de Kyoto</p>
+    </footer>
+
+<script>
+/* ============================================================
+   PHASE 3 — Notation commande (une seule fois par commande)
+   - Vérification localStorage au chargement
+   - Validation champs côté client en temps réel
+   - Compteur de caractères pour le commentaire
+   - Envoi via fetch() asynchrone
+   ============================================================ */
+
+/* ID de la commande à noter (en prod : récupéré depuis l'URL ou la session) */
+const COMMANDE_ID = 1025;
+const MAX_COMMENTAIRE = 500;
+
+/* ---- Au chargement : vérifier si déjà noté ---- */
+window.addEventListener('DOMContentLoaded', () => {
+    const notes = JSON.parse(localStorage.getItem('notes_commandes') || '{}');
+    if (notes[COMMANDE_ID]) {
+        afficherDejaNote(notes[COMMANDE_ID]);
+    } else {
+        afficherFormulaire();
+    }
+});
+
+/* ---- Afficher "Déjà noté" si la commande a déjà été évaluée ---- */
+function afficherDejaNote(noteData) {
+    const zone = document.getElementById('zoneNotation');
+    const bulle = document.getElementById('teuchiBulle');
+    bulle.querySelector('p').textContent = 'Merci pour votre avis ! 😊';
+
+    const etoilesLivraison = '⭐'.repeat(noteData.livraison);
+    const etoilesProduits  = '⭐'.repeat(noteData.produits);
+
+    zone.innerHTML = `
+        <div class="deja-note" role="status" aria-live="polite">
+            <div style="font-size:3rem; margin-bottom:0.5rem;">✅</div>
+            <h3>Vous avez déjà noté cette commande</h3>
+            <p>La commande #${COMMANDE_ID} a été évaluée le ${noteData.date}.</p>
+
+            <div class="recap-notes">
+                <p><strong>🚴 Livraison :</strong> ${etoilesLivraison} (${noteData.livraison}/4)</p>
+                <p><strong>🍱 Produits :</strong>  ${etoilesProduits} (${noteData.produits}/5)</p>
+                ${noteData.commentaire
+                    ? `<p style="margin-top:0.5rem; font-style:italic; color:var(--gris);">"${noteData.commentaire}"</p>`
+                    : ''}
+            </div>
+
+            <a href="profil.html" class="bouton-validation"
+               style="display:block; text-align:center; margin-top:1.2rem; text-decoration:none; padding:0.875rem;">
+                ← Retour à mon profil
+            </a>
+        </div>`;
+}
+
+/* ---- Afficher le formulaire de notation ---- */
+function afficherFormulaire() {
+    const zone = document.getElementById('zoneNotation');
+    zone.innerHTML = `
+        <form action="#" class="boite-formulaire" id="formNotation" method="POST" novalidate>
+            <h2>⭐ Évaluation de la commande #${COMMANDE_ID}</h2>
+
+            <fieldset>
+                <legend>* La Livraison</legend>
+                <p>Comment évaluez-vous la prestation du livreur ?</p>
+                <div class="stars" role="radiogroup" aria-label="Note livraison">
+                    <label>
+                        <input type="radio" name="note_livraison" value="4" required>
+                        ⭐⭐⭐⭐ Excellent
+                    </label>
+                    <label>
+                        <input type="radio" name="note_livraison" value="3">
+                        ⭐⭐⭐ Bien
+                    </label>
+                    <label>
+                        <input type="radio" name="note_livraison" value="2">
+                        ⭐⭐ Passable
+                    </label>
+                    <label>
+                        <input type="radio" name="note_livraison" value="1">
+                        ⭐ Décevant
+                    </label>
+                </div>
+                <span class="msg-erreur-champ" id="err-livraison" style="display:none;">
+                    ⚠ Veuillez noter la livraison.
+                </span>
+            </fieldset>
+
+            <fieldset>
+                <legend>* Qualité des Produits</legend>
+                <p>Les plats reçus étaient-ils à la hauteur de vos attentes ?</p>
+                <div class="stars" role="radiogroup" aria-label="Note produits">
+                    <label>
+                        <input type="radio" name="note_produit" value="5" required>
+                        ⭐⭐⭐⭐⭐ Délicieux
+                    </label>
+                    <label>
+                        <input type="radio" name="note_produit" value="4">
+                        ⭐⭐⭐⭐ Très bon
+                    </label>
+                    <label>
+                        <input type="radio" name="note_produit" value="3">
+                        ⭐⭐⭐ Correct
+                    </label>
+                    <label>
+                        <input type="radio" name="note_produit" value="2">
+                        ⭐⭐ Décevant
+                    </label>
+                    <label>
+                        <input type="radio" name="note_produit" value="1">
+                        ⭐ Médiocre
+                    </label>
+                </div>
+                <span class="msg-erreur-champ" id="err-produit" style="display:none;">
+                    ⚠ Veuillez noter la qualité des produits.
+                </span>
+            </fieldset>
+
+            <fieldset>
+                <legend>Commentaires (optionnel)</legend>
+                <label for="avis_texte">Dites-nous en plus :</label>
+                <textarea
+                    id="avis_texte"
+                    name="avis_texte"
+                    rows="4"
+                    maxlength="${MAX_COMMENTAIRE}"
+                    placeholder="Partagez votre expérience avec nous..."
+                    aria-describedby="compteur-commentaire"></textarea>
+                <span class="compteur-chars" id="compteur-commentaire">
+                    0 / ${MAX_COMMENTAIRE} caractères
+                </span>
+            </fieldset>
+
+            <button type="submit" class="bouton-validation" id="btnEnvoyer">
+                Envoyer mon avis
+            </button>
+        </form>`;
+
+    /* Attacher les écouteurs d'événements */
+    attacherEcouteurs();
+}
+
+/* ---- Attacher les écouteurs au formulaire ---- */
+function attacherEcouteurs() {
+    const form      = document.getElementById('formNotation');
+    const textarea  = document.getElementById('avis_texte');
+    const compteur  = document.getElementById('compteur-commentaire');
+
+    /* Compteur de caractères en temps réel */
+    textarea.addEventListener('input', () => {
+        const nb      = textarea.value.length;
+        const restant = MAX_COMMENTAIRE - nb;
+        compteur.textContent = `${nb} / ${MAX_COMMENTAIRE} caractères`;
+        compteur.classList.toggle('alerte', restant < 50);
+    });
+
+    /* Validation en temps réel des radios */
+    document.querySelectorAll('input[type="radio"]').forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            const groupe = e.target.name;
+            const errId  = groupe === 'note_livraison' ? 'err-livraison' : 'err-produit';
+            document.getElementById(errId).style.display = 'none';
+        });
+    });
+
+    /* Soumission du formulaire */
+    form.addEventListener('submit', gererSoumission);
+}
+
+/* ---- Validation et envoi du formulaire ---- */
+async function gererSoumission(e) {
+    e.preventDefault();
+
+    /* Validation côté client */
+    let valide = true;
+
+    const noteLivraison = document.querySelector('input[name="note_livraison"]:checked');
+    const noteProduit   = document.querySelector('input[name="note_produit"]:checked');
+    const commentaire   = document.getElementById('avis_texte').value.trim();
+    const errLivraison  = document.getElementById('err-livraison');
+    const errProduit    = document.getElementById('err-produit');
+
+    if (!noteLivraison) {
+        errLivraison.style.display = 'block';
+        valide = false;
+    }
+    if (!noteProduit) {
+        errProduit.style.display = 'block';
+        valide = false;
+    }
+    if (!valide) {
+        afficherToast('⚠️ Veuillez remplir tous les champs obligatoires.', 'erreur');
+        return;
+    }
+
+    /* Désactiver le bouton et afficher le chargement */
+    const btn = document.getElementById('btnEnvoyer');
+    btn.disabled = true;
+    btn.innerHTML = `<span class="spinner"></span> Envoi en cours...`;
+
+    try {
+        /* ---- APPEL RÉEL AU SERVEUR PHP ----
+           En production ce bloc serait :
+           const reponse = await fetch('../php/enregistrer_note.php', {
+               method: 'POST',
+               headers: { 'Content-Type': 'application/json' },
+               body: JSON.stringify({
+                   commande_id:     COMMANDE_ID,
+                   note_livraison:  parseInt(noteLivraison.value),
+                   note_produit:    parseInt(noteProduit.value),
+                   commentaire:     commentaire
+               })
+           });
+           const data = await reponse.json();
+           if (!data.success) throw new Error(data.message);
+        ---- SIMULATION ---- */
+        await new Promise(r => setTimeout(r, 900));
+
+        /* Vérification anti-doublon serveur simulée */
+        const notes = JSON.parse(localStorage.getItem('notes_commandes') || '{}');
+        if (notes[COMMANDE_ID]) {
+            throw new Error('Vous avez déjà noté cette commande.');
+        }
+
+        /* Sauvegarder la note */
+        const dateAujourd = new Date().toLocaleDateString('fr-FR', {
+            day:'2-digit', month:'long', year:'numeric'
+        });
+        notes[COMMANDE_ID] = {
+            livraison:   parseInt(noteLivraison.value),
+            produits:    parseInt(noteProduit.value),
+            commentaire: commentaire,
+            date:        dateAujourd
+        };
+        localStorage.setItem('notes_commandes', JSON.stringify(notes));
+
+        afficherToast('✅ Merci pour votre avis !', 'succes');
+
+        /* Remplacer le formulaire par le résumé "déjà noté" */
+        setTimeout(() => afficherDejaNote(notes[COMMANDE_ID]), 800);
+
+    } catch (err) {
+        afficherToast(`❌ ${err.message || 'Erreur lors de l\'envoi. Réessayez.'}`, 'erreur');
+        btn.disabled = false;
+        btn.innerHTML = 'Envoyer mon avis';
+    }
+}
+
+/* ---- Toast notification ---- */
+function afficherToast(message, type = 'info') {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+    container.appendChild(toast);
+    setTimeout(() => toast.remove(), 3100);
+}
+</script>
+
+</body>
+</html>

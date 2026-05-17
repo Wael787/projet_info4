@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Livraison – Le Jardin de Kyoto</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body class="delivery">
+
+<!-- Toast container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<header class="delivery-header">
+  <h1>LIVRAISON</h1>
+</header>
+
+<!-- Menu burger -->
+<input type="checkbox" id="menu-toggle" aria-hidden="true">
+<label for="menu-toggle" class="burger-left" aria-label="Ouvrir le menu">
+  <span></span><span></span><span></span>
+</label>
+<nav class="menu-left" aria-label="Navigation livreur">
+  <a href="connexion.html">Connexion</a>
+  <a href="inscriptions.html">Inscription</a>
+  <a href="livraison.html">Livraison</a>
+</nav>
+
+<!-- Carte de livraison -->
+<section class="delivery-card" id="cartelivraison">
+
+  <h2>Commande #1025</h2>
+
+  <p><strong>Adresse :</strong><br>
+     15 rue de la Paix, 75002 Paris</p>
+
+  <p><strong>Interphone :</strong> B24</p>
+  <p><strong>Étage :</strong> 3</p>
+  <p><strong>Téléphone :</strong>
+    <a href="tel:0612345678" style="color:var(--rouge); font-weight:bold;">
+      06 12 34 56 78
+    </a>
+  </p>
+
+  <a href="https://www.google.com/maps/place/15+Rue+de+la+Paix,+75002+Paris"
+     target="_blank" rel="noopener"
+     class="btn primary" style="margin-top:1rem; display:inline-block;">
+    🗺 Ouvrir dans Google Maps
+  </a>
+
+  <!-- Statut actuel -->
+  <div id="statutActuel" style="margin-top:1.2rem; padding:0.6rem 1rem; background:var(--beige-clair); border-radius:0.5rem; font-size:0.88rem;">
+    <span id="labelStatut">🛵 En cours de livraison</span>
+  </div>
+
+  <!-- Bouton principal : marquer comme livrée -->
+  <button
+    class="btn-livraison-done"
+    id="btnLivree"
+    onclick="marquerLivree()"
+    aria-label="Marquer cette commande comme livrée">
+    ✅ Livraison effectuée
+  </button>
+
+  <!-- Bouton secondaire : signaler un problème -->
+  <button
+    class="btn-statut btn-annuler"
+    id="btnProbleme"
+    onclick="signalerProbleme()"
+    style="margin-top:0.8rem; width:100%; justify-content:center;"
+    aria-label="Signaler un problème de livraison">
+    ⚠️ Adresse introuvable / Problème
+  </button>
+
+  <!-- Zone de confirmation (masquée jusqu'au clic) -->
+  <div class="livraison-confirmee" id="confirmationZone" style="display:none;" role="alert">
+    <div style="font-size:2.5rem; margin-bottom:0.5rem;">🎉</div>
+    <strong>Livraison confirmée !</strong>
+    <p style="font-size:0.85rem; color:var(--gris); margin-top:0.4rem;">
+      La commande #1025 a bien été marquée comme livrée.<br>
+      Le client peut maintenant noter sa commande.
+    </p>
+    <p id="heureConfirmation" style="font-size:0.78rem; color:var(--gris); margin-top:0.3rem;"></p>
+  </div>
+
+</section>
+
+<script>
+/* ============================================================
+   PHASE 3 — Fin de livraison via requête asynchrone
+   Le livreur marque la livraison effectuée ou signale un problème.
+   ============================================================ */
+
+const COMMANDE_ID = 1025;
+
+/* ---- Au chargement : vérifier si déjà marquée livrée ---- */
+window.addEventListener('DOMContentLoaded', () => {
+  const statuts = JSON.parse(localStorage.getItem('statuts_livraisons') || '{}');
+  if (statuts[COMMANDE_ID] === 'livree') {
+    afficherConfirmation('livree');
+  } else if (statuts[COMMANDE_ID] === 'probleme') {
+    afficherConfirmation('probleme');
+  }
+});
+
+/* ---- Marquer la livraison comme effectuée ---- */
+async function marquerLivree() {
+  await envoyerStatutLivraison('livree');
+}
+
+/* ---- Signaler un problème (adresse introuvable, etc.) ---- */
+async function signalerProbleme() {
+  const confirme = window.confirm(
+    'Confirmer le signalement d\'un problème ?\n\nExemple : adresse introuvable, personne absente, accès refusé...'
+  );
+  if (!confirme) return;
+  await envoyerStatutLivraison('probleme');
+}
+
+/* ---- Requête asynchrone vers le serveur ---- */
+async function envoyerStatutLivraison(statut) {
+  const btnLivree   = document.getElementById('btnLivree');
+  const btnProbleme = document.getElementById('btnProbleme');
+
+  /* Désactiver les boutons et afficher le chargement */
+  btnLivree.disabled   = true;
+  btnProbleme.disabled = true;
+  btnLivree.innerHTML  = `<span class="spinner"></span> Envoi en cours...`;
+
+  try {
+    /* ---- APPEL RÉEL AU SERVEUR PHP ----
+       En production ce bloc serait :
+       const reponse = await fetch('../php/marquer_livraison.php', {
+           method: 'POST',
+           headers: { 'Content-Type': 'application/json' },
+           body: JSON.stringify({
+               commande_id: COMMANDE_ID,
+               statut: statut,
+               timestamp: new Date().toISOString()
+           })
+       });
+       const data = await reponse.json();
+       if (!data.success) throw new Error(data.message);
+    ---- SIMULATION (pas de serveur PHP disponible ici) ---- */
+    await new Promise(r => setTimeout(r, 800));
+
+    /* Persistance localStorage */
+    const statuts = JSON.parse(localStorage.getItem('statuts_livraisons') || '{}');
+    statuts[COMMANDE_ID] = statut;
+    statuts[`time_${COMMANDE_ID}`] = new Date().toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
+    localStorage.setItem('statuts_livraisons', JSON.stringify(statuts));
+
+    /* Aussi mettre à jour le statut des commandes restaurateur */
+    const statutsCmd = JSON.parse(localStorage.getItem('statuts_commandes') || '{}');
+    statutsCmd[COMMANDE_ID] = statut === 'livree' ? 'livree' : 'probleme';
+    localStorage.setItem('statuts_commandes', JSON.stringify(statutsCmd));
+
+    afficherConfirmation(statut);
+
+    const msg = statut === 'livree'
+      ? '✅ Livraison confirmée avec succès !'
+      : '⚠️ Problème signalé. Le restaurateur a été notifié.';
+    afficherToast(msg, statut === 'livree' ? 'succes' : 'erreur');
+
+  } catch (err) {
+    afficherToast('❌ Erreur réseau. Vérifiez votre connexion et réessayez.', 'erreur');
+    btnLivree.disabled   = false;
+    btnProbleme.disabled = false;
+    btnLivree.innerHTML  = '✅ Livraison effectuée';
+  }
+}
+
+/* ---- Afficher la zone de confirmation finale ---- */
+function afficherConfirmation(statut) {
+  const btnLivree      = document.getElementById('btnLivree');
+  const btnProbleme    = document.getElementById('btnProbleme');
+  const confirmation   = document.getElementById('confirmationZone');
+  const labelStatut    = document.getElementById('labelStatut');
+  const statutActuel   = document.getElementById('statutActuel');
+
+  btnLivree.style.display   = 'none';
+  btnProbleme.style.display = 'none';
+  confirmation.style.display = 'block';
+
+  const statuts = JSON.parse(localStorage.getItem('statuts_livraisons') || '{}');
+  const heure   = statuts[`time_${COMMANDE_ID}`] || '';
+
+  if (statut === 'livree') {
+    labelStatut.textContent  = '✅ Livrée';
+    statutActuel.style.background = '#E8F5E9';
+    labelStatut.style.color  = '#2E7D32';
+    confirmation.style.borderLeft = '4px solid #4CAF50';
+  } else {
+    labelStatut.textContent  = '⚠️ Problème signalé';
+    statutActuel.style.background = '#FFF3E0';
+    labelStatut.style.color  = '#E65100';
+    confirmation.innerHTML = `
+      <div style="font-size:2rem; margin-bottom:0.5rem;">⚠️</div>
+      <strong>Problème signalé</strong>
+      <p style="font-size:0.85rem; color:var(--gris); margin-top:0.4rem;">
+        Le restaurateur a été notifié du problème de livraison<br>
+        pour la commande #${COMMANDE_ID}.
+      </p>
+      ${heure ? `<p style="font-size:0.78rem; color:var(--gris); margin-top:0.3rem;">Signalé à ${heure}</p>` : ''}`;
+    return;
+  }
+
+  if (heure) {
+    document.getElementById('heureConfirmation').textContent = `Confirmée à ${heure}`;
+  }
+
+  /* Bouton "retour" pour aller à la page suivante */
+  confirmation.insertAdjacentHTML('beforeend', `
+    <a href="commandes.html" class="btn primary"
+       style="margin-top:1rem; display:inline-block; font-size:0.9rem;">
+      ← Retour aux commandes
+    </a>`);
+}
+
+/* ---- Toast notification ---- */
+function afficherToast(message, type = 'info') {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.textContent = message;
+  container.appendChild(toast);
+  setTimeout(() => toast.remove(), 3100);
+}
+</script>
+
+</body>
+</html>
