@@ -1,18 +1,51 @@
-le-jardin-de-kyoto/
+fichierjardin_kyoto/
+│
 
-  html/
-    admin.html
-    commandes.html
-    livraison.html
-    index.html
-    connexion.html
-    inscription.html
-    produit.html
-    profil.html
-    notation.html
-    
-  css/
-    style.css
+│   ├── index.php
+│   ├── produit.php
+│   ├── connexion.php
+│   └── inscription.php
+│   ├── profil.php
+│   ├── profil_admin.php
+│   ├── admin.php             ← admin uniquement
+│   ├── commandes.php         ← restaurateur uniquement
+│   ├── livraison.php         ← livreur uniquement
+│   ├── panier.php            ← client uniquement
+│   └── notation.php          ← client uniquement
+│   └── getapikey.php
+│
+├── 🎨 style.css
+│
+├── 📁 includes/              ← code réutilisable
+│   ├── session.php
+│   ├── auth_check.php
+│   ├── header.php
+│   ├── footer.php
+│   └── utils.php
+│   ├── cybank.php
+│
+├── 📁 actions/               ← traitement des formulaires & AJAX
+│   ├── login.php
+│   ├── register.php
+│   ├── logout.php
+│   ├── get_plats.php
+│   ├── commander.php
+│   ├── ajouter_panier.php
+│   ├── ajouter_menu_panier.php
+│   ├── ajouter_menu_classique.php
+│   ├── noter.php
+│   ├── maj_statut.php
+│   ├── maj_profil.php
+│   ├── maj_commande_client.php
+│   ├── maj_utiilisateur.php
+│   ├── check_session.php     ← NOUVEAU phase 3│
+├   └── retour_paiement.php
 
-  img/
-    toutes les images.jpg,.png
+├── 📁 data/                  ← données JSON
+│   ├── users.json
+│   ├── commandes.json
+│   ├── plats.json
+│   ├── menus.json
+│   └── notations.json
+│
+└── 📁 img/                   ← images
