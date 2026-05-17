@@ -99,7 +99,7 @@ include 'includes/header.php';
                         </button>
 
                         <!-- Statut spécial -->
-                        <form action="actions/maj_utiilisateur.php" method="POST"
+                        <form action="actions/maj_utilisateur.php" method="POST"
                               style="display:flex;gap:4px;align-items:center;">
                             <input type="hidden" name="user_id" value="<?= htmlspecialchars($u['id']) ?>">
                             <input type="hidden" name="action"  value="statut_special">
@@ -112,7 +112,7 @@ include 'includes/header.php';
                         </form>
 
                         <!-- Remise manuelle (écrase la remise automatique liée au statut) -->
-                        <form action="actions/maj_utiilisateur.php" method="POST"
+                        <form action="actions/maj_utilisateur.php" method="POST"
                               style="display:flex;gap:4px;align-items:center;">
                             <input type="hidden" name="user_id" value="<?= htmlspecialchars($u['id']) ?>">
                             <input type="hidden" name="action"  value="remise">
@@ -162,7 +162,7 @@ document.addEventListener('click', function(event) {
     formData.append('user_id', userId);
     formData.append('action',  action);
 
-    JDK.fetch('actions/maj_utiilisateur.php', {
+    JDK.fetch('actions/maj_utilisateur.php', {
         method: 'POST',
         body:   formData
     })
