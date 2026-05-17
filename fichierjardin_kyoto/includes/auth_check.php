@@ -1,26 +1,36 @@
 <?php
 // includes/auth_check.php
-// Vérifie que l'utilisateur est connecté et a le bon rôle.
+// À inclure dans les pages protégées, après session.php.
+// Le check de blocage est déjà fait dans session.php donc ici on s'occupe
+// juste de la connexion et du rôle.
 //
-// Usage (à mettre juste après include 'includes/session.php') :
-//   $roles_autorises = ['client'];          // une seule page client
-//   $roles_autorises = ['admin'];           // admin seulement
-//   $roles_autorises = ['restaurateur'];    // restaurateur seulement
-//   $roles_autorises = ['livreur'];         // livreur seulement
-//   $roles_autorises = ['client','admin'];  // plusieurs rôles acceptés
+// Usage :
+//   $roles_autorises = ['admin'];           // admin only
+//   $roles_autorises = ['client','admin'];  // plusieurs roles ok
 //   include 'includes/auth_check.php';
-//
-// Si $roles_autorises n'est pas défini, la page est accessible à tout
-// utilisateur connecté (peu importe le rôle).
 
-// 1. Pas connecté du tout → connexion
+// Pas connecté
 if (!isset($_SESSION['user'])) {
     header('Location: connexion.php?erreur=non_connecte');
     exit;
 }
 
-// 2. Rôle insuffisant → accueil avec message
-if (isset($roles_autorises) && !in_array($_SESSION['user']['role'], $roles_autorises)) {
-    header('Location: index.php?erreur=acces_refuse');
+// Rôle pas autorisé
+if (isset($roles_autorises)
+    && is_array($roles_autorises)
+    && !in_array($_SESSION['user']['role'], $roles_autorises, true)) {
+    $role_actuel = $_SESSION['user']['role'];
+    header('Location: index.php?erreur=acces_refuse&role_requis='
+           . urlencode(implode(',', $roles_autorises))
+           . '&role_actuel=' . urlencode($role_actuel));
+    exit;
+}
+
+// Garde fou au cas où la session aurait un rôle bizarre
+$roles_valides = ['client', 'admin', 'restaurateur', 'livreur'];
+if (!in_array($_SESSION['user']['role'] ?? '', $roles_valides, true)) {
+    session_unset();
+    session_destroy();
+    header('Location: connexion.php?erreur=session_invalide');
     exit;
 }
