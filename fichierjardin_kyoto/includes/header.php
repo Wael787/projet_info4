@@ -34,14 +34,14 @@ $body_class_finale = trim($body_class . ' ' . implode(' ', $classes_theme));
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($page_title) ?> - Le Jardin de Kyoto</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/jardin_kyoto/style.css">
 </head>
 <body class="<?= htmlspecialchars($body_class_finale) ?>">
 
 <header class="entete-principale">
 
     <div class="conteneur-logo">
-        <img src="img/logo.png" alt="Logo Jardin De Kyoto" class="logo-principal">
+        <img src="/jardin_kyoto/img/logo.png" alt="Logo Jardin De Kyoto" class="logo-principal">
         <p class="slogan-header">ART CULINAIRE &amp; SÉRÉNITÉ</p>
     </div>
 
@@ -49,30 +49,30 @@ $body_class_finale = trim($body_class . ' ' . implode(' ', $classes_theme));
         <button class="menu-burger" aria-label="Menu">☰</button>
         <nav class="navigation">
             <ul class="liste-du-haut">
-                <li><a href="index.php">Accueil</a></li>
-                <li><a href="produit.php">Menu</a></li>
+                <li><a href="/jardin_kyoto/index.php">Accueil</a></li>
+                <li><a href="/jardin_kyoto/produit.php">Menu</a></li>
                 <?php if (isset($_SESSION['user'])): ?>
-                    <li><a href="profil.php">Mon profil</a></li>
+                    <li><a href="/jardin_kyoto/profil.php">Mon profil</a></li>
                     <?php if ($_SESSION['user']['role'] === 'admin'): ?>
-                        <li><a href="admin.php">Administration</a></li>
+                        <li><a href="/jardin_kyoto/admin.php">Administration</a></li>
                     <?php endif; ?>
                     <?php if ($_SESSION['user']['role'] === 'restaurateur'): ?>
-                        <li><a href="commandes.php">Commandes</a></li>
+                        <li><a href="/jardin_kyoto/commandes.php">Commandes</a></li>
                     <?php endif; ?>
                     <?php if ($_SESSION['user']['role'] === 'livreur'): ?>
-                        <li><a href="livraison.php">Ma livraison</a></li>
+                        <li><a href="/jardin_kyoto/livraison.php">Ma livraison</a></li>
                     <?php endif; ?>
                     <?php if ($_SESSION['user']['role'] === 'client'): ?>
-                        <li><a href="panier.php">🛒 Mon panier</a></li>
+                        <li><a href="/jardin_kyoto/panier.php">🛒 Mon panier</a></li>
                     <?php endif; ?>
                     <li>
-                        <a href="actions/logout.php" style="color: #c0392b;">
+                        <a href="/jardin_kyoto/actions/logout.php" style="color: #c0392b;">
                             Déconnexion (<?= htmlspecialchars($_SESSION['user']['prenom']) ?>)
                         </a>
                     </li>
                 <?php else: ?>
-                    <li><a href="connexion.php">Connexion</a></li>
-                    <li><a href="inscription.php">Inscription</a></li>
+                    <li><a href="/jardin_kyoto/connexion.php">Connexion</a></li>
+                    <li><a href="/jardin_kyoto/inscription.php">Inscription</a></li>
                 <?php endif; ?>
             </ul>
         </nav>
@@ -131,7 +131,6 @@ $body_class_finale = trim($body_class . ' ' . implode(' ', $classes_theme));
     }
 
     function appliquerCouleur(couleur) {
-        // whitelist côté JS aussi, on est jamais trop prudent
         if (couleursAutorisees.indexOf(couleur) === -1) couleur = 'light';
 
         body.classList.remove('dark-mode', 'contrast-mode');
@@ -161,7 +160,6 @@ $body_class_finale = trim($body_class . ' ' . implode(' ', $classes_theme));
         if (btn) btn.setAttribute('aria-pressed', active ? 'true' : 'false');
     }
 
-    // listener sur chaque bouton couleur
     var btnsCouleur = document.querySelectorAll('.theme-btn[data-couleur]');
     for (var i = 0; i < btnsCouleur.length; i++) {
         (function(btn) {
@@ -171,7 +169,6 @@ $body_class_finale = trim($body_class . ' ' . implode(' ', $classes_theme));
         })(btnsCouleur[i]);
     }
 
-    // toggle loupe
     var btnLoupe = document.querySelector('.theme-btn-loupe');
     if (btnLoupe) {
         btnLoupe.addEventListener('click', function() {
@@ -197,14 +194,12 @@ window.JDK.validateurs = {
     dateValide:   function(v) { if (!/^\d{4}-\d{2}-\d{2}$/.test(v)) return false; return !isNaN(new Date(v).getTime()); }
 };
 
-// Fonction générique appelée depuis chaque page de formulaire
 window.JDK.validerFormulaire = function(formId, regles) {
     var form = document.getElementById(formId);
     if (!form) return;
 
     form.addEventListener('submit', function(event) {
         var ok = true;
-        // on nettoie les anciennes erreurs
         form.querySelectorAll('.erreur-champ').forEach(function(el) { el.remove(); });
         form.querySelectorAll('.champ-invalide').forEach(function(el) { el.classList.remove('champ-invalide'); });
 
@@ -232,14 +227,12 @@ function afficherErreurChamp(input, message) {
     div.className = 'erreur-champ';
     div.setAttribute('role', 'alert');
     div.textContent = '⚠ ' + message;
-    // si le champ est wrappé pour l'oeil, on met le msg après le wrapper
     var parent = input.closest('.password-wrapper') || input;
     parent.parentNode.insertBefore(div, parent.nextSibling);
 }
 
 
 // ============== ICONE OEIL POUR LES MOTS DE PASSE ==============
-// On parcours tous les inputs password et on leur ajoute un toggle
 document.addEventListener('DOMContentLoaded', function() {
     var motsDePasse = document.querySelectorAll('input[type="password"]');
     motsDePasse.forEach(function(input) {
@@ -251,7 +244,7 @@ document.addEventListener('DOMContentLoaded', function() {
         wrapper.appendChild(input);
 
         var oeil = document.createElement('button');
-        oeil.type = 'button';  // sinon il submit le form
+        oeil.type = 'button';
         oeil.className = 'toggle-password';
         oeil.setAttribute('aria-label', 'Afficher le mot de passe');
         oeil.textContent = '👁';
@@ -271,8 +264,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // ============== COMPTEUR DE CARACTERES ==============
-// Sur tout champ avec data-max="N", on affiche "X / N caractères" en dessous.
-// Devient orange à 80%, rouge à 100%.
 document.addEventListener('DOMContentLoaded', function() {
     var champs = document.querySelectorAll('[data-max]');
 
@@ -280,7 +271,6 @@ document.addEventListener('DOMContentLoaded', function() {
         var max = parseInt(champ.getAttribute('data-max'), 10);
         if (isNaN(max) || max <= 0) return;
 
-        // double sécurité : le navigateur bloque aussi la saisie
         if (!champ.hasAttribute('maxlength')) {
             champ.setAttribute('maxlength', max);
         }
@@ -289,7 +279,6 @@ document.addEventListener('DOMContentLoaded', function() {
         compteur.className = 'compteur-chars';
         compteur.setAttribute('aria-live', 'polite');
 
-        // pour les password wrappés, on insère après le wrapper pas dedans
         var reference = champ.closest('.password-wrapper') || champ;
         reference.parentNode.insertBefore(compteur, reference.nextSibling);
 
@@ -309,7 +298,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // ============== HELPER AJAX ==============
-// Wrapper autour de fetch qui ajoute les bons headers et parse le JSON
 window.JDK.fetch = function(url, options) {
     options = options || {};
     options.headers = options.headers || {};
@@ -328,19 +316,16 @@ window.JDK.fetch = function(url, options) {
 
 
 // ============== POLLING : check de session toutes les 10s ==============
-// Si l'admin bloque un utilisateur pendant qu'il est sur une page sans
-// rien cliquer, ce check le déconnecte automatiquement.
 <?php if (isset($_SESSION['user'])): ?>
 setInterval(function() {
-    fetch('actions/check_session.php', { headers: { 'Accept': 'application/json' }})
+    fetch('/jardin_kyoto/actions/check_session.php', { headers: { 'Accept': 'application/json' }})
         .then(function(r) { return r.json(); })
         .then(function(data) {
             if (!data.actif) {
-                // la session n'est plus valide -> on redirige
-                window.location.href = 'connexion.php?erreur=session_bloquee';
+                window.location.href = '/jardin_kyoto/connexion.php?erreur=session_bloquee';
             }
         })
-        .catch(function() { /* erreur réseau, on ignore */ });
-}, 10000);  // 10 secondes
+        .catch(function() {});
+}, 10000);
 <?php endif; ?>
 </script>
