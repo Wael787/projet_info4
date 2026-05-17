@@ -21,8 +21,8 @@ include 'includes/header.php';
 
     <h2 class="admin-subtitle">Tableau de bord — Administration</h2>
 
-    <!-- STATS RAPIDES -->
-    <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px;">
+    <!-- STATS rapides -->
+    <div class="bloc-stats">
         <?php
         // Compter chaque rôle manuellement
         $nb_clients = 0;
@@ -43,9 +43,9 @@ include 'includes/header.php';
             'Commandes'     => count($commandes),
         ];
         foreach ($stats as $label => $val): ?>
-        <div style="background:#f5f5f5;border-radius:8px;padding:16px 24px;min-width:100px;text-align:center;">
-            <div style="font-size:1.8em;font-weight:bold;"><?= $val ?></div>
-            <div style="font-size:.85em;color:#666;"><?= $label ?></div>
+        <div class="stat-card">
+            <div class="stat-valeur"><?= $val ?></div>
+            <div class="stat-label"><?= $label ?></div>
         </div>
         <?php endforeach; ?>
     </div>
@@ -67,7 +67,8 @@ include 'includes/header.php';
         </thead>
         <tbody>
             <?php foreach ($users as $u): ?>
-            <tr style="<?= ($u['statut'] === 'bloque') ? 'background:#fdecea;' : '' ?>">
+            <tr data-user-id="<?= htmlspecialchars($u['id']) ?>"
+                class="<?= $u['statut'] === 'bloque' ? 'ligne-bloquee' : '' ?>">
                 <td>
                     <a href="profil_admin.php?id=<?= htmlspecialchars($u['id']) ?>">
                         <?= htmlspecialchars($u['prenom'] . ' ' . $u['nom']) ?>
@@ -75,10 +76,12 @@ include 'includes/header.php';
                 </td>
                 <td><?= htmlspecialchars($u['email']) ?></td>
                 <td><?= htmlspecialchars(ucfirst($u['role'])) ?></td>
-                <td>
-                    <span style="color:<?= $u['statut']==='actif' ? 'green' : 'red' ?>">
-                        <?= $u['statut'] === 'actif' ? '✅ Actif' : '🔒 Bloqué' ?>
-                    </span>
+                <td class="cellule-statut">
+                    <?php if ($u['statut'] === 'actif'): ?>
+                        <span class="badge-statut badge-actif">✅ Actif</span>
+                    <?php else: ?>
+                        <span class="badge-statut badge-bloque">🔒 Bloqué</span>
+                    <?php endif; ?>
                 </td>
                 <td><?= htmlspecialchars($u['statut_special'] ?? '—') ?></td>
                 <td><?= ($u['remise'] ?? 0) > 0 ? '-' . $u['remise'] . '%' : '—' ?></td>
@@ -87,17 +90,13 @@ include 'includes/header.php';
                     <?php if ($u['id'] !== $_SESSION['user']['id']): ?>
                     <div style="display:flex;flex-direction:column;gap:6px;min-width:200px;">
 
-                        <!-- Bloquer / Débloquer -->
-                        <form action="actions/maj_utiilisateur.php" method="POST">
-                            <input type="hidden" name="user_id" value="<?= htmlspecialchars($u['id']) ?>">
-                            <input type="hidden" name="action"  value="<?= $u['statut'] === 'actif' ? 'bloquer' : 'debloquer' ?>">
-                            <?php if ($u['statut'] === 'actif'): ?>
-                                <button type="submit" class="btn-admin btn-danger"
-                                        onclick="return confirm('Bloquer ce compte ?')">🔒 Bloquer</button>
-                            <?php else: ?>
-                                <button type="submit" class="btn-admin btn-success">🔓 Débloquer</button>
-                            <?php endif; ?>
-                        </form>
+                        <!-- Bouton AJAX (data-* portent les infos, listener en bas de page) -->                        <button type="button"
+                                class="btn-admin btn-ajax-statut <?= $u['statut'] === 'actif' ? 'btn-danger' : 'btn-success' ?>"
+                                data-user-id="<?= htmlspecialchars($u['id']) ?>"
+                                data-action="<?= $u['statut'] === 'actif' ? 'bloquer' : 'debloquer' ?>"
+                                data-user-nom="<?= htmlspecialchars($u['prenom'] . ' ' . $u['nom']) ?>">
+                            <?= $u['statut'] === 'actif' ? '🔒 Bloquer' : '🔓 Débloquer' ?>
+                        </button>
 
                         <!-- Statut spécial -->
                         <form action="actions/maj_utiilisateur.php" method="POST"
@@ -135,4 +134,105 @@ include 'includes/header.php';
     </table>
 
 </main>
+
+<!-- Script AJAX pour le blocage : un seul listener sur le document
+     intercepte les clics sur .btn-ajax-statut (event delegation) -->
+<script>
+document.addEventListener('click', function(event) {
+    var bouton = event.target.closest('.btn-ajax-statut');
+    if (!bouton) return;
+
+    var userId   = bouton.dataset.userId;
+    var action   = bouton.dataset.action;
+    var userNom  = bouton.dataset.userNom;
+
+    // confirm uniquement pour le blocage
+    if (action === 'bloquer') {
+        if (!confirm('Bloquer le compte de ' + userNom + ' ?\n\nL\'utilisateur sera déconnecté immédiatement.')) {
+            return;
+        }
+    }
+
+    // anti double-clic
+    bouton.disabled = true;
+    var libelleInitial = bouton.textContent;
+    bouton.textContent = '⏳ Patientez...';
+
+    var formData = new FormData();
+    formData.append('user_id', userId);
+    formData.append('action',  action);
+
+    JDK.fetch('actions/maj_utiilisateur.php', {
+        method: 'POST',
+        body:   formData
+    })
+    .then(function(data) {
+        if (!data.ok) {
+            throw new Error(data.message || 'Erreur inconnue');
+        }
+        majLigneUtilisateur(userId, data.user);
+        afficherToast('✅ ' + (action === 'bloquer'
+            ? userNom + ' a été bloqué (déconnexion immédiate)'
+            : userNom + ' a été débloqué'), 'succes');
+    })
+    .catch(function(err) {
+        console.error('[AJAX]', err);
+        afficherToast('❌ Erreur : ' + err.message, 'erreur');
+        bouton.disabled = false;
+        bouton.textContent = libelleInitial;
+    });
+});
+
+// MAJ visuelle de la ligne après une modif AJAX
+function majLigneUtilisateur(userId, userData) {
+    var ligne = document.querySelector('tr[data-user-id="' + userId + '"]');
+    if (!ligne) return;
+
+    var statut = userData.statut;
+    var nouveauEstActif = (statut === 'actif');
+
+    ligne.classList.toggle('ligne-bloquee', !nouveauEstActif);
+
+    var cellule = ligne.querySelector('.cellule-statut');
+    if (cellule) {
+        cellule.innerHTML = nouveauEstActif
+            ? '<span class="badge-statut badge-actif">✅ Actif</span>'
+            : '<span class="badge-statut badge-bloque">🔒 Bloqué</span>';
+    }
+
+    var bouton = ligne.querySelector('.btn-ajax-statut');
+    if (bouton) {
+        bouton.disabled = false;
+        if (nouveauEstActif) {
+            bouton.dataset.action = 'bloquer';
+            bouton.textContent = '🔒 Bloquer';
+            bouton.classList.remove('btn-success');
+            bouton.classList.add('btn-danger');
+        } else {
+            bouton.dataset.action = 'debloquer';
+            bouton.textContent = '🔓 Débloquer';
+            bouton.classList.remove('btn-danger');
+            bouton.classList.add('btn-success');
+        }
+    }
+}
+
+// Petit toast en haut à droite qui disparait après 3.5s
+function afficherToast(message, type) {
+    var toast = document.createElement('div');
+    toast.className = 'toast toast-' + (type || 'succes');
+    toast.setAttribute('role', 'alert');
+    toast.textContent = message;
+    document.body.appendChild(toast);
+
+    void toast.offsetWidth;  // force un reflow pour que la transition CSS marche
+    toast.classList.add('toast-visible');
+
+    setTimeout(function() {
+        toast.classList.remove('toast-visible');
+        setTimeout(function() { toast.remove(); }, 300);
+    }, 3500);
+}
+</script>
+
 <?php include 'includes/footer.php'; ?>
