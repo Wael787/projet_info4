@@ -14,10 +14,8 @@ $panier      = $_SESSION['panier'] ?? [];
 $sous_total = 0.0;
 foreach ($panier as $item) {
     if (($item['type'] ?? '') === 'menu') {
-        // Article de type menu : le prix est stocké directement dans l'item
         $sous_total += (float)($item['prix'] ?? 0) * (int)$item['quantite'];
     } else {
-        // Plat normal : on cherche dans plats.json
         $prix = (float)($index_plats[$item['plat_id']]['prix'] ?? 0);
         $sous_total += $prix * (int)$item['quantite'];
     }
@@ -45,16 +43,55 @@ include 'includes/header.php';
 
     <h1 style="margin-bottom:24px;">🛒 Mon Panier</h1>
 
+    <!-- 🚨 ALERTE PAIEMENT — TRÈS VISIBLE
+         On utilise une boîte spéciale (rouge, animée) au lieu du
+         simple message-erreur qui passait inaperçu. -->
+    <?php if ($erreur === 'paiement_refuse'): ?>
+        <div class="alerte-paiement" role="alert">
+            <div class="icone">⚠️</div>
+            <div class="contenu">
+                <h3>Paiement refusé par votre banque</h3>
+                <p>
+                    Votre commande n'a <strong>pas été validée</strong>.
+                    Vérifiez les informations de votre carte (numéro, date, CVV)
+                    puis réessayez. Aucune somme n'a été débitée.
+                </p>
+            </div>
+            <a href="#zone-paiement" class="btn-reessayer">↻ Réessayer le paiement</a>
+        </div>
+
+    <?php elseif ($erreur === 'controle_invalide'): ?>
+        <div class="alerte-paiement" role="alert">
+            <div class="icone">🛡️</div>
+            <div class="contenu">
+                <h3>Erreur de sécurité lors du retour de paiement</h3>
+                <p>
+                    Les données reçues de la banque n'ont pas pu être vérifiées.
+                    Par mesure de sécurité, votre paiement n'a pas été enregistré.
+                    Réessayez ou contactez le support.
+                </p>
+            </div>
+            <a href="#zone-paiement" class="btn-reessayer">↻ Réessayer</a>
+        </div>
+
+    <?php elseif ($erreur === 'retour_incomplet'): ?>
+        <div class="alerte-paiement" role="alert">
+            <div class="icone">⚠️</div>
+            <div class="contenu">
+                <h3>Retour de paiement incomplet</h3>
+                <p>Certaines informations sont manquantes. Veuillez réessayer.</p>
+            </div>
+            <a href="#zone-paiement" class="btn-reessayer">↻ Réessayer</a>
+        </div>
+
+    <?php elseif ($erreur === 'commande_vide'): ?>
+        <p class="message-erreur">Votre panier est vide.</p>
+    <?php endif; ?>
+
     <?php if ($msg === 'ajout_ok'): ?>
         <p class="message-succes">Article ajouté au panier !</p>
     <?php elseif ($msg === 'commande_creee'): ?>
         <p class="message-succes">Commande enregistrée ! Procédez au paiement ci-dessous.</p>
-    <?php elseif ($erreur === 'paiement_refuse'): ?>
-        <p class="message-erreur">Paiement refusé par la banque. Veuillez réessayer.</p>
-    <?php elseif ($erreur === 'controle_invalide'): ?>
-        <p class="message-erreur">Erreur de sécurité lors du retour de paiement.</p>
-    <?php elseif ($erreur === 'commande_vide'): ?>
-        <p class="message-erreur">Votre panier est vide.</p>
     <?php endif; ?>
 
     <?php if (empty($panier)): ?>
@@ -78,12 +115,11 @@ include 'includes/header.php';
             </thead>
             <tbody>
                 <?php foreach ($panier as $cle => $item):
-                    // ?? : si 'type' n'existe pas dans l'item, on utilise '' par défaut
                     $est_menu = ($item['type'] ?? '') === 'menu';
 
                     if ($est_menu) {
-                        $nom        = $item['nom'] ?? 'Menu';
-                        $pu         = (float)($item['prix'] ?? 0);
+                        $nom         = $item['nom'] ?? 'Menu';
+                        $pu          = (float)($item['prix'] ?? 0);
                         $description = $item['description'] ?? '';
                     } else {
                         $plat = $index_plats[$item['plat_id']] ?? null;
@@ -104,7 +140,6 @@ include 'includes/header.php';
                         <?php endif; ?>
                     </td>
                     <td style="text-align:center;padding:8px;">
-                        <!-- Moins -->
                         <form action="actions/ajouter_panier.php" method="POST" style="display:inline">
                             <input type="hidden" name="plat_id"  value="<?= htmlspecialchars($cle) ?>">
                             <input type="hidden" name="quantite" value="-1">
@@ -112,7 +147,6 @@ include 'includes/header.php';
                                     style="border:1px solid #ddd;background:#fff;width:24px;height:24px;cursor:pointer;border-radius:4px;">−</button>
                         </form>
                         <span style="margin:0 8px;"><?= $qte ?></span>
-                        <!-- Plus -->
                         <form action="actions/ajouter_panier.php" method="POST" style="display:inline">
                             <input type="hidden" name="plat_id"  value="<?= htmlspecialchars($cle) ?>">
                             <input type="hidden" name="quantite" value="1">
@@ -205,7 +239,8 @@ include 'includes/header.php';
 
         <?php else: ?>
         <!-- ÉTAPE 2 : PAIEMENT CYBANK -->
-        <div style="background:#f0f8f0;border:2px solid #27ae60;border-radius:8px;padding:24px;text-align:center;">
+        <div id="zone-paiement"
+             style="background:#f0f8f0;border:2px solid #27ae60;border-radius:8px;padding:24px;text-align:center;">
             <h3 style="color:#27ae60;margin-top:0;">
                 ✅ Commande #<?= htmlspecialchars($commande_id_temp) ?> enregistrée
             </h3>
@@ -222,18 +257,32 @@ include 'includes/header.php';
     <?php endif; ?>
 
 </main>
+
 <?php include 'includes/footer.php'; ?>
+
 <script>
+// 1. Toggle du bloc adresse selon le type de commande
 document.querySelectorAll('[name="type_livraison"]').forEach(r => {
     r.addEventListener('change', () => {
         document.getElementById('bloc-adresse').style.display =
             r.value === 'livraison' ? 'block' : 'none';
     });
 });
+
+// 2. Toggle du bloc heure programmée
 document.querySelectorAll('[name="heure_type"]').forEach(r => {
     r.addEventListener('change', () => {
         document.getElementById('bloc-heure').style.display =
             r.value === 'programmee' ? 'block' : 'none';
     });
 });
+
+// 3. Si on revient sur la page avec une alerte de paiement, on fait défiler
+//    automatiquement la page pour que l'utilisateur la voie (priorité visuelle).
+(function() {
+    const alerte = document.querySelector('.alerte-paiement');
+    if (alerte) {
+        alerte.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+})();
 </script>
