@@ -5,8 +5,59 @@ require_once 'includes/utils.php';
 $page_title = 'Accueil';
 $body_class = 'page-accueil';
 
-// Message d'erreur éventuel (accès refusé depuis auth_check)
 $erreur = $_GET['erreur'] ?? null;
+
+// Calcul des 3 plats les plus commandés
+$toutes_commandes = lire_json('commandes.json');
+$plats_json       = lire_json('plats.json');
+
+// On compte combien de fois chaque plat a été commandé
+$compteur = [];
+foreach ($toutes_commandes as $commande) {
+    foreach ($commande['articles'] ?? [] as $article) {
+        $id = $article['plat_id'] ?? '';
+        if ($id === '') continue;
+        if (isset($compteur[$id])) {
+            $compteur[$id] += (int)$article['quantite'];
+        } else {
+            $compteur[$id] = (int)$article['quantite'];
+        }
+    }
+}
+
+// Du plus commandé au moins commandé
+arsort($compteur);
+
+// Index des plats par id
+$index_plats = [];
+foreach ($plats_json as $p) {
+    $index_plats[$p['id']] = $p;
+}
+
+// On prend les 3 premiers
+$favoris = [];
+foreach ($compteur as $plat_id => $nb) {
+    if (isset($index_plats[$plat_id])) {
+        $favoris[] = $index_plats[$plat_id];
+    }
+    if (count($favoris) >= 3) break;
+}
+
+// Si moins de 3 résultats, on complète avec des plats par défaut
+$defaut = ['P006', 'P012', 'P016'];
+foreach ($defaut as $id_defaut) {
+    if (count($favoris) >= 3) break;
+    $deja_la = false;
+    foreach ($favoris as $f) {
+        if ($f['id'] === $id_defaut) {
+            $deja_la = true;
+            break;
+        }
+    }
+    if (!$deja_la && isset($index_plats[$id_defaut])) {
+        $favoris[] = $index_plats[$id_defaut];
+    }
+}
 
 include 'includes/header.php';
 ?>
@@ -19,9 +70,7 @@ include 'includes/header.php';
         </div>
     <?php endif; ?>
 
-    <!-- SECTION BIENVENUE -->
     <section class="section-bienvenue">
-
         <div class="perso-accueil">
             <div class="bulle-bienvenue">
                 <?php if (isset($_SESSION['user'])): ?>
@@ -43,31 +92,20 @@ include 'includes/header.php';
                 <button type="submit" class="bouton-recherche">Rechercher</button>
             </form>
         </div>
-
     </section>
 
-    <!-- SECTION FAVORIS -->
     <section class="section-favoris">
         <h2>Les favoris du moment</h2>
         <div class="grille-presentation">
 
+            <?php foreach ($favoris as $plat): ?>
             <article class="produits-favoris">
-                <img src="img/PlateauKyoto2.jpg" alt="Plateau Kyoto Mix">
-                <h3>Plateau Kyoto Mix</h3>
-                <p class="prix-produit">17,90 €</p>
+                <img src="<?= htmlspecialchars($plat['image']) ?>"
+                     alt="<?= htmlspecialchars($plat['nom']) ?>">
+                <h3><?= htmlspecialchars($plat['nom']) ?></h3>
+                <p class="prix-produit"><?= number_format($plat['prix'], 2, ',', '') ?> €</p>
             </article>
-
-            <article class="produits-favoris">
-                <img src="img/RamenIchiraku.jpg" alt="Ramen Ichiraku">
-                <h3>Ramen Ichiraku</h3>
-                <p class="prix-produit">14,50 €</p>
-            </article>
-
-            <article class="produits-favoris">
-                <img src="img/MochiSakura.jpg" alt="Mochis Glacé">
-                <h3>Perles de Sakura</h3>
-                <p class="prix-produit">6,90 €</p>
-            </article>
+            <?php endforeach; ?>
 
             <article class="produits-favoris carte-menu">
                 <a href="produit.php">
