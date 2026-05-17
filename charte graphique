@@ -22,3 +22,66 @@ Expérience Utilisateur (UX)
     Le fil rouge : Le personnage de Teuchi nous sert de guide. Il apparaît dans des bulles pour valider une inscription ou confirmer un ajout au panier.
 
     Adaptabilité : Le site est pensé pour être utilisé aussi bien sur PC que sur mobile (avec un menu burger pour ne pas encombrer l'écran sur téléphone).
+
+
+Identité Visuelle — Le Jardin de Kyoto (Phase 3)
+
+Pour la phase 3, on a gardé toute l'identité de Teuchi qu'on avait construite avant, mais on a ajouté 3 nouveaux modes d'affichage pour rendre le site accessible à tout le monde. L'idée c'était que peu importe le contexte (lumière du jour, fatigue oculaire, malvoyance), l'utilisateur puisse profiter du restaurant.
+La charte d'origine, on l'a gardée
+On change rien à l'identité de base : beige doux, rouge japonais, Georgia, bords arrondis, Teuchi en mascotte. Tout ce qu'on a construit en phase 1 reste valable en mode "clair" qui est le mode par défaut. C'est juste qu'on a ajouté 3 alternatives pour ceux qui en ont besoin.
+Le selecteur en haut à droite
+Pour basculer entre les modes, on a placé un selecteur dans le header, toujours visible. Il est en deux parties :
+
+3 boutons couleur mutuellement exclusifs : ☀️ Clair / 🌙 Sombre / 🌗 Contraste
+1 toggle indépendant : 🔍 Loupe
+
+L'idée d'avoir séparé la loupe c'est pour pouvoir la combiner avec n'importe quel mode couleur. Quelqu'un de malvoyant qui préfère le sombre (moins fatigant) peut activer sombre + loupe. Avant on avait fait 4 modes exclusifs et c'était moins souple.
+Le choix est sauvegardé dans 2 cookies (un pour la couleur, un pour la loupe), valables 1 an. À chaque chargement, PHP les lit et applique direct la bonne classe sur le <body>, ce qui évite que la page clignote en mode clair avant de passer en sombre.
+Mode Sombre 🌙
+Inspiré des soirées au restaurant, ambiance tamisée. On voulait pas du noir total qui fait "Netflix", mais quelque chose de plus chaud.
+Les couleurs :
+
+Fond principal : un bleu nuit foncé (#1E1E2E) qui rappelle un ciel de Tokyo le soir
+Fond des cartes : un peu plus clair (#2A2A3A) pour bien démarquer les blocs du fond
+Texte : un blanc cassé doux (#E8E8F0) pour pas que ça pique les yeux
+Accent rouge : on a éclairci le rouge en #FF6B6B pour qu'il reste visible sur fond sombre
+
+Pourquoi c'est utile : moins fatigant le soir, moins de batterie sur les écrans OLED, plus reposant pour les yeux sensibles.
+Mode Contraste 🌗
+Là on est dans l'accessibilité pure, conforme aux recommandations WCAG (les standards d'accessibilité du web). C'est fait pour les personnes avec une déficience visuelle importante ou qui utilisent le site en plein soleil.
+Les couleurs :
+
+Fond : noir absolu #000000
+Texte : blanc absolu #FFFFFF
+Accents et boutons : jaune vif #FFFF00
+
+Le contraste noir/blanc est le maximum possible. Le jaune sert pour tout ce qu'il faut remarquer (boutons, liens, badges). Les bordures sont épaissies pour bien séparer les zones cliquables.
+Pourquoi c'est utile : essentiel pour les personnes malvoyantes, et utile aussi pour tout le monde en cas de luminosité difficile.
+Mode Loupe 🔍
+Celui-là c'est pas un changement de couleur mais une augmentation des tailles. On le combine avec n'importe quel des 3 modes couleur.
+Ce qui grossit :
+
+Texte de base : de 16px à 22px (environ +37%)
+Titres : encore plus gros
+Espacements et padding : pour aérer la lecture
+Menu burger : devient particulièrement gros pour rester accessible
+Boutons et champs de formulaire : plus grands donc plus faciles à cliquer
+
+Ce qui reste pareil :
+
+Le selecteur de thème (sinon il prendrait tout l'écran)
+Le logo (limité en taille pour pas déborder)
+
+Pourquoi c'est utile : pour les personnes qui ont du mal à lire les petites tailles, ou simplement pour les seniors. On voulait pas obliger l'utilisateur à zoomer avec Ctrl + et casser la mise en page.
+Comment on a fait techniquement
+Pour pas tout refaire à chaque mode, on a utilisé les variables CSS (var(--beige-clair), etc.). Quand on passe en mode sombre, on redéfinit juste les variables sur body.dark-mode, et tout le site se met à jour automatiquement. C'est super pratique pour la maintenance.
+Sur certains blocs (comme les options de livraison du panier, ou les stats admin), on avait des styles "en dur" qui ignoraient les variables. On a dû les refactoriser en classes CSS propres pour qu'ils s'adaptent aussi aux modes.
+Petite philosophie
+L'accessibilité c'est pas un bonus, c'est essentiel. On voulait que le site de Teuchi soit accueillant pour tout le monde, pas juste les visiteurs "moyens". Avec ces 3 modes, on couvre :
+
+Les utilisateurs qui veulent juste préférer un look différent (sombre par esthétique)
+Les personnes avec une déficience visuelle (contraste)
+Les personnes qui ont besoin de gros caractères (loupe)
+Et toutes les combinaisons entre les deux
+
+C'est un peu plus de travail, mais c'est aligné avec l'esprit "zen et accueillant" qu'on voulait dès le départ.
