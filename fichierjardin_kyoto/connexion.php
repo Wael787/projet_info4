@@ -4,10 +4,10 @@ require_once 'includes/session.php';
 // Si déjà connecté → redirige vers la page adaptée au rôle
 if (isset($_SESSION['user'])) {
     $role = $_SESSION['user']['role'];
-    if ($role === 'admin')         header('Location: admin.php');
+    if ($role === 'admin')            header('Location: admin.php');
     elseif ($role === 'restaurateur') header('Location: commandes.php');
-    elseif ($role === 'livreur')   header('Location: livraison.php');
-    else                           header('Location: index.php');
+    elseif ($role === 'livreur')      header('Location: livraison.php');
+    else                              header('Location: index.php');
     exit;
 }
 
@@ -23,13 +23,35 @@ include 'includes/header.php';
 
 <main class="login-container">
 
-    <form action="actions/login.php" method="POST" class="boite-formulaire">
+    <!-- novalidate désactive la validation HTML5 du navigateur :
+         on préfère la nôtre qui affiche des messages cohérents -->
+    <form id="form-connexion"
+          action="actions/login.php"
+          method="POST"
+          class="boite-formulaire"
+          novalidate>
         <h2>🔐 Accès à votre compte JDK</h2>
 
         <?php if ($erreur === 'identifiants'): ?>
             <p class="message-erreur">Email ou mot de passe incorrect.</p>
         <?php elseif ($erreur === 'bloque'): ?>
             <p class="message-erreur">Votre compte est bloqué. Contactez l'administration.</p>
+        <?php elseif ($erreur === 'session_bloquee'): ?>
+            <!-- message si l'admin a bloqué pendant que l'user était connecté -->
+            <div class="bandeau-alerte" role="alert">
+                <div class="bandeau-alerte-icone">🔒</div>
+                <div class="bandeau-alerte-contenu">
+                    <h3 class="bandeau-alerte-titre">Session terminée</h3>
+                    <p class="bandeau-alerte-message">
+                        Votre compte a été bloqué par l'administration.
+                    </p>
+                    <p class="bandeau-alerte-conseil">
+                        👉 Contactez l'administration pour plus d'informations.
+                    </p>
+                </div>
+            </div>
+        <?php elseif ($erreur === 'session_invalide'): ?>
+            <p class="message-erreur">Votre session n'est plus valide. Veuillez vous reconnecter.</p>
         <?php elseif ($erreur === 'non_connecte'): ?>
             <p class="message-erreur">Vous devez être connecté pour accéder à cette page.</p>
         <?php endif; ?>
@@ -42,12 +64,15 @@ include 'includes/header.php';
 
         <label for="email">📧 E-mail :</label>
         <input type="email" id="email" name="email"
-               placeholder="votre.email@exemple.com" required
+               data-max="100"
+               placeholder="votre.email@exemple.com"
                value="<?= htmlspecialchars($_GET['email'] ?? '') ?>">
 
         <label for="password">🔑 Mot de passe :</label>
         <input type="password" id="password" name="password"
-               placeholder="••••••••" required>
+               data-max="64"
+               placeholder="••••••••">
+        <!-- L'icône œil est ajoutée automatiquement par le script du header -->
 
         <div class="options">
             <input type="checkbox" id="se_souvenir" name="se_souvenir">
@@ -66,6 +91,20 @@ include 'includes/header.php';
     </div>
 
 </main>
+
+<!-- Validation côté client : on bloque le submit tant que c'est pas valide -->
+<script>
+JDK.validerFormulaire('form-connexion', {
+    email: {
+        test: function(v) { return JDK.validateurs.email(v); },
+        msg:  "Adresse email invalide (ex : prenom@exemple.com)"
+    },
+    password: {
+        test: function(v) { return JDK.validateurs.nonVide(v) && v.length >= 6; },
+        msg:  "Le mot de passe doit contenir au moins 6 caractères"
+    }
+});
+</script>
 
 <footer>
     <p>&copy; 2025-2026 Le Jardin de Kyoto</p>
