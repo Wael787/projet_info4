@@ -1,19 +1,20 @@
 <?php
 // actions/retour_paiement.php
 // Reçoit le retour GET de CYBank après paiement.
-// CYBank ajoute à l'URL : transaction, montant, vendeur, statut, control
+// Gère deux cas :
+//   1. Paiement initial d'une commande (ID normal ex: "20D496D270")
+//   2. Paiement différentiel d'une modification (ID se termine par "D" ex: "20D496D270D")
+
 require_once '../includes/session.php';
 require_once '../includes/utils.php';
 require_once '../includes/cybank.php';
 
-// Récupérer les paramètres GET envoyés par CYBank
-$transaction = $_GET['transaction'] ?? '';
-$montant     = $_GET['montant']     ?? '';
-$vendeur     = $_GET['vendeur']     ?? '';
-$statut      = $_GET['statut']      ?? $_GET['status'] ?? '';
-$control_recu = $_GET['control']   ?? '';
+$transaction  = $_GET['transaction'] ?? '';
+$montant      = $_GET['montant']     ?? '';
+$vendeur      = $_GET['vendeur']     ?? '';
+$statut       = $_GET['statut']      ?? $_GET['status'] ?? '';
+$control_recu = $_GET['control']     ?? '';
 
-// Si un paramètre essentiel manque → erreur
 if ($transaction === '' || $montant === '' || $vendeur === '' || $statut === '' || $control_recu === '') {
     header('Location: ../panier.php?erreur=retour_incomplet');
     exit;
@@ -26,44 +27,108 @@ if (file_exists(__DIR__ . '/../getapikey.php')) {
     $api_key = getAPIKey($vendeur);
 }
 
-// Vérifier la valeur de contrôle (intégrité du retour)
+// Vérifier la valeur de contrôle
 $control_attendu = cybank_controle_retour($api_key, $transaction, $montant, $vendeur, $statut);
-
-// Vérifier que les données n'ont pas été modifiées
-if ($control_attendu !== $control_recu) {
-    // Hash invalide : données altérées
+if (!hash_equals($control_attendu, $control_recu)) {
     header('Location: ../panier.php?erreur=controle_invalide');
     exit;
 }
 
-// Chercher la commande correspondante
+// --- Détecter si c'est un paiement différentiel ---
+// Les paiements différentiels ont un ID qui se termine par "D"
+// et la vraie commande a l'ID sans le "D" à la fin
+$est_paiement_diff = false;
+$commande_id_reel  = '';
+
+if (strlen($transaction) > 1 && substr($transaction, -1) === 'D') {
+    // On retire le "D" final pour retrouver l'ID réel de la commande
+    $commande_id_reel  = substr($transaction, 0, -1);
+    $commande_possible = trouver_commande($commande_id_reel);
+    if ($commande_possible) {
+        $est_paiement_diff = true;
+    }
+}
+
+// ============================================================
+//  CAS 1 : Paiement différentiel (modification de commande)
+// ============================================================
+if ($est_paiement_diff) {
+
+    if ($statut === 'accepted') {
+        // Vérifier que la session contient bien les nouvelles données à appliquer
+        $modif = $_SESSION['modif_commande_en_attente'] ?? null;
+
+        if ($modif && $modif['commande_id'] === $commande_id_reel) {
+            // Appliquer les modifications dans le JSON
+            $commandes = lire_json('commandes.json');
+            foreach ($commandes as &$cmd) {
+                if ($cmd['id'] !== $commande_id_reel) continue;
+                $cmd['articles']   = $modif['nouveaux_articles'];
+                $cmd['sous_total'] = $modif['sous_total'];
+                $cmd['reduction']  = $modif['reduction'];
+                $cmd['total']      = $modif['total'];
+                break;
+            }
+            unset($cmd);
+            ecrire_json('commandes.json', $commandes);
+
+            // Ajouter des points de fidélité (1 pt par euro de différence payée)
+            $commande_data = trouver_commande($commande_id_reel);
+            $client_id     = $commande_data['client_id'] ?? '';
+            if ($client_id !== '') {
+                $tous_users = lire_json('users.json');
+                foreach ($tous_users as &$u) {
+                    if ($u['id'] === $client_id) {
+                        $u['points_fidelite'] = ((int)($u['points_fidelite'] ?? 0)) + (int)floor((float)$montant);
+                        break;
+                    }
+                }
+                unset($u);
+                ecrire_json('users.json', $tous_users);
+            }
+
+            // Nettoyer la session
+            unset($_SESSION['modif_commande_en_attente']);
+        }
+
+        header('Location: ../profil.php?msg=modif_payee&commande_id=' . urlencode($commande_id_reel));
+
+    } else {
+        // Paiement refusé : on ne touche à rien, la commande reste inchangée
+        unset($_SESSION['modif_commande_en_attente']);
+        header('Location: ../profil.php?erreur=paiement_diff_refuse&commande_id=' . urlencode($commande_id_reel));
+    }
+
+    exit;
+}
+
+// ============================================================
+//  CAS 2 : Paiement initial classique (première commande)
+// ============================================================
 $commande = trouver_commande($transaction);
 if (!$commande) {
-    // Commande introuvable (transaction inconnue)
     header('Location: ../index.php?erreur=commande_introuvable');
     exit;
 }
 
 if ($statut === 'accepted') {
-    // ✅ Paiement accepté
     maj_commande($transaction, 'paiement_statut', 'paye');
     maj_commande($transaction, 'statut', 'en_preparation');
     maj_commande($transaction, 'date_paiement', date('Y-m-d H:i:s'));
 
-    // Ajouter des points de fidélité au client (1 pt par euro)
+    // Ajouter des points de fidélité
     $client_id = $commande['client_id'] ?? '';
     if ($client_id !== '') {
         $tous_users = lire_json('users.json');
         foreach ($tous_users as &$u) {
             if ($u['id'] === $client_id) {
-                $points_gagnes = (int)floor((float)$montant);
-                $u['points_fidelite'] = ((int)($u['points_fidelite'] ?? 0)) + $points_gagnes;
+                $u['points_fidelite'] = ((int)($u['points_fidelite'] ?? 0)) + (int)floor((float)$montant);
                 break;
             }
         }
+        unset($u);
         ecrire_json('users.json', $tous_users);
 
-        // Mettre à jour la session si c'est le client connecté
         if (isset($_SESSION['user']) && $_SESSION['user']['id'] === $client_id) {
             foreach ($tous_users as $u) {
                 if ($u['id'] === $client_id) {
@@ -76,20 +141,15 @@ if ($statut === 'accepted') {
         }
     }
 
-    // Vider le panier et la commande en cours
     unset($_SESSION['panier']);
     unset($_SESSION['commande_en_cours']);
 
     header('Location: ../profil.php?msg=paiement_ok&commande_id=' . urlencode($transaction));
 
 } else {
-    // ❌ Paiement refusé
     maj_commande($transaction, 'paiement_statut', 'refuse');
     maj_commande($transaction, 'statut', 'abandonne');
-
-    // On garde le panier en session pour que le client puisse réessayer
     unset($_SESSION['commande_en_cours']);
-
     header('Location: ../panier.php?erreur=paiement_refuse');
 }
 exit;
