@@ -38,7 +38,9 @@ foreach ($tous_users as &$u) {
 }
 ecrire_json('users.json', $tous_users);
 
-// Stocker en session (sans le mot de passe)
+// regen de l'id de session = protection contre session fixation
+session_regenerate_id(true);
+
 unset($user['password']);
 $_SESSION['user'] = $user;
 
