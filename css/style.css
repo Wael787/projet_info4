@@ -1019,3 +1019,1123 @@ _____________________________________Yanis______________________________________
 .btn-qte:hover { border-color: var(--rouge); }
 
 __________________________Yanis_______________________
+
+--------------------------Wael-------------------------
+/* ===================================================================
+   STYLE.CSS — Partie PHASE 3 uniquement
+   ===================================================================
+   Ce fichier extrait toutes les règles CSS ajoutées en phase 3.
+   À placer normalement à la fin du style.css principal.
+
+   Contenu :
+   1. Mode sombre (dark-mode)
+   2. Mode contraste (contrast-mode)
+   3. Mode loupe (large-mode) - combinable
+   4. Override des styles inline pour le theming
+   5. Selecteur de theme (header)
+   6. Styles d'erreur de validation
+   7. Compteur de caracteres
+   8. Icone oeil mot de passe
+   9. Bandeau d'alerte (paiement, session bloquee)
+   10. Badges et toast pour l'admin AJAX
+   11. Classes refactorisees (.bloc-options, .bloc-stats)
+   12. Patches divers
+   =================================================================== */
+
+
+/* ================================================
+   PHASE 3 — MODE SOMBRE
+   Principe : on redéfinit les variables CSS sur body.dark-mode
+   Tout le reste du CSS s'adapte automatiquement grâce aux var()
+   ================================================ */
+
+/* --- Palette sombre --- */
+body.dark-mode {
+    --beige-clair:  #1E1E2E;   /* fond principal : bleu nuit profond          */
+    --beige-fonce:  #2E2E3E;   /* fond secondaire / bordures                  */
+    --noir:         #E8E8F0;   /* texte principal : blanc cassé (pas blanc pur, moins fatiguant) */
+    --rouge:        #E8686C;   /* rouge légèrement éclairci pour rester lisible sur fond sombre */
+    --gris:         #A0A0B0;   /* texte secondaire                            */
+    --blanc:        #2A2A3A;   /* "blanc" des cartes/formulaires : fond carte sombre */
+    --radius:       0.5rem;
+}
+
+/* Quelques ajustements que les variables seules ne couvrent pas */
+
+/* Les inputs et textareas ont un fond blanc hardcodé parfois */
+body.dark-mode input[type="text"],
+body.dark-mode input[type="email"],
+body.dark-mode input[type="password"],
+body.dark-mode input[type="tel"],
+body.dark-mode input[type="number"],
+body.dark-mode input[type="datetime-local"],
+body.dark-mode textarea,
+body.dark-mode select {
+    background-color: #2E2E3E;
+    color: var(--noir);
+    border-color: #4E4E6E;
+}
+
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder {
+    color: #7070A0;
+}
+
+/* Les tableaux admin ont des fonds inline parfois */
+body.dark-mode table {
+    background-color: var(--blanc);
+    color: var(--noir);
+}
+body.dark-mode th {
+    background-color: var(--beige-fonce) !important;
+}
+body.dark-mode tr {
+    background-color: var(--blanc) !important;
+}
+body.dark-mode td,
+body.dark-mode th {
+    border-color: #4E4E6E !important;
+    color: var(--noir);
+}
+
+/* Stats rapides (admin) */
+body.dark-mode [style*="background:#f5f5f5"] {
+    /* Les styles inline ne peuvent pas être overridés par variable CSS,
+       on utilise un filtre de luminosité comme fallback */
+    filter: invert(0.85) hue-rotate(180deg);
+}
+
+/* Fond des blocs f9f9f9 (admin profil) */
+body.dark-mode .bloc-profil,
+body.dark-mode .delivery-card,
+body.dark-mode .order-card {
+    background-color: var(--blanc);
+    border-color: #4E4E6E;
+}
+
+/* Fond header */
+body.dark-mode .entete-principale,
+body.dark-mode .header {
+    background-color: var(--beige-clair);
+    border-bottom: 1px solid var(--beige-fonce);
+}
+
+/* Menu burger déroulant */
+body.dark-mode .navigation {
+    background-color: var(--blanc);
+    border-color: #4E4E6E;
+}
+body.dark-mode .liste-du-haut a {
+    color: var(--noir);
+}
+
+/* Footer */
+body.dark-mode footer,
+body.dark-mode .bas-de-page {
+    background-color: #0D0D1A;
+}
+
+/* Messages succès/erreur — rester lisibles en sombre */
+body.dark-mode .message-erreur {
+    background: #3D1A1A;
+    border-color: #8B2E2E;
+    color: #FF9090;
+}
+body.dark-mode .message-succes {
+    background: #1A3D2E;
+    border-color: #2E7D52;
+    color: #90FFB0;
+}
+
+/* Overlay popups */
+body.dark-mode .popup {
+    background-color: var(--blanc);
+    border-color: #4E4E6E;
+    color: var(--noir);
+}
+
+/* Sakura background — légèrement plus visible en sombre */
+body.dark-mode.admin-page::before,
+body.dark-mode.orders-page::before,
+body.dark-mode.delivery::before {
+    opacity: 0.07;
+}
+
+/* Teuchi sur les pages formulaires — légèrement moins opaque */
+body.dark-mode.page-deco::before {
+    opacity: 0.7;
+}
+
+/* --- BOUTON TOGGLE CLAIR/SOMBRE --- */
+/* Positionné en haut à droite du header */
+.btn-theme-toggle {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    background: var(--beige-fonce);
+    border: 2px solid var(--beige-fonce);
+    border-radius: 2rem;
+    padding: 0.4rem 0.9rem;
+    cursor: pointer;
+    font-size: 1.15rem;
+    transition: background 0.3s, transform 0.2s;
+    z-index: 1001;
+    line-height: 1;
+    color: var(--noir);
+}
+.btn-theme-toggle:hover {
+    background: var(--rouge);
+    color: var(--blanc);
+    border-color: var(--rouge);
+    transform: scale(1.1);
+}
+
+/* Transition douce sur tout le body quand on change de thème */
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Mode sombre — menu latéral (pages admin/commandes/livraison) */
+body.dark-mode .menu-left {
+    background-color: #1A1A2E;
+    box-shadow: 5px 0 20px rgba(0,0,0,0.4);
+}
+body.dark-mode .menu-left a {
+    color: var(--noir);
+    border-color: #3E3E5E;
+}
+body.dark-mode .burger-left span {
+    background-color: var(--noir);
+}
+
+/* Mode sombre — select et inputs dans admin */
+body.dark-mode .select-admin {
+    background-color: #2E2E3E;
+    color: var(--noir);
+    border-color: #4E4E6E;
+}
+
+/* Mode sombre — boutons admin */
+body.dark-mode .btn-admin {
+    background: #2E2E3E;
+    border-color: #5E5E7E;
+    color: var(--noir);
+}
+body.dark-mode .btn-admin.btn-danger {
+    background: #3D1A1A;
+    border-color: #8B2E2E;
+    color: #FF9090;
+}
+body.dark-mode .btn-admin.btn-success {
+    background: #1A3D2E;
+    border-color: #2E7D52;
+    color: #90FFB0;
+}
+body.dark-mode .btn-admin.btn-actif {
+    background: var(--rouge);
+    color: #fff;
+}
+
+/* Mode sombre — formulaires panier et profil */
+body.dark-mode .boite-formulaire {
+    background-color: var(--blanc);
+    border-color: #4E4E6E;
+}
+body.dark-mode fieldset {
+    background-color: #252535;
+    border-color: #4E4E6E;
+}
+
+/* Mode sombre — section hero profil */
+body.dark-mode .section-hero-profil {
+    background: linear-gradient(135deg, #2E2E4E 0%, #1E1E2E 100%);
+    border-color: #4E4E6E;
+}
+body.dark-mode .bloc-entete {
+    background-color: #252535;
+    border-color: #4E4E6E;
+}
+
+/* Mode sombre — bannières menus produits */
+body.dark-mode .bandeau-enfant {
+    background: linear-gradient(135deg, #2A1A1A 0%, #1A1A2A 100%) !important;
+    border-color: var(--rouge);
+}
+
+/* Mode sombre — cartes produits */
+body.dark-mode .carte-produit {
+    background-color: var(--blanc);
+    border-color: #4E4E6E;
+}
+
+/* Mode sombre — navigation catégories */
+body.dark-mode .overlay {
+    background: rgba(0,0,0,0.6);
+}
+
+/* Mode sombre — panier tableau */
+body.dark-mode .commande-item:hover,
+body.dark-mode .ligne-info:hover {
+    background-color: var(--beige-fonce);
+}
+
+
+/* === PHASE 3 — Themes (couleur + loupe combinables) === */
+
+
+/* Mode contrasté : noir / blanc / jaune (WCAG) */
+body.contrast-mode {
+    --beige-clair:  #000000;
+    --beige-fonce:  #FFFFFF;
+    --noir:         #FFFFFF;
+    --rouge:        #FFFF00;
+    --gris:         #FFFFFF;
+    --blanc:        #000000;
+    --radius:       0.5rem;
+}
+
+
+/* Mode loupe : grossit le texte. Marche en combinaison avec n'importe quel theme */
+body.large-mode {
+    font-size: 22px;
+    line-height: 1.9;
+    letter-spacing: 0.02em;
+}
+body.large-mode h1 { font-size: 3rem; }
+body.large-mode h2 { font-size: 2.4rem; }
+body.large-mode h3 { font-size: 2rem; }
+body.large-mode p,
+body.large-mode li,
+body.large-mode label,
+body.large-mode td,
+body.large-mode th { font-size: 1.2rem; }
+
+/* Champs/boutons de formulaire plus grands en loupe — MAIS pas les
+   boutons du sélecteur de thème (sinon ils prennent tout l'écran) */
+body.large-mode input,
+body.large-mode textarea,
+body.large-mode select,
+body.large-mode .bouton-validation,
+body.large-mode .btn,
+body.large-mode .btn-admin {
+    font-size: 1.25rem;
+    padding: 1rem 1.4rem;
+}
+body.large-mode .carte-produit,
+body.large-mode .bloc-profil,
+body.large-mode .delivery-card,
+body.large-mode .order-card,
+body.large-mode .boite-formulaire {
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+}
+body.large-mode .liste-du-haut a {
+    padding: 1rem 1.5rem;
+    font-size: 1.2rem;
+}
+
+/* MODE LOUPE — burger ENCORE PLUS GROS (priorité absolue accessibilité) */
+body.large-mode .menu-burger {
+    font-size: 5rem;        /* contre 3rem par défaut */
+}
+body.large-mode .section-menu-burger {
+    top: 2rem;
+    left: 2.5rem;
+}
+
+/* MODE LOUPE — le logo doit rester proportionné (ne pas déborder) */
+body.large-mode .logo-principal { max-height: 9rem; }  /* limite la croissance */
+body.large-mode .page-accueil .logo-principal { max-height: 14rem; }
+
+/* MODE LOUPE — donner plus d'espace au header pour tout caser */
+body.large-mode .entete-principale {
+    padding: 1.5rem 2rem 1rem;
+    min-height: 12rem;
+}
+
+
+/* Override des inline styles color:#666 etc. qui passent à travers du theming */
+body.dark-mode [style*="color:#666"],
+body.dark-mode [style*="color: #666"],
+body.dark-mode [style*="color:#888"],
+body.dark-mode [style*="color: #888"],
+body.dark-mode [style*="color:#777"],
+body.dark-mode [style*="color: #777"] {
+    color: var(--noir) !important;
+}
+body.contrast-mode [style*="color:#666"],
+body.contrast-mode [style*="color: #666"],
+body.contrast-mode [style*="color:#888"],
+body.contrast-mode [style*="color: #888"],
+body.contrast-mode [style*="color:#777"],
+body.contrast-mode [style*="color: #777"] {
+    color: #FFFFFF !important;
+}
+
+/* Forçage couleur sur les textes "neutres" qui n'ont pas de style inline
+   mais qui héritent d'une couleur insuffisante. */
+body.dark-mode main *,
+body.dark-mode form *,
+body.dark-mode table * {
+    color: var(--noir);
+}
+body.contrast-mode main *,
+body.contrast-mode form *,
+body.contrast-mode table * {
+    color: #FFFFFF !important;
+}
+/* Sauf les boutons rouges/colorés qu'on veut garder distincts */
+body.dark-mode .bouton-validation,
+body.dark-mode .btn.primary,
+body.dark-mode button[style*="background:#c0392b"] {
+    color: #fff;
+}
+body.contrast-mode .bouton-validation,
+body.contrast-mode .btn.primary,
+body.contrast-mode button[style*="background:#c0392b"] {
+    color: #000 !important;
+    background: #FFFF00 !important;
+}
+
+
+/* Override des fonds inline (#f5f5f5, #f9f9f9, etc) pour qu'ils suivent le theme */
+
+/* Fond gris clair (#f5f5f5) utilisé dans les stats admin */
+body.dark-mode [style*="background:#f5f5f5"],
+body.dark-mode [style*="background: #f5f5f5"] {
+    background-color: var(--blanc) !important;
+    color: var(--noir) !important;
+    border: 1px solid var(--beige-fonce);
+}
+body.contrast-mode [style*="background:#f5f5f5"],
+body.contrast-mode [style*="background: #f5f5f5"] {
+    background-color: #000000 !important;
+    color: #FFFFFF !important;
+    border: 2px solid #FFFFFF !important;
+}
+
+/* Fond gris très clair (#f9f9f9) utilisé dans les options de livraison */
+body.dark-mode [style*="background:#f9f9f9"],
+body.dark-mode [style*="background: #f9f9f9"] {
+    background-color: var(--blanc) !important;
+    color: var(--noir) !important;
+    border-color: var(--beige-fonce) !important;
+}
+body.contrast-mode [style*="background:#f9f9f9"],
+body.contrast-mode [style*="background: #f9f9f9"] {
+    background-color: #000000 !important;
+    color: #FFFFFF !important;
+    border: 2px solid #FFFFFF !important;
+}
+
+/* Fond rouge clair (#fdecea) utilisé pour les utilisateurs bloqués */
+body.dark-mode [style*="background:#fdecea"] {
+    background-color: #3D1A1A !important;
+}
+body.contrast-mode [style*="background:#fdecea"] {
+    background-color: #330000 !important;
+    color: #FFFF00 !important;
+}
+
+/* Inputs avec inline-styles dans les options livraison */
+body.dark-mode [style*="border:1px solid #ddd"],
+body.dark-mode [style*="border: 1px solid #ddd"] {
+    background-color: var(--blanc) !important;
+    color: var(--noir) !important;
+    border-color: #4E4E6E !important;
+}
+body.contrast-mode [style*="border:1px solid #ddd"],
+body.contrast-mode [style*="border: 1px solid #ddd"] {
+    background-color: #000 !important;
+    color: #fff !important;
+    border: 2px solid #fff !important;
+}
+
+
+/* Selecteur de theme : 2 groupes (couleur + loupe) */
+.theme-selector {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--blanc);
+    padding: 0.35rem;
+    border-radius: 2rem;
+    border: 1px solid var(--beige-fonce);
+    box-shadow: 0 0.2rem 0.6rem rgba(0,0,0,0.1);
+    z-index: 1001;
+}
+.theme-group {
+    display: flex;
+    flex-direction: row;
+    gap: 0.2rem;
+}
+.theme-separator {
+    width: 1px;
+    height: 2rem;
+    background: var(--beige-fonce);
+    margin: 0 0.2rem;
+}
+
+.theme-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.1rem;
+    background: transparent;
+    border: 2px solid transparent;
+    border-radius: 1.5rem;
+    padding: 0.4rem 0.7rem;
+    cursor: pointer;
+    color: var(--noir);
+    font-family: inherit;
+    font-size: 0.9rem;  /* fixé : ne suit pas large-mode */
+    transition: background 0.2s, transform 0.15s, border-color 0.2s;
+    min-width: 3.5rem;
+}
+.theme-btn:hover,
+.theme-btn:focus {
+    background: var(--beige-clair);
+    transform: scale(1.05);
+    outline: none;
+}
+.theme-btn .theme-icon { font-size: 1.2rem; line-height: 1; }
+.theme-btn .theme-label {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+}
+
+/* Bouton couleur ACTIF (3 boutons exclusifs) */
+.theme-btn[aria-current="true"] {
+    background: var(--rouge);
+    border-color: var(--rouge);
+    color: #fff;
+}
+/* Bouton loupe ACTIVÉ (toggle indépendant) */
+.theme-btn-loupe[aria-pressed="true"] {
+    background: var(--rouge);
+    border-color: var(--rouge);
+    color: #fff;
+}
+
+/* IMPORTANT : en large-mode, on FORCE les boutons du sélecteur à rester petits */
+body.large-mode .theme-selector .theme-btn {
+    font-size: 0.9rem !important;
+    padding: 0.4rem 0.7rem !important;
+    min-width: 3.5rem !important;
+}
+body.large-mode .theme-selector .theme-icon { font-size: 1.2rem !important; }
+body.large-mode .theme-selector .theme-label { font-size: 0.7rem !important; }
+
+/* Mode contraste — sélecteur bien visible */
+body.contrast-mode .theme-selector {
+    background: #000 !important;
+    border: 2px solid #fff !important;
+}
+body.contrast-mode .theme-btn { color: #FFFF00 !important; }
+body.contrast-mode .theme-btn[aria-current="true"],
+body.contrast-mode .theme-btn-loupe[aria-pressed="true"] {
+    background: #FFFF00 !important;
+    color: #000 !important;
+    border-color: #fff !important;
+}
+body.contrast-mode .theme-separator { background: #fff; }
+
+/* Petits écrans : on cache les labels */
+@media (max-width: 800px) {
+    .theme-btn .theme-label { display: none; }
+    .theme-btn { min-width: auto; padding: 0.5rem 0.6rem; }
+}
+
+/* Transitions douces */
+body {
+    transition: background-color 0.3s ease, color 0.3s ease, font-size 0.2s ease;
+}
+
+
+/* Styles d'erreur pour la validation des formulaires */
+.champ-invalide {
+    border: 2px solid #D1464A !important;
+    background-color: #FFF5F5 !important;
+    animation: shake-erreur 0.3s ease-in-out;
+}
+body.dark-mode .champ-invalide { background-color: #3D1A1A !important; }
+body.contrast-mode .champ-invalide { border: 3px solid #FFFF00 !important; }
+
+@keyframes shake-erreur {
+    0%, 100% { transform: translateX(0); }
+    25%      { transform: translateX(-4px); }
+    75%      { transform: translateX(4px); }
+}
+
+.erreur-champ {
+    color: #D1464A;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-top: 0.3rem;
+    margin-bottom: 0.5rem;
+    padding: 0.3rem 0.6rem;
+    background: rgba(209, 70, 74, 0.08);
+    border-left: 3px solid #D1464A;
+    border-radius: 0.25rem;
+}
+body.dark-mode .erreur-champ {
+    color: #FF9090 !important;
+    background: rgba(255, 144, 144, 0.1);
+}
+body.contrast-mode .erreur-champ {
+    color: #FFFF00 !important;
+    background: #000 !important;
+    border: 2px solid #FFFF00 !important;
+}
+
+
+/* Icone oeil sur les champs password */
+.password-wrapper {
+    position: relative;
+    display: block;
+    width: 100%;
+}
+.password-wrapper input {
+    width: 100%;
+    padding-right: 2.8rem !important;
+}
+.toggle-password {
+    position: absolute;
+    right: 0.6rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.25rem;
+    line-height: 1;
+    color: var(--noir);
+    transition: background 0.2s;
+}
+.toggle-password:hover { background: var(--beige-fonce); }
+body.contrast-mode .toggle-password {
+    background: #FFFF00 !important;
+    color: #000 !important;
+}
+
+
+/* Bloc "options de livraison" du panier - thematisable */
+.bloc-options {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+.bloc-options h3 { margin-top: 0; }
+.bloc-options .champ-bloc { margin-bottom: 16px; }
+.bloc-options .champ-bloc-titre {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 8px;
+}
+.bloc-options input[type="text"],
+.bloc-options textarea,
+.bloc-options input[type="datetime-local"] {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+.bloc-options input[type="radio"] { margin-right: 6px; }
+.bloc-options .radio-inline { margin-right: 20px; display: inline-block; }
+
+/* Thématisation du bloc-options */
+body.dark-mode .bloc-options {
+    background: var(--blanc) !important;
+    border-color: #4E4E6E !important;
+    color: var(--noir) !important;
+}
+body.dark-mode .bloc-options input,
+body.dark-mode .bloc-options textarea {
+    background-color: #2E2E3E !important;
+    color: var(--noir) !important;
+    border-color: #4E4E6E !important;
+}
+body.contrast-mode .bloc-options {
+    background: #000 !important;
+    border: 3px solid #fff !important;
+    color: #fff !important;
+}
+body.contrast-mode .bloc-options input,
+body.contrast-mode .bloc-options textarea {
+    background-color: #000 !important;
+    color: #fff !important;
+    border: 2px solid #fff !important;
+}
+
+
+/* Stats du dashboard admin */
+.bloc-stats {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+}
+.bloc-stats .stat-card {
+    background: #f5f5f5;
+    border-radius: 8px;
+    padding: 16px 24px;
+    min-width: 100px;
+    text-align: center;
+}
+.bloc-stats .stat-valeur {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: var(--noir);
+}
+.bloc-stats .stat-label {
+    font-size: 0.85em;
+    color: #666;
+}
+body.dark-mode .bloc-stats .stat-card {
+    background: var(--blanc) !important;
+    border: 1px solid var(--beige-fonce);
+}
+body.dark-mode .bloc-stats .stat-label { color: var(--noir) !important; opacity: 0.8; }
+body.contrast-mode .bloc-stats .stat-card {
+    background: #000 !important;
+    border: 3px solid #fff !important;
+}
+body.contrast-mode .bloc-stats .stat-valeur,
+body.contrast-mode .bloc-stats .stat-label { color: #FFFF00 !important; }
+
+
+/* Fix : sur certaines pages le header ne prenait pas toute la largeur */
+body.delivery .entete-principale,
+body.admin-page .entete-principale,
+body.orders-page .entete-principale {
+    width: 100%;
+    align-self: stretch;
+}
+
+
+/* Bandeau d'alerte gros (paiement refusé, session bloquée...) */
+.bandeau-alerte {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    background: linear-gradient(135deg, #FFF1F1 0%, #FFE0E0 100%);
+    border-left: 6px solid #D1464A;
+    border-radius: 0.5rem;
+    padding: 1.2rem 1.5rem;
+    margin: 1.5rem 0;
+    box-shadow: 0 0.3rem 1rem rgba(209, 70, 74, 0.15);
+    animation: alerte-apparition 0.4s ease-out;
+}
+
+@keyframes alerte-apparition {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.bandeau-alerte-icone {
+    font-size: 2.5rem;
+    line-height: 1;
+    flex-shrink: 0;
+}
+.bandeau-alerte-contenu { flex: 1; }
+.bandeau-alerte-titre {
+    color: #B23438;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 0 0 0.4rem 0;
+}
+.bandeau-alerte-message {
+    color: #6B2729;
+    font-size: 1rem;
+    margin: 0 0 0.5rem 0;
+    line-height: 1.5;
+}
+.bandeau-alerte-conseil {
+    color: #8B3D40;
+    font-size: 0.95rem;
+    margin: 0;
+    font-style: italic;
+    background: rgba(255, 255, 255, 0.5);
+    padding: 0.5rem 0.8rem;
+    border-radius: 0.3rem;
+}
+
+/* Mode sombre */
+body.dark-mode .bandeau-alerte {
+    background: linear-gradient(135deg, #3D1A1A 0%, #2D1010 100%);
+    border-left-color: #FF6B6B;
+}
+body.dark-mode .bandeau-alerte-titre { color: #FFB0B0 !important; }
+body.dark-mode .bandeau-alerte-message { color: #FFD0D0 !important; }
+body.dark-mode .bandeau-alerte-conseil {
+    color: #FFE0E0 !important;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+/* Mode contraste */
+body.contrast-mode .bandeau-alerte {
+    background: #000 !important;
+    border: 3px solid #FFFF00 !important;
+    border-left-width: 8px !important;
+}
+body.contrast-mode .bandeau-alerte-titre,
+body.contrast-mode .bandeau-alerte-message,
+body.contrast-mode .bandeau-alerte-conseil {
+    color: #FFFF00 !important;
+    background: #000 !important;
+}
+
+
+/* === Patches divers (corrections trouvées au cours des tests) === */
+
+
+/* Étend la liste de couleurs inline foncées à intercepter (#555 etc.) */
+body.dark-mode [style*="color:#555"],
+body.dark-mode [style*="color: #555"],
+body.dark-mode [style*="color:#444"],
+body.dark-mode [style*="color: #444"],
+body.dark-mode [style*="color:#333"],
+body.dark-mode [style*="color: #333"],
+body.dark-mode [style*="color:#222"],
+body.dark-mode [style*="color: #222"] {
+    color: var(--noir) !important;
+}
+body.contrast-mode [style*="color:#555"],
+body.contrast-mode [style*="color: #555"],
+body.contrast-mode [style*="color:#444"],
+body.contrast-mode [style*="color: #444"],
+body.contrast-mode [style*="color:#333"],
+body.contrast-mode [style*="color: #333"],
+body.contrast-mode [style*="color:#222"],
+body.contrast-mode [style*="color: #222"] {
+    color: #FFFFFF !important;
+}
+
+
+/* Footer : on force des couleurs fixes parce que les variables
+   du theme s'inversent et rendent le footer illisible en sombre */
+body.dark-mode footer,
+body.dark-mode .bas-de-page {
+    background-color: #0D0D1A !important;
+    color: #E8E8F0 !important;
+}
+body.dark-mode footer p,
+body.dark-mode .bas-de-page p,
+body.dark-mode footer a,
+body.dark-mode .bas-de-page a,
+body.dark-mode .colonne-footer p,
+body.dark-mode .colonne-footer a,
+body.dark-mode .copyright,
+body.dark-mode .copyright p {
+    color: #E8E8F0 !important;
+}
+body.dark-mode .colonne-footer h3 {
+    color: #FF9090 !important;  /* touche colorée pour les titres */
+}
+body.dark-mode footer a:hover,
+body.dark-mode .bas-de-page a:hover {
+    color: #FFCCCC !important;
+}
+body.dark-mode .reseaux-sociaux a {
+    background-color: #2A2A3A !important;
+    color: #E8E8F0 !important;
+}
+body.dark-mode .reseaux-sociaux a:hover {
+    background-color: #FF6B6B !important;
+    color: #fff !important;
+}
+body.dark-mode .copyright {
+    border-top-color: #4E4E6E !important;
+}
+
+body.contrast-mode footer,
+body.contrast-mode .bas-de-page {
+    background-color: #000000 !important;
+    color: #FFFFFF !important;
+    border-top: 3px solid #FFFFFF !important;
+}
+body.contrast-mode footer p,
+body.contrast-mode .bas-de-page p,
+body.contrast-mode footer a,
+body.contrast-mode .bas-de-page a,
+body.contrast-mode .colonne-footer p,
+body.contrast-mode .colonne-footer a,
+body.contrast-mode .copyright,
+body.contrast-mode .copyright p {
+    color: #FFFFFF !important;
+}
+body.contrast-mode .colonne-footer h3 {
+    color: #FFFF00 !important;
+}
+body.contrast-mode .reseaux-sociaux a {
+    background-color: #FFFF00 !important;
+    color: #000000 !important;
+    border: 2px solid #FFFFFF !important;
+}
+body.contrast-mode .reseaux-sociaux a:hover {
+    background-color: #FFFFFF !important;
+    color: #000000 !important;
+}
+
+
+/* L'image du petit samouraï dépassait du bandeau */
+.page-produits .bandeau-enfant {
+    overflow: hidden;
+}
+
+
+/* Boutons jaunes en mode contraste : texte forcé en noir */
+body.contrast-mode button:not(.theme-btn),
+body.contrast-mode .bouton-validation,
+body.contrast-mode input[type="submit"],
+body.contrast-mode .btn,
+body.contrast-mode .btn-admin,
+body.contrast-mode .btn-admin.btn-actif,
+body.contrast-mode .btn-actif {
+    background-color: #FFFF00 !important;
+    color: #000000 !important;
+    border: 2px solid #FFFFFF !important;
+    font-weight: bold;
+}
+body.contrast-mode button:not(.theme-btn) *,
+body.contrast-mode .bouton-validation *,
+body.contrast-mode .btn *,
+body.contrast-mode .btn-admin *,
+body.contrast-mode .btn-admin.btn-actif *,
+body.contrast-mode .btn-actif * {
+    color: #000000 !important;
+}
+
+
+/* Messages succès/erreur ont un fond clair, donc texte noir */
+body.contrast-mode .message-succes {
+    background: #d4edda !important;
+    color: #000000 !important;
+    border: 3px solid #155724 !important;
+}
+body.contrast-mode .message-succes,
+body.contrast-mode .message-succes * {
+    color: #000000 !important;
+}
+body.contrast-mode .message-erreur {
+    background: #fdecea !important;
+    color: #000000 !important;
+    border: 3px solid #c0392b !important;
+}
+body.contrast-mode .message-erreur,
+body.contrast-mode .message-erreur * {
+    color: #000000 !important;
+}
+
+
+/* Hero "Savourez l'excellence" : son fond image reste clair même en sombre,
+   donc le texte doit rester sombre avec une ombre blanche pour ressortir */
+body.dark-mode .page-accueil .section-bienvenue,
+body.dark-mode .page-accueil .section-bienvenue h1 {
+    color: #2C2C2C !important;
+    text-shadow: 0 0 0.6rem rgba(255,255,255,0.95),
+                 0 0 1rem rgba(255,255,255,0.8) !important;
+}
+body.contrast-mode .page-accueil .section-bienvenue {
+    background-image: none !important;
+    background-color: #FFFFFF !important;
+    border: 3px solid #000 !important;
+}
+body.contrast-mode .page-accueil .section-bienvenue,
+body.contrast-mode .page-accueil .section-bienvenue h1 {
+    color: #000000 !important;
+    text-shadow: none !important;
+}
+
+/* Carrousel "Découvrir les autres plats" — overlay sombre + texte blanc
+   pour garantir la lisibilité quelle que soit l'image */
+body.dark-mode .texte-survol {
+    background: rgba(0,0,0,0.55) !important;
+}
+body.dark-mode .texte-survol h3,
+body.dark-mode .texte-survol p {
+    color: #FFFFFF !important;
+    text-shadow: 0 0 0.6rem rgba(0,0,0,0.95),
+                 0 0 1rem rgba(0,0,0,0.7) !important;
+}
+body.contrast-mode .texte-survol {
+    background: rgba(0,0,0,0.9) !important;
+    border: 2px solid #FFFF00 !important;
+}
+body.contrast-mode .texte-survol h3,
+body.contrast-mode .texte-survol p {
+    color: #FFFF00 !important;
+    text-shadow: none !important;
+}
+
+
+/* Barre de recherche : le placeholder était invisible en sombre */
+body.dark-mode .champ-recherche {
+    background-color: #2A2A3A !important;
+    color: #E8E8F0 !important;
+    border-color: #4E4E6E !important;
+}
+body.dark-mode .champ-recherche::placeholder {
+    color: #A0A0B0 !important;
+}
+body.contrast-mode .champ-recherche {
+    background-color: #000 !important;
+    color: #FFF !important;
+    border: 3px solid #FFFF00 !important;
+}
+body.contrast-mode .champ-recherche::placeholder {
+    color: #CCCC00 !important;
+}
+
+
+/* Compteur de caractères qui apparait sous les champs data-max */
+.compteur-chars {
+    font-size: 0.8rem;
+    color: #666;
+    text-align: right;
+    margin-top: 0.2rem;
+    margin-bottom: 0.5rem;
+    padding: 0.15rem 0.4rem;
+    transition: color 0.2s, background 0.2s;
+    font-variant-numeric: tabular-nums;  /* chiffres de largeur fixe = pas de "tremblement" */
+}
+.compteur-chars.compteur-warning {
+    color: #B8740C;
+    font-weight: 500;
+}
+.compteur-chars.compteur-danger {
+    color: #D1464A;
+    font-weight: bold;
+    background: rgba(209, 70, 74, 0.08);
+    border-radius: 0.3rem;
+}
+
+/* Mode sombre */
+body.dark-mode .compteur-chars { color: #A0A0B0; }
+body.dark-mode .compteur-chars.compteur-warning { color: #FFB84D; }
+body.dark-mode .compteur-chars.compteur-danger {
+    color: #FF9090;
+    background: rgba(255, 144, 144, 0.15);
+}
+
+/* Mode contraste */
+body.contrast-mode .compteur-chars { color: #FFFF00 !important; }
+body.contrast-mode .compteur-chars.compteur-warning,
+body.contrast-mode .compteur-chars.compteur-danger {
+    color: #FFFF00 !important;
+    background: #000 !important;
+    border: 2px solid #FFFF00 !important;
+}
+
+
+/* Badges actif/bloqué dans le tableau admin */
+.badge-statut {
+    display: inline-block;
+    padding: 0.3rem 0.7rem;
+    border-radius: 1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+.badge-actif {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #b7dfc0;
+}
+.badge-bloque {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f0b9bd;
+}
+
+body.dark-mode .badge-actif {
+    background: #1A3D2E;
+    color: #90FFB0;
+    border-color: #2E7D52;
+}
+body.dark-mode .badge-bloque {
+    background: #3D1A1A;
+    color: #FF9090;
+    border-color: #8B2E2E;
+}
+
+body.contrast-mode .badge-actif,
+body.contrast-mode .badge-bloque {
+    background: #000 !important;
+    color: #FFFF00 !important;
+    border: 2px solid #FFFF00 !important;
+}
+
+/* Ligne d'utilisateur bloqué */
+.ligne-bloquee { background: #fdecea; transition: background 0.3s; }
+body.dark-mode .ligne-bloquee { background: #3D1A1A !important; }
+body.contrast-mode .ligne-bloquee { background: #1A0000 !important; }
+
+
+/* Toast = mini notif en haut a droite, disparait après quelques secondes */
+.toast {
+    position: fixed;
+    top: 1.5rem;
+    right: 1.5rem;
+    z-index: 9999;
+    background: #2C3E50;
+    color: #fff;
+    padding: 0.9rem 1.3rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.4rem 1.2rem rgba(0,0,0,0.25);
+    max-width: 25rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+
+    /* Animation : on apparaît depuis la droite */
+    opacity: 0;
+    transform: translateX(2rem);
+    transition: opacity 0.3s, transform 0.3s;
+}
+.toast-visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+.toast-succes { background: #1E8449; }
+.toast-erreur { background: #B23438; }
+
+body.contrast-mode .toast {
+    background: #000 !important;
+    color: #FFFF00 !important;
+    border: 3px solid #FFFF00 !important;
+}
+
+/* En mode loupe, on grossit le toast */
+body.large-mode .toast {
+    font-size: 1.15rem;
+    padding: 1.2rem 1.6rem;
+    max-width: 32rem;
+}
+
+
+/* Sur les inputs (pas textarea), le compteur doit être plus discret */
+
+/* Compteur qui suit un INPUT (pas un textarea) : plus petit, gris, à droite */
+input ~ .compteur-chars {
+    font-size: 0.75rem;
+    margin-top: 0.1rem;
+    margin-bottom: 0.3rem;
+    padding: 0;
+}
+
+/* En mode loupe, on garde le compteur lisible quand même */
+body.large-mode input ~ .compteur-chars {
+    font-size: 1rem;
+}
