@@ -1,94 +1,113 @@
 <?php
 require_once 'includes/session.php';
 
-// Déjà connecté → accueil
+// Si déjà connecté → redirige vers la page adaptée au rôle
 if (isset($_SESSION['user'])) {
-    header('Location: index.php');
+    $role = $_SESSION['user']['role'];
+    if ($role === 'admin')            header('Location: admin.php');
+    elseif ($role === 'restaurateur') header('Location: commandes.php');
+    elseif ($role === 'livreur')      header('Location: livraison.php');
+    else                              header('Location: index.php');
     exit;
 }
 
-$page_title = 'Inscription';
+$page_title = 'Connexion';
 $body_class = 'page-deco';
 
-$erreur = $_GET['erreur'] ?? null;
+// Messages
+$erreur  = $_GET['erreur']  ?? null;
+$message = $_GET['message'] ?? null;
 
 include 'includes/header.php';
 ?>
 
-<main>
-    <form class="boite-formulaire" action="actions/register.php" method="POST">
-        <h2>✨ Créer un compte JDK</h2>
+<main class="login-container">
 
-        <?php if ($erreur === 'email_pris'): ?>
-            <p class="message-erreur">Cet email est déjà utilisé. <a href="connexion.php">Se connecter</a></p>
-        <?php elseif ($erreur === 'champs_manquants'): ?>
-            <p class="message-erreur">Veuillez remplir tous les champs obligatoires (*).</p>
-        <?php elseif ($erreur === 'mdp_court'): ?>
-            <p class="message-erreur">Le mot de passe doit contenir au moins 6 caractères.</p>
+    <!-- novalidate désactive la validation HTML5 du navigateur :
+         on préfère la nôtre qui affiche des messages cohérents -->
+    <form id="form-connexion"
+          action="actions/login.php"
+          method="POST"
+          class="boite-formulaire"
+          novalidate>
+        <h2>🔐 Accès à votre compte JDK</h2>
+
+        <?php if ($erreur === 'identifiants'): ?>
+            <p class="message-erreur">Email ou mot de passe incorrect.</p>
+        <?php elseif ($erreur === 'bloque'): ?>
+            <p class="message-erreur">Votre compte est bloqué. Contactez l'administration.</p>
+        <?php elseif ($erreur === 'session_bloquee'): ?>
+            <!-- message si l'admin a bloqué pendant que l'user était connecté -->
+            <div class="bandeau-alerte" role="alert">
+                <div class="bandeau-alerte-icone">🔒</div>
+                <div class="bandeau-alerte-contenu">
+                    <h3 class="bandeau-alerte-titre">Session terminée</h3>
+                    <p class="bandeau-alerte-message">
+                        Votre compte a été bloqué par l'administration.
+                    </p>
+                    <p class="bandeau-alerte-conseil">
+                        👉 Contactez l'administration pour plus d'informations.
+                    </p>
+                </div>
+            </div>
+        <?php elseif ($erreur === 'session_invalide'): ?>
+            <p class="message-erreur">Votre session n'est plus valide. Veuillez vous reconnecter.</p>
+        <?php elseif ($erreur === 'non_connecte'): ?>
+            <p class="message-erreur">Vous devez être connecté pour accéder à cette page.</p>
         <?php endif; ?>
 
-        <fieldset>
-            <legend>Informations Personnelles</legend>
+        <?php if ($message === 'inscription_ok'): ?>
+            <p class="message-succes">Inscription réussie ! Vous pouvez maintenant vous connecter.</p>
+        <?php elseif ($message === 'deconnexion'): ?>
+            <p class="message-succes">Vous avez bien été déconnecté.</p>
+        <?php endif; ?>
 
-            <div class="form-group">
-                <label for="nom">* Nom :</label>
-                <input type="text" id="nom" name="nom"
-                       placeholder="Yamamoto" required
-                       value="<?= htmlspecialchars($_GET['nom'] ?? '') ?>">
-            </div>
+        <label for="email">📧 E-mail :</label>
+        <input type="email" id="email" name="email"
+               data-max="100"
+               placeholder="votre.email@exemple.com"
+               value="<?= htmlspecialchars($_GET['email'] ?? '') ?>">
 
-            <div class="form-group">
-                <label for="prenom">* Prénom :</label>
-                <input type="text" id="prenom" name="prenom"
-                       placeholder="Hiroshi" required
-                       value="<?= htmlspecialchars($_GET['prenom'] ?? '') ?>">
-            </div>
+        <label for="password">🔑 Mot de passe :</label>
+        <input type="password" id="password" name="password"
+               data-max="64"
+               placeholder="••••••••">
+        <!-- L'icône œil est ajoutée automatiquement par le script du header -->
 
-            <label for="tel">* Numéro de téléphone :</label>
-            <input type="tel" id="tel" name="tel"
-                   placeholder="06 12 34 56 78" required
-                   value="<?= htmlspecialchars($_GET['tel'] ?? '') ?>">
-        </fieldset>
+        <div class="options">
+            <input type="checkbox" id="se_souvenir" name="se_souvenir">
+            <label for="se_souvenir">Se souvenir de moi</label>
+        </div>
 
-        <fieldset>
-            <legend>Coordonnées de Livraison</legend>
+        <button type="submit" class="bouton-validation">Se connecter</button>
 
-            <label for="adresse">* Adresse complète :</label>
-            <input type="text" id="adresse" name="adresse"
-                   placeholder="15 rue de la Paix, 75002 Paris" required
-                   value="<?= htmlspecialchars($_GET['adresse'] ?? '') ?>">
-
-            <label for="infos_comp">Informations complémentaires (code, étage...) :</label>
-            <textarea id="infos_comp" name="infos_comp" rows="3"
-                      placeholder="Code: A1234, 3ème étage, porte droite"></textarea>
-        </fieldset>
-
-        <fieldset>
-            <legend>Sécurité</legend>
-
-            <label for="email">* E-mail :</label>
-            <input type="email" id="email" name="email"
-                   placeholder="votre.email@exemple.com" required
-                   value="<?= htmlspecialchars($_GET['email'] ?? '') ?>">
-
-            <label for="password">* Mot de passe (min. 6 caractères) :</label>
-            <input type="password" id="password" name="password"
-                   placeholder="Min. 6 caractères" required>
-        </fieldset>
-
-        <button type="submit" class="bouton-validation">S'inscrire</button>
+        <p class="footer-form">
+            Nouveau sur JDK ? <a href="inscription.php">Créer un compte</a>
+        </p>
     </form>
 
     <div class="teuchi-bubble">
-        <p>Rejoignez le Jardin de Kyoto et profitez de 10% de réduction ! 🎉</p>
+        <p>Connectez-vous pour bénéficier de mes offres alléchantes ! 🍜</p>
     </div>
+
 </main>
+
+<!-- Validation côté client : on bloque le submit tant que c'est pas valide -->
+<script>
+JDK.validerFormulaire('form-connexion', {
+    email: {
+        test: function(v) { return JDK.validateurs.email(v); },
+        msg:  "Adresse email invalide (ex : prenom@exemple.com)"
+    },
+    password: {
+        test: function(v) { return JDK.validateurs.nonVide(v) && v.length >= 6; },
+        msg:  "Le mot de passe doit contenir au moins 6 caractères"
+    }
+});
+</script>
 
 <footer>
     <p>&copy; 2025-2026 Le Jardin de Kyoto</p>
 </footer>
 </body>
 </html>
-
-inscription.php
-Affichage de connexion.php en cours...
