@@ -81,6 +81,13 @@ foreach ($users as &$u) {
             }
             break;
 
+        case 'remise':
+            $valeur = (int)($_POST['valeur'] ?? 0);
+            if ($valeur >= 0 && $valeur <= 50) {
+                $u['remise'] = $valeur;
+            }
+            break;
+
         default:
             repondre($est_ajax, false, 'action_inconnue', 'Action inconnue.');
     }
