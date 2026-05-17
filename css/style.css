@@ -909,4 +909,113 @@ footer a:hover, .bas-de-page a:hover { color: var(--rouge); }
 }
 }
 
+_____________________________________Yanis_______________________________________
 
+/* =============================================
+   PHASE 3 — AJOUTS CSS
+   ============================================= */
+
+/* Barre de filtres produit */
+.barre-filtres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    padding: 14px 20px;
+    background: #f9f5f0;
+    border-bottom: 1px solid #e8ddd0;
+    margin-bottom: 20px;
+}
+
+.groupe-filtres {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.label-filtre {
+    font-size: .85em;
+    color: #888;
+    font-weight: bold;
+}
+
+.btn-filtre {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: .88em;
+    cursor: pointer;
+    transition: all .2s;
+}
+
+.btn-filtre:hover {
+    border-color: var(--rouge);
+    color: var(--rouge);
+}
+
+.btn-filtre.active {
+    background: var(--rouge);
+    color: #fff;
+    border-color: var(--rouge);
+}
+
+/* Profil — bouton modifier et champs édition */
+.btn-modifier-profil {
+    background: var(--rouge);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 14px;
+    cursor: pointer;
+    font-size: .9em;
+}
+.btn-modifier-profil:hover { opacity: .85; }
+
+.champ-edit {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: .95em;
+    box-sizing: border-box;
+}
+.champ-edit:focus {
+    outline: none;
+    border-color: var(--rouge);
+}
+
+.bloc-entete {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* Profil — modifier commande */
+.btn-modif-commande {
+    background: #f39c12;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: .85em;
+    cursor: pointer;
+    margin-left: 8px;
+}
+.btn-modif-commande:hover { opacity: .85; }
+
+.btn-qte {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    font-size: 1em;
+}
+.btn-qte:hover { border-color: var(--rouge); }
+
+__________________________Yanis_______________________
