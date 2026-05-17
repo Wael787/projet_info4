@@ -21,7 +21,7 @@ if (($cmd['statut'] ?? '') !== 'livre') {
     exit;
 }
 
-// Vérifier pas déjà noté
+// Vérifier qu'elle n'a pas déjà été notée
 $notations = lire_json('notations.json');
 foreach ($notations as $n) {
     if (($n['commande_id'] ?? '') === $commande_id) {
@@ -38,7 +38,7 @@ include 'includes/header.php';
 ?>
 <main class="rating-container">
 
-    <form action="actions/noter.php" method="POST" class="boite-formulaire">
+    <form action="actions/noter.php" method="POST" class="boite-formulaire" id="form-notation">
         <h2>⭐ Évaluation de la commande #<?= htmlspecialchars($commande_id) ?></h2>
 
         <?php if ($erreur === 'champs_manquants'): ?>
@@ -76,11 +76,15 @@ include 'includes/header.php';
         <fieldset>
             <legend>Commentaires (optionnel)</legend>
             <label for="avis_texte">Dites-nous en plus :</label>
-            <textarea id="avis_texte" name="avis_texte" rows="4"
+            <textarea id="avis_texte" name="avis_texte" rows="4" maxlength="500"
                       placeholder="Partagez votre expérience avec nous..."></textarea>
+            <!-- Compteur de caractères mis à jour en temps réel -->
+            <p style="text-align:right;font-size:.85em;color:#888;margin-top:4px;">
+                <span id="compteur-avis">0</span> / 500 caractères
+            </p>
         </fieldset>
 
-        <button type="submit" class="bouton-validation">Envoyer mon avis</button>
+        <button type="submit" class="bouton-validation" id="btn-envoyer">Envoyer mon avis</button>
     </form>
 
     <div class="teuchi-bubble">
@@ -88,9 +92,31 @@ include 'includes/header.php';
     </div>
 
 </main>
-<footer>
-    <p><a href="profil.php">← Retour à mes commandes</a></p>
-    <p>&copy; 2025-2026 Le Jardin de Kyoto</p>
-</footer>
-</body>
-</html>
+
+<?php include 'includes/footer.php'; ?>
+
+<script>
+(function() {
+    // 1. Compteur de caractères pour le textarea
+    //    On met à jour à chaque frappe (événement 'input').
+    const textarea = document.getElementById('avis_texte');
+    const compteur = document.getElementById('compteur-avis');
+    if (textarea && compteur) {
+        textarea.addEventListener('input', function() {
+            compteur.textContent = textarea.value.length;
+        });
+    }
+
+    // 2. Empêcher la double soumission du formulaire
+    //    Si le client clique 2 fois rapidement, on aurait 2 notations.
+    //    On désactive le bouton après le premier clic valide.
+    const form = document.getElementById('form-notation');
+    const btn  = document.getElementById('btn-envoyer');
+    if (form && btn) {
+        form.addEventListener('submit', function() {
+            btn.disabled = true;
+            btn.textContent = '⏳ Envoi en cours…';
+        });
+    }
+})();
+</script>
