@@ -36,6 +36,23 @@ foreach ($users as &$user) {
 
     $trouve = true;
 
+    // On revérifie email et téléphone côté serveur (le JS peut être contourné)
+    if (isset($donnees['email'])) {
+        $email = trim($donnees['email']);
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            echo json_encode(['succes' => false, 'message' => 'Adresse email invalide.']);
+            exit;
+        }
+    }
+    if (isset($donnees['telephone']) && trim($donnees['telephone']) !== '') {
+        // On retire espaces/points/tirets puis on attend un numéro français à 10 chiffres
+        $tel = preg_replace('/[\s.\-]/', '', trim($donnees['telephone']));
+        if (!preg_match('/^0[1-9][0-9]{8}$/', $tel)) {
+            echo json_encode(['succes' => false, 'message' => 'Numéro de téléphone invalide.']);
+            exit;
+        }
+    }
+
     // On ne met à jour que les champs autorisés (pas le mot de passe, pas le rôle)
     $champs = ['prenom', 'nom', 'email', 'telephone', 'adresse', 'infos_comp'];
     foreach ($champs as $champ) {

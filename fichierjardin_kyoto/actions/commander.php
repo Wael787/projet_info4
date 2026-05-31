@@ -1,5 +1,5 @@
 <?php
-// actions/commander.php
+// actions/ajouter_panier.php — ajoute/retire/supprime un article du panier
 require_once '../includes/session.php';
 require_once '../includes/utils.php';
 
@@ -12,92 +12,56 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-$panier = $_SESSION['panier'] ?? [];
-if (empty($panier)) {
-    header('Location: ../panier.php?erreur=commande_vide');
+$plat_id  = trim($_POST['plat_id']  ?? '');
+$quantite = (int)($_POST['quantite'] ?? 1);
+$action   = $_POST['action'] ?? 'ajouter';
+
+if ($plat_id === '') {
+    header('Location: ../panier.php');
     exit;
 }
 
-$type_livraison  = in_array($_POST['type_livraison'] ?? '', ['livraison','emporter','sur_place'])
-                    ? $_POST['type_livraison'] : 'livraison';
-$adresse         = trim($_POST['adresse_livraison'] ?? '');
-$infos           = trim($_POST['infos_livraison']   ?? '');
-$commentaire     = trim($_POST['commentaire']       ?? '');
-$heure_type      = $_POST['heure_type'] ?? 'immediat';
-$heure_souhaitee = ($heure_type === 'programmee') ? trim($_POST['heure_souhaitee'] ?? '') : null;
-
-if ($type_livraison === 'livraison' && $adresse === '') {
-    header('Location: ../panier.php?erreur=champs_manquants');
-    exit;
+if (!isset($_SESSION['panier'])) {
+    $_SESSION['panier'] = [];
 }
 
-$plats_json  = lire_json('plats.json');
-$index_plats = array_column($plats_json, null, 'id');
-$user        = trouver_utilisateur_par_id($_SESSION['user']['id']) ?? $_SESSION['user'];
+// Les menus ont une clé qui commence par "MENU_"
+$est_menu = (strpos($plat_id, 'MENU_') === 0);
 
-$sous_total = 0.0;
-$articles   = [];
+if (!$est_menu) {
+    // Plat normal : vérifier qu'il existe dans plats.json
+    $plats = lire_json('plats.json');
+    $index = array_column($plats, null, 'id');
+    if (!isset($index[$plat_id])) {
+        header('Location: ../panier.php?erreur=plat_introuvable');
+        exit;
+    }
+}
+// Pour les menus, la clé existe forcément en session si on les manipule depuis le panier
 
-foreach ($panier as $item) {
-    $est_menu = isset($item['type']) && $item['type'] === 'menu';
-
-    if ($est_menu) {
-        // Article de type menu : toutes les infos sont dans l'item de session
-        $prix        = (float)($item['prix'] ?? 0);
-        $qte         = (int)$item['quantite'];
-        $sous_total += $prix * $qte;
-        $articles[]  = [
-            'plat_id'     => $item['plat_id'],
-            'type'        => 'menu',
-            'nom'         => $item['nom'] ?? 'Menu',
-            'description' => $item['description'] ?? '',
-            'quantite'    => $qte,
-            'prix_unit'   => $prix,
-        ];
+if ($action === 'supprimer') {
+    unset($_SESSION['panier'][$plat_id]);
+} else {
+    if (isset($_SESSION['panier'][$plat_id])) {
+        $nouvelle_qte = (int)$_SESSION['panier'][$plat_id]['quantite'] + $quantite;
+        if ($nouvelle_qte <= 0) {
+            unset($_SESSION['panier'][$plat_id]);
+        } else {
+            $_SESSION['panier'][$plat_id]['quantite'] = $nouvelle_qte;
+        }
     } else {
-        // Plat normal
-        $plat = $index_plats[$item['plat_id']] ?? null;
-        if (!$plat) continue;
-        $prix        = (float)$plat['prix'];
-        $qte         = (int)$item['quantite'];
-        $sous_total += $prix * $qte;
-        $articles[]  = [
-            'plat_id'   => $item['plat_id'],
-            'quantite'  => $qte,
-            'prix_unit' => $prix,
-        ];
+        // Uniquement pour les plats normaux (les menus sont toujours ajoutés
+        // via leur propre script et existent déjà en session)
+        if (!$est_menu && $quantite > 0) {
+            $_SESSION['panier'][$plat_id] = [
+                'plat_id'  => $plat_id,
+                'quantite' => $quantite,
+            ];
+        }
     }
 }
 
-$remise    = (int)($user['remise'] ?? 0);
-$reduction = $remise > 0 ? round($sous_total * $remise / 100, 2) : 0;
-$total     = round($sous_total - $reduction, 2);
-
-$commande_id = generer_id();
-$commande = [
-    'id'               => $commande_id,
-    'client_id'        => $user['id'],
-    'articles'         => $articles,
-    'type_livraison'   => $type_livraison,
-    'adresse'          => $adresse,
-    'infos_livraison'  => $infos,
-    'commentaire'      => $commentaire,
-    'heure_souhaitee'  => $heure_souhaitee,
-    'sous_total'       => $sous_total,
-    'remise'           => $remise,
-    'reduction'        => $reduction,
-    'total'            => $total,
-    'statut'           => 'en_attente',
-    'paiement_statut'  => 'en_attente',
-    'livreur_id'       => null,
-    'date'             => date('Y-m-d H:i:s'),
-];
-
-$commandes   = lire_json('commandes.json');
-$commandes[] = $commande;
-ecrire_json('commandes.json', $commandes);
-
-$_SESSION['commande_en_cours'] = ['id' => $commande_id, 'total' => $total];
-
-header('Location: ../panier.php?msg=commande_creee');
+$referer = $_SERVER['HTTP_REFERER'] ?? '../panier.php';
+$sep     = strpos($referer, '?') === false ? '?' : '&';
+header('Location: ' . $referer . $sep . 'msg=ajout_ok');
 exit;
