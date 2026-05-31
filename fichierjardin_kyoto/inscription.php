@@ -18,6 +18,7 @@ $body_class = 'page-deco';
 $erreur  = $_GET['erreur']  ?? null;
 $message = $_GET['message'] ?? null;
 
+$scripts_page = ['inscription.js'];
 include 'includes/header.php';
 ?>
 
@@ -93,19 +94,6 @@ include 'includes/header.php';
 </main>
 
 <!-- Validation côté client : on bloque le submit tant que c'est pas valide -->
-<script>
-JDK.validerFormulaire('form-connexion', {
-    email: {
-        test: function(v) { return JDK.validateurs.email(v); },
-        msg:  "Adresse email invalide (ex : prenom@exemple.com)"
-    },
-    password: {
-        test: function(v) { return JDK.validateurs.nonVide(v) && v.length >= 6; },
-        msg:  "Le mot de passe doit contenir au moins 6 caractères"
-    }
-});
-</script>
-
 <footer>
     <p>&copy; 2025-2026 Le Jardin de Kyoto</p>
 </footer>

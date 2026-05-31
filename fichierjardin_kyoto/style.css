@@ -1506,3 +1506,61 @@ body.dark-mode .alerte-paiement {
 .btn-qte:hover { border-color: var(--rouge); }
 
 
+
+/* ================================================
+   OPTIONS DE LIVRAISON (page panier)
+   On utilise les variables de la charte pour rester
+   lisible dans tous les thèmes (clair / sombre / contrasté).
+   ================================================ */
+
+.bloc-options {
+    background: var(--blanc);
+    border: 1px solid var(--beige-fonce);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 20px;
+    color: var(--noir);
+}
+.bloc-options h3 { text-align: left; margin-top: 0; color: var(--noir); }
+.bloc-options .label-bloc { font-weight: bold; display: block; margin-bottom: 8px; }
+.bloc-options .groupe-choix { margin-bottom: 16px; }
+
+/* Chaque choix est une "pastille" cliquable */
+.option-choix {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    margin: 0 8px 8px 0;
+    border: 2px solid var(--beige-fonce);
+    border-radius: 30px;
+    cursor: pointer;
+    transition: 0.2s;
+    background: var(--beige-clair);
+    color: var(--noir);
+    font-weight: bold;
+}
+.option-choix:hover { border-color: var(--rouge); }
+
+/* l'option sélectionnée passe en rouge */
+.option-choix:has(input:checked) {
+    background: var(--rouge);
+    color: var(--blanc);
+    border-color: var(--rouge);
+}
+
+/* Accessibilité : on garde un contour visible quand on navigue au clavier */
+.option-choix:focus-within { outline: 3px solid var(--rouge); outline-offset: 2px; }
+
+.bloc-options input[type="text"],
+.bloc-options textarea,
+.bloc-options input[type="datetime-local"] {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid var(--beige-fonce);
+    border-radius: 4px;
+    margin-bottom: 8px;
+    background: var(--blanc);
+    color: var(--noir);
+}

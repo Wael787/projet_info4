@@ -37,6 +37,7 @@ $commande_id_temp = $_SESSION['commande_en_cours']['id'] ?? null;
 
 $page_title = 'Mon Panier';
 $body_class = 'page-deco';
+$scripts_page = ['panier.js'];
 include 'includes/header.php';
 ?>
 <main style="max-width:800px;margin:30px auto;padding:0 16px;">
@@ -191,40 +192,36 @@ include 'includes/header.php';
         <?php if (!$commande_id_temp): ?>
         <!-- ÉTAPE 1 : OPTIONS DE LIVRAISON -->
         <form action="actions/commander.php" method="POST">
-            <div style="background:#f9f9f9;border:1px solid #ddd;border-radius:8px;padding:20px;margin-bottom:20px;">
-                <h3 style="margin-top:0;">Options de livraison</h3>
+            <div class="bloc-options">
+                <h3>Options de livraison</h3>
 
-                <div style="margin-bottom:16px;">
-                    <label style="font-weight:bold;display:block;margin-bottom:8px;">Type de commande :</label>
-                    <label style="margin-right:20px;"><input type="radio" name="type_livraison" value="livraison" checked> 🚴 Livraison</label>
-                    <label style="margin-right:20px;"><input type="radio" name="type_livraison" value="emporter"> 🥡 À emporter</label>
-                    <label><input type="radio" name="type_livraison" value="sur_place"> 🍽️ Sur place</label>
+                <div class="groupe-choix">
+                    <span class="label-bloc">Type de commande :</span>
+                    <label class="option-choix"><input type="radio" name="type_livraison" value="livraison" checked> 🚴 Livraison</label>
+                    <label class="option-choix"><input type="radio" name="type_livraison" value="emporter"> 🥡 À emporter</label>
+                    <label class="option-choix"><input type="radio" name="type_livraison" value="sur_place"> 🍽️ Sur place</label>
                 </div>
 
-                <div id="bloc-adresse">
-                    <label style="font-weight:bold;display:block;margin-bottom:6px;">Adresse de livraison :</label>
+                <div id="bloc-adresse" class="groupe-choix">
+                    <span class="label-bloc">Adresse de livraison :</span>
                     <input type="text" name="adresse_livraison"
-                           style="width:100%;padding:8px;box-sizing:border-box;border:1px solid #ddd;border-radius:4px;margin-bottom:8px;"
                            value="<?= htmlspecialchars($user['adresse'] ?? '') ?>">
                     <textarea name="infos_livraison" rows="2"
-                              style="width:100%;padding:8px;box-sizing:border-box;border:1px solid #ddd;border-radius:4px;"
                               placeholder="Code interphone, étage..."><?= htmlspecialchars($user['infos_comp'] ?? '') ?></textarea>
                 </div>
 
-                <div style="margin-top:16px;">
-                    <label style="font-weight:bold;display:block;margin-bottom:8px;">Heure souhaitée :</label>
-                    <label style="margin-right:20px;"><input type="radio" name="heure_type" value="immediat" checked> Dès que possible</label>
-                    <label><input type="radio" name="heure_type" value="programmee"> À une heure précise</label>
+                <div class="groupe-choix">
+                    <span class="label-bloc">Heure souhaitée :</span>
+                    <label class="option-choix"><input type="radio" name="heure_type" value="immediat" checked> Dès que possible</label>
+                    <label class="option-choix"><input type="radio" name="heure_type" value="programmee"> À une heure précise</label>
                     <div id="bloc-heure" style="display:none;margin-top:8px;">
-                        <input type="datetime-local" name="heure_souhaitee"
-                               style="padding:8px;border:1px solid #ddd;border-radius:4px;">
+                        <input type="datetime-local" name="heure_souhaitee">
                     </div>
                 </div>
 
-                <div style="margin-top:16px;">
-                    <label style="font-weight:bold;display:block;margin-bottom:6px;">Commentaires :</label>
+                <div class="groupe-choix">
+                    <span class="label-bloc">Commentaires :</span>
                     <textarea name="commentaire" rows="2"
-                              style="width:100%;padding:8px;box-sizing:border-box;border:1px solid #ddd;border-radius:4px;"
                               placeholder="Allergies, instructions..."></textarea>
                 </div>
             </div>
@@ -259,30 +256,3 @@ include 'includes/header.php';
 </main>
 
 <?php include 'includes/footer.php'; ?>
-
-<script>
-// 1. Toggle du bloc adresse selon le type de commande
-document.querySelectorAll('[name="type_livraison"]').forEach(r => {
-    r.addEventListener('change', () => {
-        document.getElementById('bloc-adresse').style.display =
-            r.value === 'livraison' ? 'block' : 'none';
-    });
-});
-
-// 2. Toggle du bloc heure programmée
-document.querySelectorAll('[name="heure_type"]').forEach(r => {
-    r.addEventListener('change', () => {
-        document.getElementById('bloc-heure').style.display =
-            r.value === 'programmee' ? 'block' : 'none';
-    });
-});
-
-// 3. Si on revient sur la page avec une alerte de paiement, on fait défiler
-//    automatiquement la page pour que l'utilisateur la voie (priorité visuelle).
-(function() {
-    const alerte = document.querySelector('.alerte-paiement');
-    if (alerte) {
-        alerte.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-})();
-</script>
