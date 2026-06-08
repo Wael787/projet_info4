@@ -1,46 +1,35 @@
 <?php
-// actions/login.php — traite le formulaire de connexion (POST)
+// actions/login.php
 require_once '../includes/session.php';
 require_once '../includes/utils.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: ../connexion.php');
-    exit;
+    header('Location: ../connexion.php'); exit;
 }
 
 $email    = trim($_POST['email']    ?? '');
 $password = $_POST['password'] ?? '';
 
 if ($email === '' || $password === '') {
-    header('Location: ../connexion.php?erreur=identifiants');
-    exit;
+    header('Location: ../connexion.php?erreur=identifiants'); exit;
 }
 
 $user = trouver_utilisateur_par_email($email);
-
 if (!$user || !password_verify($password, $user['password'])) {
-    header('Location: ../connexion.php?erreur=identifiants');
-    exit;
+    header('Location: ../connexion.php?erreur=identifiants'); exit;
 }
-
 if (($user['statut'] ?? 'actif') === 'bloque') {
-    header('Location: ../connexion.php?erreur=bloque');
-    exit;
+    header('Location: ../connexion.php?erreur=bloque'); exit;
 }
 
-// Mettre à jour la date de dernière connexion
 $tous_users = lire_json('users.json');
 foreach ($tous_users as &$u) {
-    if ($u['id'] === $user['id']) {
-        $u['derniere_connexion'] = date('Y-m-d');
-        break;
-    }
+    if ($u['id'] === $user['id']) { $u['derniere_connexion'] = date('Y-m-d'); break; }
 }
+unset($u);
 ecrire_json('users.json', $tous_users);
 
-// regen de l'id de session = protection contre session fixation
 session_regenerate_id(true);
-
 unset($user['password']);
 $_SESSION['user'] = $user;
 
