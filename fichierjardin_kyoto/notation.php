@@ -1,97 +1,113 @@
 <?php
 require_once 'includes/session.php';
-require_once 'includes/utils.php';
-$roles_autorises = ['client'];
-include 'includes/auth_check.php';
 
-// La commande à noter doit être passée en GET
-$commande_id = trim($_GET['commande_id'] ?? '');
-if ($commande_id === '') {
-    header('Location: profil.php');
+// Si déjà connecté → redirige vers la page adaptée au rôle
+if (isset($_SESSION['user'])) {
+    $role = $_SESSION['user']['role'];
+    if ($role === 'admin')            header('Location: admin.php');
+    elseif ($role === 'restaurateur') header('Location: commandes.php');
+    elseif ($role === 'livreur')      header('Location: livraison.php');
+    else                              header('Location: index.php');
     exit;
 }
 
-$cmd = trouver_commande($commande_id);
-if (!$cmd || ($cmd['client_id'] ?? '') !== $_SESSION['user']['id']) {
-    header('Location: profil.php?erreur=commande_introuvable');
-    exit;
-}
-if (($cmd['statut'] ?? '') !== 'livre') {
-    header('Location: profil.php?erreur=non_livree');
-    exit;
-}
-
-// Vérifier qu'elle n'a pas déjà été notée
-$notations = lire_json('notations.json');
-foreach ($notations as $n) {
-    if (($n['commande_id'] ?? '') === $commande_id) {
-        header('Location: profil.php?msg=deja_note');
-        exit;
-    }
-}
-
-$erreur = $_GET['erreur'] ?? null;
-
-$page_title = 'Noter ma commande';
+$page_title = 'Connexion';
 $body_class = 'page-deco';
-$scripts_page = ['notation.js'];
+
+// Messages
+$erreur  = $_GET['erreur']  ?? null;
+$message = $_GET['message'] ?? null;
+
 include 'includes/header.php';
 ?>
-<main class="rating-container">
 
-    <form action="actions/noter.php" method="POST" class="boite-formulaire" id="form-notation">
-        <h2>⭐ Évaluation de la commande #<?= htmlspecialchars($commande_id) ?></h2>
+<main class="login-container">
 
-        <?php if ($erreur === 'champs_manquants'): ?>
-            <p class="message-erreur">Veuillez noter à la fois la livraison et les produits.</p>
+    <!-- novalidate désactive la validation HTML5 du navigateur :
+         on préfère la nôtre qui affiche des messages cohérents -->
+    <form id="form-connexion"
+          action="actions/login.php"
+          method="POST"
+          class="boite-formulaire"
+          novalidate>
+        <h2>🔐 Accès à votre compte JDK</h2>
+
+        <?php if ($erreur === 'identifiants'): ?>
+            <p class="message-erreur">Email ou mot de passe incorrect.</p>
+        <?php elseif ($erreur === 'bloque'): ?>
+            <p class="message-erreur">Votre compte est bloqué. Contactez l'administration.</p>
+        <?php elseif ($erreur === 'session_bloquee'): ?>
+            <!-- message si l'admin a bloqué pendant que l'user était connecté -->
+            <div class="bandeau-alerte" role="alert">
+                <div class="bandeau-alerte-icone">🔒</div>
+                <div class="bandeau-alerte-contenu">
+                    <h3 class="bandeau-alerte-titre">Session terminée</h3>
+                    <p class="bandeau-alerte-message">
+                        Votre compte a été bloqué par l'administration.
+                    </p>
+                    <p class="bandeau-alerte-conseil">
+                        👉 Contactez l'administration pour plus d'informations.
+                    </p>
+                </div>
+            </div>
+        <?php elseif ($erreur === 'session_invalide'): ?>
+            <p class="message-erreur">Votre session n'est plus valide. Veuillez vous reconnecter.</p>
+        <?php elseif ($erreur === 'non_connecte'): ?>
+            <p class="message-erreur">Vous devez être connecté pour accéder à cette page.</p>
         <?php endif; ?>
 
-        <input type="hidden" name="commande_id" value="<?= htmlspecialchars($commande_id) ?>">
+        <?php if ($message === 'inscription_ok'): ?>
+            <p class="message-succes">Inscription réussie ! Vous pouvez maintenant vous connecter.</p>
+        <?php elseif ($message === 'deconnexion'): ?>
+            <p class="message-succes">Vous avez bien été déconnecté.</p>
+        <?php endif; ?>
 
-        <fieldset>
-            <legend>* La Livraison</legend>
-            <p>Comment évaluez-vous la prestation du livreur ?</p>
-            <div class="stars">
-                <?php foreach ([4=>'⭐⭐⭐⭐ Excellent', 3=>'⭐⭐⭐ Bien', 2=>'⭐⭐ Passable', 1=>'⭐ Décevant'] as $v => $l): ?>
-                <label>
-                    <input type="radio" name="note_livraison" value="<?= $v ?>" required>
-                    <?= $l ?>
-                </label>
-                <?php endforeach; ?>
-            </div>
-        </fieldset>
+        <label for="email">📧 E-mail :</label>
+        <input type="email" id="email" name="email"
+               data-max="100"
+               placeholder="votre.email@exemple.com"
+               value="<?= htmlspecialchars($_GET['email'] ?? '') ?>">
 
-        <fieldset>
-            <legend>* Qualité des Produits</legend>
-            <p>Les plats reçus étaient-ils à la hauteur de vos attentes ?</p>
-            <div class="stars">
-                <?php foreach ([5=>'⭐⭐⭐⭐⭐ Délicieux', 4=>'⭐⭐⭐⭐ Très bon', 3=>'⭐⭐⭐ Correct', 2=>'⭐⭐ Décevant', 1=>'⭐ Médiocre'] as $v => $l): ?>
-                <label>
-                    <input type="radio" name="note_produit" value="<?= $v ?>" required>
-                    <?= $l ?>
-                </label>
-                <?php endforeach; ?>
-            </div>
-        </fieldset>
+        <label for="password">🔑 Mot de passe :</label>
+        <input type="password" id="password" name="password"
+               data-max="64"
+               placeholder="••••••••">
+        <!-- L'icône œil est ajoutée automatiquement par le script du header -->
 
-        <fieldset>
-            <legend>Commentaires (optionnel)</legend>
-            <label for="avis_texte">Dites-nous en plus :</label>
-            <textarea id="avis_texte" name="avis_texte" rows="4" maxlength="500"
-                      placeholder="Partagez votre expérience avec nous..."></textarea>
-            <!-- Compteur de caractères mis à jour en temps réel -->
-            <p style="text-align:right;font-size:.85em;color:#888;margin-top:4px;">
-                <span id="compteur-avis">0</span> / 500 caractères
-            </p>
-        </fieldset>
+        <div class="options">
+            <input type="checkbox" id="se_souvenir" name="se_souvenir">
+            <label for="se_souvenir">Se souvenir de moi</label>
+        </div>
 
-        <button type="submit" class="bouton-validation" id="btn-envoyer">Envoyer mon avis</button>
+        <button type="submit" class="bouton-validation">Se connecter</button>
+
+        <p class="footer-form">
+            Nouveau sur JDK ? <a href="inscription.php">Créer un compte</a>
+        </p>
     </form>
 
     <div class="teuchi-bubble">
-        <p>Votre avis nous aide à améliorer nos plats ! ⭐</p>
+        <p>Connectez-vous pour bénéficier de mes offres alléchantes ! 🍜</p>
     </div>
 
 </main>
 
-<?php include 'includes/footer.php'; ?>
+<!-- Validation côté client : on bloque le submit tant que c'est pas valide -->
+<script>
+JDK.validerFormulaire('form-connexion', {
+    email: {
+        test: function(v) { return JDK.validateurs.email(v); },
+        msg:  "Adresse email invalide (ex : prenom@exemple.com)"
+    },
+    password: {
+        test: function(v) { return JDK.validateurs.nonVide(v) && v.length >= 6; },
+        msg:  "Le mot de passe doit contenir au moins 6 caractères"
+    }
+});
+</script>
+
+<footer>
+    <p>&copy; 2025-2026 Le Jardin de Kyoto</p>
+</footer>
+</body>
+</html>

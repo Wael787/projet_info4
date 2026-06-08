@@ -14,8 +14,10 @@ $panier      = $_SESSION['panier'] ?? [];
 $sous_total = 0.0;
 foreach ($panier as $item) {
     if (($item['type'] ?? '') === 'menu') {
+        // Article de type menu : le prix est stocké directement dans l'item
         $sous_total += (float)($item['prix'] ?? 0) * (int)$item['quantite'];
     } else {
+        // Plat normal : on cherche dans plats.json
         $prix = (float)($index_plats[$item['plat_id']]['prix'] ?? 0);
         $sous_total += $prix * (int)$item['quantite'];
     }
@@ -37,62 +39,59 @@ $commande_id_temp = $_SESSION['commande_en_cours']['id'] ?? null;
 
 $page_title = 'Mon Panier';
 $body_class = 'page-deco';
-$scripts_page = ['panier.js'];
 include 'includes/header.php';
 ?>
 <main style="max-width:800px;margin:30px auto;padding:0 16px;">
 
     <h1 style="margin-bottom:24px;">🛒 Mon Panier</h1>
 
-    <!-- 🚨 ALERTE PAIEMENT — TRÈS VISIBLE
-         On utilise une boîte spéciale (rouge, animée) au lieu du
-         simple message-erreur qui passait inaperçu. -->
-    <?php if ($erreur === 'paiement_refuse'): ?>
-        <div class="alerte-paiement" role="alert">
-            <div class="icone">⚠️</div>
-            <div class="contenu">
-                <h3>Paiement refusé par votre banque</h3>
-                <p>
-                    Votre commande n'a <strong>pas été validée</strong>.
-                    Vérifiez les informations de votre carte (numéro, date, CVV)
-                    puis réessayez. Aucune somme n'a été débitée.
-                </p>
-            </div>
-            <a href="#zone-paiement" class="btn-reessayer">↻ Réessayer le paiement</a>
-        </div>
-
-    <?php elseif ($erreur === 'controle_invalide'): ?>
-        <div class="alerte-paiement" role="alert">
-            <div class="icone">🛡️</div>
-            <div class="contenu">
-                <h3>Erreur de sécurité lors du retour de paiement</h3>
-                <p>
-                    Les données reçues de la banque n'ont pas pu être vérifiées.
-                    Par mesure de sécurité, votre paiement n'a pas été enregistré.
-                    Réessayez ou contactez le support.
-                </p>
-            </div>
-            <a href="#zone-paiement" class="btn-reessayer">↻ Réessayer</a>
-        </div>
-
-    <?php elseif ($erreur === 'retour_incomplet'): ?>
-        <div class="alerte-paiement" role="alert">
-            <div class="icone">⚠️</div>
-            <div class="contenu">
-                <h3>Retour de paiement incomplet</h3>
-                <p>Certaines informations sont manquantes. Veuillez réessayer.</p>
-            </div>
-            <a href="#zone-paiement" class="btn-reessayer">↻ Réessayer</a>
-        </div>
-
-    <?php elseif ($erreur === 'commande_vide'): ?>
-        <p class="message-erreur">Votre panier est vide.</p>
-    <?php endif; ?>
-
     <?php if ($msg === 'ajout_ok'): ?>
         <p class="message-succes">Article ajouté au panier !</p>
     <?php elseif ($msg === 'commande_creee'): ?>
         <p class="message-succes">Commande enregistrée ! Procédez au paiement ci-dessous.</p>
+    <?php elseif ($erreur === 'paiement_refuse'): ?>
+        <!-- Bandeau visible si paiement refusé (le panier est conservé) -->
+        <div class="bandeau-alerte" role="alert">
+            <div class="bandeau-alerte-icone">⚠️</div>
+            <div class="bandeau-alerte-contenu">
+                <h3 class="bandeau-alerte-titre">Paiement refusé</h3>
+                <p class="bandeau-alerte-message">
+                    Votre banque a refusé la transaction. Aucun montant n'a été prélevé.
+                </p>
+                <p class="bandeau-alerte-conseil">
+                    👉 Vérifiez vos informations bancaires et réessayez ci-dessous.
+                    Votre panier est conservé.
+                </p>
+            </div>
+        </div>
+    <?php elseif ($erreur === 'controle_invalide'): ?>
+        <div class="bandeau-alerte" role="alert">
+            <div class="bandeau-alerte-icone">🔒</div>
+            <div class="bandeau-alerte-contenu">
+                <h3 class="bandeau-alerte-titre">Erreur de sécurité</h3>
+                <p class="bandeau-alerte-message">
+                    Le retour de paiement a échoué au contrôle de signature.
+                </p>
+                <p class="bandeau-alerte-conseil">
+                    👉 Si le problème persiste, contactez le support.
+                </p>
+            </div>
+        </div>
+    <?php elseif ($erreur === 'retour_incomplet'): ?>
+        <div class="bandeau-alerte" role="alert">
+            <div class="bandeau-alerte-icone">⚠️</div>
+            <div class="bandeau-alerte-contenu">
+                <h3 class="bandeau-alerte-titre">Retour de paiement incomplet</h3>
+                <p class="bandeau-alerte-message">
+                    Des informations du retour bancaire sont manquantes.
+                </p>
+                <p class="bandeau-alerte-conseil">
+                    👉 Réessayez le paiement ci-dessous.
+                </p>
+            </div>
+        </div>
+    <?php elseif ($erreur === 'commande_vide'): ?>
+        <p class="message-erreur">Votre panier est vide.</p>
     <?php endif; ?>
 
     <?php if (empty($panier)): ?>
@@ -116,11 +115,12 @@ include 'includes/header.php';
             </thead>
             <tbody>
                 <?php foreach ($panier as $cle => $item):
+                    // ?? : si 'type' n'existe pas dans l'item, on utilise '' par défaut
                     $est_menu = ($item['type'] ?? '') === 'menu';
 
                     if ($est_menu) {
-                        $nom         = $item['nom'] ?? 'Menu';
-                        $pu          = (float)($item['prix'] ?? 0);
+                        $nom        = $item['nom'] ?? 'Menu';
+                        $pu         = (float)($item['prix'] ?? 0);
                         $description = $item['description'] ?? '';
                     } else {
                         $plat = $index_plats[$item['plat_id']] ?? null;
@@ -141,6 +141,7 @@ include 'includes/header.php';
                         <?php endif; ?>
                     </td>
                     <td style="text-align:center;padding:8px;">
+                        <!-- Moins -->
                         <form action="actions/ajouter_panier.php" method="POST" style="display:inline">
                             <input type="hidden" name="plat_id"  value="<?= htmlspecialchars($cle) ?>">
                             <input type="hidden" name="quantite" value="-1">
@@ -148,6 +149,7 @@ include 'includes/header.php';
                                     style="border:1px solid #ddd;background:#fff;width:24px;height:24px;cursor:pointer;border-radius:4px;">−</button>
                         </form>
                         <span style="margin:0 8px;"><?= $qte ?></span>
+                        <!-- Plus -->
                         <form action="actions/ajouter_panier.php" method="POST" style="display:inline">
                             <input type="hidden" name="plat_id"  value="<?= htmlspecialchars($cle) ?>">
                             <input type="hidden" name="quantite" value="1">
@@ -190,38 +192,40 @@ include 'includes/header.php';
         </table>
 
         <?php if (!$commande_id_temp): ?>
-        <!-- ÉTAPE 1 : OPTIONS DE LIVRAISON -->
+        <!-- Etape 1 : options de livraison (classes css pour pouvoir thematiser) -->
         <form action="actions/commander.php" method="POST">
             <div class="bloc-options">
                 <h3>Options de livraison</h3>
 
-                <div class="groupe-choix">
-                    <span class="label-bloc">Type de commande :</span>
-                    <label class="option-choix"><input type="radio" name="type_livraison" value="livraison" checked> 🚴 Livraison</label>
-                    <label class="option-choix"><input type="radio" name="type_livraison" value="emporter"> 🥡 À emporter</label>
-                    <label class="option-choix"><input type="radio" name="type_livraison" value="sur_place"> 🍽️ Sur place</label>
+                <div class="champ-bloc">
+                    <span class="champ-bloc-titre">Type de commande :</span>
+                    <label class="radio-inline"><input type="radio" name="type_livraison" value="livraison" checked> 🚴 Livraison</label>
+                    <label class="radio-inline"><input type="radio" name="type_livraison" value="emporter"> 🥡 À emporter</label>
+                    <label class="radio-inline"><input type="radio" name="type_livraison" value="sur_place"> 🍽️ Sur place</label>
                 </div>
 
-                <div id="bloc-adresse" class="groupe-choix">
-                    <span class="label-bloc">Adresse de livraison :</span>
+                <div id="bloc-adresse" class="champ-bloc">
+                    <span class="champ-bloc-titre">Adresse de livraison :</span>
                     <input type="text" name="adresse_livraison"
                            value="<?= htmlspecialchars($user['adresse'] ?? '') ?>">
                     <textarea name="infos_livraison" rows="2"
+                              data-max="200"
                               placeholder="Code interphone, étage..."><?= htmlspecialchars($user['infos_comp'] ?? '') ?></textarea>
                 </div>
 
-                <div class="groupe-choix">
-                    <span class="label-bloc">Heure souhaitée :</span>
-                    <label class="option-choix"><input type="radio" name="heure_type" value="immediat" checked> Dès que possible</label>
-                    <label class="option-choix"><input type="radio" name="heure_type" value="programmee"> À une heure précise</label>
+                <div class="champ-bloc">
+                    <span class="champ-bloc-titre">Heure souhaitée :</span>
+                    <label class="radio-inline"><input type="radio" name="heure_type" value="immediat" checked> Dès que possible</label>
+                    <label class="radio-inline"><input type="radio" name="heure_type" value="programmee"> À une heure précise</label>
                     <div id="bloc-heure" style="display:none;margin-top:8px;">
                         <input type="datetime-local" name="heure_souhaitee">
                     </div>
                 </div>
 
-                <div class="groupe-choix">
-                    <span class="label-bloc">Commentaires :</span>
+                <div class="champ-bloc">
+                    <span class="champ-bloc-titre">Commentaires :</span>
                     <textarea name="commentaire" rows="2"
+                              data-max="300"
                               placeholder="Allergies, instructions..."></textarea>
                 </div>
             </div>
@@ -236,8 +240,7 @@ include 'includes/header.php';
 
         <?php else: ?>
         <!-- ÉTAPE 2 : PAIEMENT CYBANK -->
-        <div id="zone-paiement"
-             style="background:#f0f8f0;border:2px solid #27ae60;border-radius:8px;padding:24px;text-align:center;">
+        <div style="background:#f0f8f0;border:2px solid #27ae60;border-radius:8px;padding:24px;text-align:center;">
             <h3 style="color:#27ae60;margin-top:0;">
                 ✅ Commande #<?= htmlspecialchars($commande_id_temp) ?> enregistrée
             </h3>
@@ -254,5 +257,18 @@ include 'includes/header.php';
     <?php endif; ?>
 
 </main>
-
 <?php include 'includes/footer.php'; ?>
+<script>
+document.querySelectorAll('[name="type_livraison"]').forEach(r => {
+    r.addEventListener('change', () => {
+        document.getElementById('bloc-adresse').style.display =
+            r.value === 'livraison' ? 'block' : 'none';
+    });
+});
+document.querySelectorAll('[name="heure_type"]').forEach(r => {
+    r.addEventListener('change', () => {
+        document.getElementById('bloc-heure').style.display =
+            r.value === 'programmee' ? 'block' : 'none';
+    });
+});
+</script>
